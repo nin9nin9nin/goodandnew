@@ -5,7 +5,7 @@ $is_home = true; //トップページの判定用の変数
 $flash_message = Session::getFlash();
 $cookie_check = Cookie::getCookieCheck();
 $cookie_name = Cookie::getCookieName();
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 

@@ -2,7 +2,7 @@
 $title = 'ec site 管理画面';
 $description = '説明（新規登録ページ）';
 $is_home = true; //トップページの判定用の変数
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 
