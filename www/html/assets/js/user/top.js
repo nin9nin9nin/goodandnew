@@ -136,8 +136,7 @@ $('.home-slider').on('touchmove', function(event, slick, currentSlide, nextSlide
     $('.home-slider').slick('slickPlay');
 });
 
-//----------------------------------------------------------------------------
-//GSAP 横スクロール
+//GSAP 横スクロール ----------------------------------------------------------------------------------
 const listWrapperEl = document.querySelector('.side-scroll-wrap');
 const listEl = document.querySelector('.side-scroll-list');
 
