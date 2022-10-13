@@ -1,6 +1,87 @@
-//header スクロールすると上部に固定させるための設定を関数でまとめる-----------------------
+//splash アニメーション-----------------------------------------------------------------------------
+//Vivus SVGアニメーションの描画
+var stroke;
+stroke = new Vivus('mask', {//アニメーションをするIDの指定
+    start:'manual',//自動再生をせずスタートをマニュアルに
+    type: 'scenario-sync',// アニメーションのタイプを設定
+    duration: 15,//アニメーションの時間設定。数字が小さくなるほど速い
+    forceRender: false,//パスが更新された場合に再レンダリングさせない
+    animTimingFunction:Vivus.EASE,//動きの加速減速設定
+},
+function(){
+         $("#mask, #splash_logo").attr("class", "done");//描画が終わったらdoneというクラスを追加
+}
+);
+
+//---------------------------------------------------------
+$(window).on('load',function(){
+  stroke.play();//SVGアニメーションの実行
+
+  $("#splash-logo").delay(2500).fadeOut('slow');//ロゴを1.2秒でフェードアウトする記述
+
+  //=====ここからローディングエリア（splashエリア）を1.5秒でフェードアウトした後に動かしたいJSをまとめる
+  $("#splash").delay(3000).fadeOut('slow',function(){//ローディングエリア（splashエリア）を1.5秒でフェードアウトする記述
+  
+      $('body').addClass('appear');//フェードアウト後bodyにappearクラス付与
+
+  });
+  //=====ここまでローディングエリア（splashエリア）を1.5秒でフェードアウトした後に動かしたいJSをまとめる
+  
+ //=====ここから背景が伸びた後に動かしたいJSをまとめたい場合は
+  $('.splash-bg').on('animationend', function() {    
+      //この中に動かしたいJSを記載
+  });
+  //=====ここまで背景が伸びた後に動かしたいJSをまとめる
+      
+});
+
+//GSAP topのtop-bgの拡大スクロール----------------------------------------------------------------
+/* アニメーション対象要素の初期値を設定 開始 */
+gsap.set(".moveItem", { scale: 0 });
+//初期状態としてtransform:scale(0);が適用される
+ 
+/* アニメーション対象要素の初期値を設定 終了 */
+ 
+/* アニメーション内容を記述 開始 */
+gsap.to("#top-bg", {
+  scale: 3, //transform:scale(1)
+  ease: "power1.out", // 用意されているイージング詳細は公式:https://greensock.com/docs/v3/Eases
+
+ 
+  /* アニメーション完了後の状態を記述 終了 */
+  scrollTrigger: {
+    trigger: "#top",
+    //この要素が画面に入ったらgsap.toで記述した要素がアニメーションを開始する(トリガー設定)
+    // pin: true,
+    //の場合はこの要素がendの数値スクロール分固定される
+    start: "top top",
+    //トリガー要素のどの部分が画面に入ったらアニメーションを発火するか設定
+    end: "bottom top",
+    //アニメーション終了位置を設定。この数値のスクロール量でアニメーションが 0% -> 100% に到達
+    scrub: true,
+    //スクロールとアニメーションを連動させる場合はtrue。数字をセットすることで◯秒遅れでスクロールと連動させる(慣性スクロール)
+    // markers: true,
+    //デバッグ用マーカーを表示する場合はtrue(triggerの位置、アニメーション開始・終了位置を表示可能)
+  },
+});
+
+// #top-bgをピン留 -------------------------------------------------------------------
+gsap.utils.toArray(".panel").forEach((panel, i) => {
+  ScrollTrigger.create({
+    trigger: panel,
+    start: "top top",
+    pin: true, 
+    pinSpacing: false,
+    scrub: 1, //スクロール量に合わせてアニメーションが進む
+    // markers: true,
+  });
+});
+
+
+// header fixed ----------------------------------------------------------
+// header スクロールすると上部に固定させるための設定を関数でまとめる
 function FixedAnime() {
-  var headerH = $('#home').outerHeight(true); //#homeの画像を超えたら
+  var headerH = $('#top-bg').outerHeight(true); //#homeの画像を超えたら
   var scroll = $(window).scrollTop();
   if (scroll >= headerH){//headerの高さ以上になったら
       $('#header').addClass('fixed');//fixedというクラス名を付与
@@ -140,9 +221,9 @@ $(window).on('load', function () {
 // ページトップリンク-----------------------------------------------------------------------
 //スクロールした際の動きを関数でまとめる
 function PageTopAnime() {
-  var headerH = $('#home').outerHeight(true);
+  var headerH = $('#event').outerHeight(true);
   var scroll = $(window).scrollTop();
-  if (scroll >= headerH){//headerの出現に合わせる
+  if (scroll >= headerH){//出現するタイミング
     $('#page-top').removeClass('DownMove');//#page-topについているDownMoveというクラス名を除く
     $('#page-top').addClass('UpMove');//#page-topについているUpMoveというクラス名を付与
   }else{
@@ -177,106 +258,76 @@ $('#page-top').click(function () {
   }
     return false;//リンク自体の無効化
 });
-//banner ------------------------------------------------------------------------
-$(function() {
-  setTimeout(function() {  
-    $('.banner').slick({
-    fade:true,//切り替えをフェードで行う。初期値はfalse。
+
+//slick slider ------------------------------------------------------------------------
+$('.slider').slick({
+  // fade:true,//切り替えをフェードで行う。初期値はfalse。
+  autoplay: true,//自動的に動き出すか。初期値はfalse。
+  infinite: true,//スライドをループさせるかどうか。初期値はtrue。
+  slidesToShow: 3,//スライドを画面に3枚見せる
+  slidesToScroll: 1,//1回のスクロールで3枚の写真を移動して見せる
+  prevArrow: '<div class="slick-prev"></div>',//矢印部分PreviewのHTMLを変更
+  nextArrow: '<div class="slick-next"></div>',//矢印部分NextのHTMLを変更
+  dots: true,//下部ドットナビゲーションの表示
+  centerMode: true, //一枚目を中心に表示させる
+  centerPadding: '20%',//周囲の画像の表示範囲
+  variableWidth: true,//高さを揃える
+  initialSlide: 0,//最初に表示させる要素の番号を指定
+  // rtl: true,//スライダの表示方向を左⇒右に変更する
+  responsive: [
+    {
+    breakpoint: 1024,//モニターの横幅が769px以下の見せ方
+    settings: {
+      slidesToShow: 3,//スライドを画面に2枚見せる
+      centerMode: true,
+      centerPadding: '15%',
+    }
+  },
+  {
+    breakpoint: 600,//モニターの横幅が426px以下の見せ方
+    settings: {
+      slidesToShow: 1,//スライドを画面に1枚見せる
+      centerMode: true,
+      centerPadding: '0%',
+    }
+  }
+]
+});
+
+// event-slider ------------------------------------------------
+$('.e-slider').slick({
     autoplay: true,//自動的に動き出すか。初期値はfalse。
-    autoplaySpeed: 3000,//次のスライドに切り替わる待ち時間
-    speed:3000,//スライドの動きのスピード。初期値は300。
+    autoplaySpeed: 0,//次のスライドに切り替わる待ち時間
+    speed: 8000,//スライドの動きのスピード。初期値は300
     infinite: true,//スライドをループさせるかどうか。初期値はtrue。
-    slidesToShow: 1,//スライドを画面に3枚見せる
-    slidesToScroll: 1,//1回のスクロールで3枚の写真を移動して見せる
-    arrows: false,//左右の矢印なし
+    cssEase: 'linear',//スライドの流れを等速に設定
+    arrows: false, //左右に出る矢印を非表示
     dots: false,//下部ドットナビゲーションの表示
-            pauseOnFocus: false,//フォーカスで一時停止を無効
-            pauseOnHover: false,//マウスホバーで一時停止を無効
-            pauseOnDotsHover: false,//ドットナビゲーションをマウスホバーで一時停止を無効
-    });
-  }, 5000);
-});
-
-//スマホ用：スライダーをタッチしても止めずにスライドをさせたい場合
-$('.banner').on('touchmove', function(event, slick, currentSlide, nextSlide){
-    $('.banner').slick('slickPlay');
-});
-
-//スライドショウ ------------------------------------------------------------------------
-$('.home-slider').slick({
-    // fade:true,//切り替えをフェードで行う。初期値はfalse。
-    autoplay: true,//自動的に動き出すか。初期値はfalse。
-    autoplaySpeed: 3000,//次のスライドに切り替わる待ち時間(3秒設定）
-    speed: 2000,//スライドの動きのスピード。初期値は300。(2秒設定)
-    infinite: true,//スライドをループさせるかどうか。初期値はtrue。
-    // cssEase: 'linear',//スライドの流れを等速に設定
     swipe: false, // 操作による切り替えはさせない
-    pauseOnFocus: false, //スライダーをフォーカスした時にスライドを停止させるか
-    pauseOnHover: false, //スライダーにマウスホバーした時にスライドを停止させるか
-    centerMode: true,
-    centerPadding: '20%',
-    variableWidth: true,//高さを揃える
-    initialSlide: 0,//最初に表示させる要素の番号を指定
-    slidesToShow: 1,
-    slidesToScroll: 1,//1回のスクロールで2枚の写真を移動して見せる
-    // rtl: true,//スライダの表示方向を左⇒右に変更する
+    pauseOnFocus: false, //フォーカスで一時停止を無効
+    pauseOnHover: false, //マウスホバーで一時停止を無効
+    pauseOnDotsHover: false,//ドットナビゲーションをマウスホバーで一時停止を無効
+    variableWidth: true,//スライドの要素の幅をcssで設定できるようにする
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          arrows: true, //左右の矢印あり
-          dots: true,//下部ドットナビゲーションの表示
-          centerMode: true,
-          centerPadding: '15%',
-          slidesToShow: 1
+          //speed: 7000,//スライドの動きのスピード。初期値は300
         }
       },
       {
         breakpoint: 600,
         settings: {
-          arrows: false,//左右の矢印なし
-          dots: false,//下部ドットナビゲーションの表示
-          centerMode: true,
-          centerPadding: '0%',
-          slidesToShow: 1
+          speed: 6000,//スライドの動きのスピード。初期値は300
         }
       }
     ],
-    arrows: true,//左右の矢印あり
-    prevArrow: '<div class="slick-prev"></div>',//矢印部分PreviewのHTMLを変更
-    nextArrow: '<div class="slick-next"></div>',//矢印部分NextのHTMLを変更
-    dots: true,//下部ドットナビゲーションの表示
-        pauseOnFocus: false,//フォーカスで一時停止を無効
-        pauseOnHover: false,//マウスホバーで一時停止を無効
-        pauseOnDotsHover: false,//ドットナビゲーションをマウスホバーで一時停止を無効
-    });
+  });
 
 //スマホ用：スライダーをタッチしても止めずにスライドをさせたい場合
 $('.home-slider').on('touchmove', function(event, slick, currentSlide, nextSlide){
     $('.home-slider').slick('slickPlay');
 });
-
-//-----------------------------------------------------------------------------
-//Vivus SVGアニメーションの描画
-var stroke;
-stroke = new Vivus('mask', {//アニメーションをするIDの指定
-    start:'manual',//自動再生をせずスタートをマニュアルに
-    type: 'scenario-sync',// アニメーションのタイプを設定
-    duration: 10,//アニメーションの時間設定。数字が小さくなるほど速い
-    forceRender: false,//パスが更新された場合に再レンダリングさせない
-    animTimingFunction:Vivus.EASE,//動きの加速減速設定
-},
-function(){
-         $("#mask, #splash_logo").attr("class", "done");//描画が終わったらdoneというクラスを追加
-}
-);
-
-$(window).on('load',function(){
-    $("#splash").delay(3000).fadeOut('slow');//ローディング画面を3秒（3000ms）待機してからフェイドアウト
-  $("#splash_logo").delay(3000).fadeOut('slow');//ロゴを3秒（3000ms）待機してからフェイドアウト
-        stroke.play();//SVGアニメーションの実行
-});
-
 
 //----------------------------------------------------------------------------
 //GSAP 横スクロール
@@ -297,17 +348,3 @@ gsap.to(listEl, {
     // markers: true,
   },
 });
-
-//----------------------------------------------------------------------------
-//concept-img
-// gsap.to('.concept-img-inner', {
-//   x: -300,
-//   y: 300,
-//   z: -300,
-//   scrollTrigger: {
-//     trigger: '.concept-img-inner',
-//     start: 'top 100px',
-//     scrub: true,
-//     markers: true,
-//   }
-// })

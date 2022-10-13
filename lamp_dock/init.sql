@@ -24,7 +24,7 @@ CREATE TABLE  categorys (
 CREATE TABLE  brands (
   brand_id int(11) NOT NULL COMMENT 'ブランドID' AUTO_INCREMENT,
   brand_name varchar(64) NOT NULL COMMENT 'ブランド名' COLLATE utf8_general_ci,
-  category_id int(11) NOT NULL default 0 COMMENT 'カテゴリーID（マンスリー）',
+  category_id int(11) NOT NULL COMMENT 'カテゴリーID（マンスリー）',
   description text COMMENT 'ブランド説明' COLLATE utf8_general_ci,
   brand_hp text COMMENT 'ブランドHP' COLLATE utf8_general_ci,
   brand_link1 text COMMENT 'ブランドLINK1' COLLATE utf8_general_ci,
@@ -195,5 +195,7 @@ CREATE TABLE dashboards (
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(id)
 );
+
+-- memo
 -- AUTO_INCREMENT 初期化
-ALTER TABLE `tablename` auto_increment = 1;
+-- ALTER TABLE `tablename` auto_increment = 1;

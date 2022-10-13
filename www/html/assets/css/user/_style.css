@@ -24,7 +24,7 @@ body {
     line-height: 1.7;
     color: #222222;
     /*color: #4d4d4d;*/
-    background: #f7f5f4;
+    background: #f7f6f4;
     /*background: #F5F7F7;*/
     overflow-y: scroll;
     overflow-x: hidden;
@@ -45,7 +45,10 @@ li {
 
 img {
     max-width: 100%;
+    /*width: 100%;*/
     height: auto;
+    /*vertical-align: bottom;*/
+    /*画像の下にできる余白を削除*/
 }
 
 /*サイズの設定*/
@@ -67,16 +70,28 @@ img {
     position: relative;
 }
 
+/* 大きな背景画像 */
+.big-bg {
+    background-size: cover;
+    background-position: center top;
+}
+
+.sub-title {
+    font-size: 1.375rem;
+    padding: 0 8px 8px;
+    /*border-bottom: 2px #0bd solid;*/
+    font-weight: normal;
+}
+
 /* section 見出し*/
 .section-title {
-    padding: 8px 0;
-    margin-bottom: 30px;
-    /* font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif; */
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
     font-size: 1.2rem;
+    padding: 8px 0;
     font-weight: 500;
-    line-height: 2.2;
-    letter-spacing: 0.1em;
     text-align: center;
+    letter-spacing: 0.1em;
+    margin-bottom: 30px;
     text-transform: uppercase;
 }
 
@@ -85,147 +100,8 @@ iframe {
     width: 100%;
 }
 
-
-/* smoothText
-------------------------------- */
-/*滑らか*/
-.smoothText {
-    overflow: hidden;
-    display: block;
-  }
-  
-  /* 初期値 */
-  span.smoothTextTrigger{
-    transition: 1s ease-in-out;
-    transform: translate3d(0,100%,0) skewY(6deg);
-    transform-origin: top left;
-    display: inline-block;
-  }
-  /* アニメーションで傾斜がついている文字列を水平に戻す*/
-  span.smoothTextTrigger.smoothTextAppear{
-      transform: translate3d(0,0,0) skewY(0);
-  }
-  /* ディレイ調整 */
-  .smoothTextAppear:nth-child(1){
-      transition-delay: 4s;
-  }
-  
-  /* fadeUp,fadeIn...
-  ------------------------------- */
-  /* スクロールをしたら出現する要素にはじめに透過0を指定　*/
-  .fadeUpTrigger,
-  .fadeInTrigger,
-  .fadeLeftTrigger,
-  .fadeRightTrigger,
-  .fadeInOut {
-      opacity: 0;
-  }
-  
-  /* 下から */
-  .fadeUp {
-      animation-name: fadeUpAnime;
-      animation-duration: 2s;
-      animation-timing-function: ease-out;
-      /* animation-delay: .1s; */
-      animation-fill-mode: forwards;
-      opacity: 0;
-  }
-  
-  @keyframes fadeUpAnime {
-      from {
-          opacity: 0;
-          transform: translateY(100px);
-      }
-  
-      to {
-          opacity: 1;
-          transform: translateY(0);
-      }
-  }
-  
-  /* その場で */
-  .fadeIn {
-      animation-name: fadeInAnime;
-      animation-duration: 2s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      opacity: 0;
-  }
-  
-  @keyframes fadeInAnime {
-      from {
-          opacity: 0;
-      }
-  
-      to {
-          opacity: 1;
-      }
-  }
-  
-  /* 左から */
-  .fadeLeft {
-      animation-name: fadeLeftAnime;
-      animation-duration: 1.5s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      opacity: 0;
-  }
-  
-  @keyframes fadeLeftAnime {
-      from {
-          opacity: 0;
-          transform: translateX(-5%);
-      }
-  
-      to {
-          opacity: 1;
-          transform: translateX(0);
-      }
-  }
-  
-  /* 右から */
-  .fadeRight {
-      animation-name: fadeRightAnime;
-      animation-duration: 1.5s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      opacity: 0;
-  }
-  
-  @keyframes fadeRightAnime {
-      from {
-          opacity: 0;
-          transform: translateX(5%);
-      }
-  
-      to {
-          opacity: 1;
-          transform: translateX(0);
-      }
-  }
-  
-  /* アニメーションスタートの遅延時間を決めるCSS*/
-  .delay-time1 {
-      animation-delay: 1s;
-  }
-  .delay-time2 {
-      animation-delay: 2s;
-  }
-  .delay-time3 {
-      animation-delay: 3s;
-  }
-  .delay-time4 {
-      animation-delay: 4s;
-  }
-  .delay-time5 {
-      animation-delay: 5s;
-  }
-
-
-
-
-/* splash
-------------------------------------------------------------------------------------- */
+/* Loading背景画面設定
+-------------------------------*/
 #splash {
     display: grid;
     place-content: center;
@@ -235,12 +111,31 @@ iframe {
     width: 100%;
     height: 100%;
     z-index: 999;
+    background: #fff;
     color: #fff;
 }
 
-/* ロゴの大きさ設定　*/
-#splash_logo svg{
-    width: 500px;
+/* Loading画像中央配置　*/
+#splash_logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+}
+
+/* Loading アイコンの大きさ設定　*/
+#splash_logo img {
+    width: 50%;
+    opacity:0;
+}
+#splash_logo.done img{
+    animation: fadeInAnime .5s forwards,shake .8s .5s ease-out;
+}
+
+/* Loading アイコンの大きさ設定　*/
+#splash_logo svg {
+    width: 100%;
 }
 
 /*=============== SVGアニメーション内の指定 =================*/
@@ -267,98 +162,6 @@ iframe {
     /*線の色なし*/
 }
 
-/*========= 画面遷移のためのCSS ===============*/
-
-/*画面遷移アニメーション*/
-.splash-bg{
-    display: none;
-}
-
-/*bodyにappearクラスがついたら出現*/
-body.appear .splash-bg{
-    display: block;
-    content: "";
-    position:fixed;
-  z-index: 999;
-    width: 100%;
-    height: 100vh;
-    top: 0;
-  left: 0;
-    transform: scaleY(0);
-    background-color: #4d4c4b;/*伸びる背景色の設定*/
-  animation-name:PageAnime;
-  animation-duration:1.2s;
-  animation-timing-function:ease-in-out;
-  animation-fill-mode:forwards;
-
-}
-
-@keyframes PageAnime{
-  0% {
-    transform-origin:bottom;
-    transform:scaleY(0);
-  }
-  50% {
-    transform-origin:bottom;
-    transform:scaleY(1);
-  }
-  50.001% {
-    transform-origin:top;
-  }
-  100% {
-    transform-origin:top;
-    transform:scaleY(0);
-  }
-}
-
-/*画面遷移の後現れるコンテンツ設定*/
-
-#top-bg, #top-logo, .top-text, .scrolldown{
-  opacity: 0;/*はじめは透過0に*/
-}
-
-/*bodyにappearクラスがついたら出現*/
-body.appear #top-bg{
-  animation-name:PageAnimeAppear;
-  animation-duration:1s;
-  animation-delay: 0.8s;
-  animation-fill-mode:forwards;
-  opacity: 0;
-}
-
-@keyframes PageAnimeAppear{
-  0% {
-  opacity: 0;
-  }
-  100% {
-  opacity: 1;
-}
-}
-
-body.appear #top-logo{
-    animation-name:PageAnimeAppear;
-    animation-duration:1.5s;
-    animation-delay: 1.8s;
-    animation-fill-mode:forwards;
-    opacity: 0;
-  }
-
-body.appear .top-text{
-    animation-name:PageAnimeAppear;
-    animation-duration:1.5s;
-    animation-delay: 2.8s;
-    animation-fill-mode:forwards;
-    opacity: 0;
-  }
-
-body.appear .scrolldown{
-    animation:PageAnimeAppear 1.5s 3.5s forwards, arrowmove 1s ease-in-out infinite;
-    /* animation-duration:1.5s;
-    animation-delay: 3.3s;
-    animation-fill-mode:forwards; */
-    opacity: 0;
-  }
-
 
 /* HEADER
 ------------------------------------------------------------------------------------- */
@@ -370,16 +173,10 @@ body.appear .scrolldown{
     position: absolute;
     top: 0;
     z-index: 990;
-    display: none;
 }
 
 /*JSを使いfixedクラスが付与された際の設定*/
 #header.fixed {
-    display: block;
-    height: 70px;
-    /*高さ指定*/
-    width: 100%;
-    /*横幅指定*/
     position: fixed;
     /*fixedを設定して固定*/
     top: 0;
@@ -394,7 +191,6 @@ body.appear .scrolldown{
     box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
     animation: fadeDown 0.5s forwards;
 }
-
 @keyframes fadeDown{
     from{
         opacity: 0;
@@ -456,7 +252,7 @@ svgを外部から読み込み*/
     height: 100vh;
     /*ナビの高さ*/
     /*background: #999;*/
-    background: #b3b2b1;
+    background: #e6e4dc;
     /*動き*/
     transition: all 0.6s;
 }
@@ -549,22 +345,22 @@ svgを外部から読み込み*/
     padding-bottom: 50px;
 }
 
+.g-nav-content li {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 2.8;
+}
+
 .g-nav-content li a {
     display: inline-block;
 }
 
 /*メインナビ*/
 .g-nav-list-main {
-    margin-bottom: 10px;
-}
-
-.g-nav-list-main li {
-    /* 英数字の大文字変換 */
-    text-transform: uppercase;
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    font-weight: 500;
     font-size: 1.125rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    line-height: 2.8;
+    margin-bottom: 10px;
 }
 
 /*サブナビ*/
@@ -574,14 +370,6 @@ svgを外部から読み込み*/
     gap: 10px;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     font-size: 0.65rem;
-}
-
-.g-nav-list-sub li {
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    line-height: 2.8;
 }
 
 /*左から右に線が伸びる（下部）*/
@@ -790,6 +578,46 @@ svgを外部から読み込み*/
     left: 8px;
 }
 
+/*アカウント*/
+.account {
+    position: relative;
+}
+
+/*プルダウンログアウト*/
+.child {
+    visibility: hidden;
+    width: 100%;
+    position: absolute;
+    top: 45px;
+    left: -13px;
+}
+
+.account:hover .child {
+    visibility: visible;
+}
+
+.child-logout input[type="submit"] {
+    font-size: 0.7rem;
+    background: #000000;
+    color: #fff;
+    border: 1px solid #000000;
+    padding: 3px 7px;
+    margin: 0;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+}
+
+.child-logout input[type="submit"]:hover {
+    background: #fff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+/*お気に入り*/
+/* .favorite {} */
+
+/*ショッピングカート*/
+/* .shopping-cart {} */
+
 /* カートアイテム数 */
 .cart-count:not(.cart-count--0) {
     display: inline-block;
@@ -812,121 +640,94 @@ svgを外部から読み込み*/
 }
 
 
-/* TOP
+/* HOME
 ------------------------------------------------------------------------------------- */
-#top {
-    position: relative;
+#home {
     padding: 0;
-    height: 100vh;
 }
 
-/* 固定背景　sticky→gsapに変更 
------------------------------ */
-#top-bg {
-    /* position: -webkit-sticky;
-    position: sticky;
-	top: 0; */
-	min-height: 100vh;
-    overflow: hidden;
+/* #home タイトル */
+.home-title {
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    font-size: 4.5rem;
+    text-transform: uppercase;
+    font-weight: normal;
+    color: #fff;
+    text-shadow: 0px 2px 4px rgb(0 0 0 / 25%);
 }
 
-#top-bg img{
-    width: 100%;
-}
-
-.bb-1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    width: 28vw;
-    min-width: 350px;
-    z-index: 5;
-}
-.bb-2 {
-    position: absolute;
-    top: 1%;
-    left: 8.6%;
-    width: 20vw;
-    min-width: 250px;
-    z-index: 4;
-}
-.bb-3 {
-    position: absolute;
-    left: 1.5%;
-    bottom: 0;
-    width: 21vw;
-    min-width: 260px;
-    z-index: 3;
-}
-.bb-4 {
-    position: absolute;
-    top: 5.8%;
-    right: 4.6%;
-    width: 23vw;
-    min-width: 290px;
-    z-index: 1;
-}
-.bb-5 {
-    position: absolute;
-    right: 7.2%;
-    bottom: -1.8%;
-    width: 19vw;
-    min-width: 240px;
-    z-index: 2;
-}
-
-
-/* TOP タイトル
------------------------------ */
-.top-title {
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-.top-title-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1ch;
-}
-
-#top-logo {
-    width: 100%;
-}
-
-/* 実験　h1 seo対策
-インラインsvgはインデックスされずただの文字列扱いとなる
-imgタグを使用して対策+filterで色変更*/
-#top-logo img{
-    /* fill: #4d4c4b; */
-    /* 半透明 */
-    /* fill: rgba(77, 76, 75, 0.8); */
-    filter: 
-    invert(25%) sepia(1%) saturate(2222%) hue-rotate(349deg) brightness(100%) contrast(80%) 
-    opacity(80%) drop-shadow(0px 1px 4px rgb(0 0 0 / 70%));
-    /* 画像の下に出る余白を無くす */
-    vertical-align: bottom;
-}
-
-/* #top ページテキスト*/
-.top-text {
+/* #home ページテキスト*/
+.home-text {
     font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
     font-size: 1.2rem;
     font-weight: 500;
+    margin: 10px 0 42px;
     color: #fff;
-    line-height: 2;
+    line-height: 2.4;
     letter-spacing: 0.3em;
-    text-shadow: 0px 1px 4px rgb(0 0 0 / 70%);
+    text-shadow: 0px 2px 4px rgb(0 0 0 / 25%);
     overflow: hidden;
-    display: block;
+  display: block;
 }
+
+.home-sticky-bg {
+    /*紙芝居エフェクト*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+.home-content {
+    text-align: center;
+    overflow-wrap: break-word;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 100%;
+}
+
+/* banner
+--------------------------- */
+.banner {
+    z-index: 1;
+    /*↑z-indexの値をhome-contentのz-indexの値よりも小さくして背景に回す*/
+    height: 100vh;
+    /*スライダー全体の縦幅を画面の高さいっぱい（100vh）にする*/
+}
+
+.banner .slider-item {
+    width: 100%;
+    /*各スライダー全体の横幅を画面の高さいっぱい（100%）にする*/
+    height: 100vh;
+    /*各スライダー全体の縦幅を画面の高さいっぱい（100vh）にする*/
+    background-repeat: no-repeat;
+    /*背景画像をリピートしない*/
+    background-position: center;
+    /*背景画像の位置を中央に*/
+    background-size: cover;
+    /*背景画像が.slider-item全体を覆い表示*/
+}
+
+.banner .slider-item:first-child{
+    background-position: bottom;
+}
+
+/*　背景画像設定　*/
+.slider-item01 {
+    background: url('../../images/banner/pexels-serhii-volyk-10865058.jpg');
+}
+
+.slider-item02 {
+    background: url('../../images/banner/pexels-sujira-su-11376531.jpg');
+}
+
+.slider-item03 {
+    background: url('../../images/banner/pexels-zsófia-fehér-11405127.jpg');
+}
+
 
 /* スクロールダウン
 ----------------------------- */
@@ -937,7 +738,8 @@ imgタグを使用して対策+filterで色変更*/
     bottom: 1%;
     right: 50%;
     /*矢印の動き1秒かけて永遠にループ*/
-    /* animation:arrowmove 1s ease-in-out infinite; */
+    animation:arrowmove 1s ease-in-out infinite;
+    z-index: 2;
 }
 
 /*下からの距離が変化して全体が下→上→下に動く*/
@@ -962,7 +764,7 @@ imgタグを使用して対策+filterで色変更*/
     left: -20px;
     bottom: 10px;
     /*テキストの形状*/
-    color: rgba(77, 76, 75, 0.6);
+    color: #fff;
     font-size: 0.7rem;
     letter-spacing: 0.05em;
     /*縦書き設定*/
@@ -981,7 +783,7 @@ imgタグを使用して対策+filterで色変更*/
     /*矢印の形状*/
     width: 1px;
     height: 20px;
-    background: rgba(77, 76, 75, 0.6);
+    background: #fff;
     transform: skewX(-31deg);
 }
 
@@ -994,264 +796,277 @@ imgタグを使用して対策+filterで色変更*/
     /*矢印の形状*/
     width: 1px;
     height: 50px;
-    background: rgba(77, 76, 75, 0.6);
+    background: #fff;
 }
 
+/*home ページ背景色
+----------------------------------------------------------------------- */
+#concept,
+#schedule {
+    background: #fff;
+}
+#event, #event-info, #items, #brands,
+#original-items, #information{
+    /* background: #fff; */
+    background: #f7f6f4;
+    /* background: #e6e2da; */
+} 
 
-/* CAPTION
+
+
+/* concept
 ------------------------------------------------------------------------------------- */
-#caption {
-    background: #ffffff;
-    padding-bottom: 0px;
-}
 
-.caption-layout {
+.concept-content {
+    position: relative;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    gap: 1ch;
 }
 
-.caption-text {
-    font-size: 0.9rem;
-    font-weight: 400;
+.concept-text-area {
+    z-index: 2;
+    width: 60%;
+    display: grid;
+    place-content: center;
+    /*gap: 1ch;*/
+}
+
+.concept-text{
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    font-size: 1.2rem;
+    font-weight: 500;
     line-height: 2.4;
     letter-spacing: 0.3em;
-    text-align: center;
+    /*white-space: nowrap;*/
 }
 
-
-/* EVENT
-------------------------------------------------------------------------------------- */
-#event {
-    background: #ffffff;
-    padding-bottom: 0px;
-}
-.event-month {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1ch;
-    width: 100%;
-}
-
-.event-month svg {
-    width: 100px;
-}
-
-.event-area-layout {
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-align-items: center;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.event-image, .event-lead {
-    width: calc(50% - 25px);
-}
-
-.event-lead {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1ch;
-    padding: 20px 0;
-}
-
-.event-tag {
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 2;
-    letter-spacing: 0.02em;
-    color: #cc3314;
-}
-
-.event-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 2.2;
-    letter-spacing: 0.3em;
-}
-
-.event-title a{
-    display: block;
-}
-
-.event-text {
-    font-size: 0.9rem;
-    font-weight: 400;
-    line-height: 2;
-    letter-spacing: 0.3em;
-}
-
-.event-text span {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+.concept-img-area{
+    width: 35%;
+    /*imgを中央に*/
+    display: grid;
+    place-content: center;
     overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* 押し込みリンクボタン */
-.event-link-btn {
-    padding: 6px 10px;
-}
-
-.event-link-btn a {
-    color: #fff;
-    text-align: center;
-    background-color: #a7a7a7;
-    border: 1px solid #a7a7a7;
-    border-radius: 5rem;
-    box-sizing: border-box;
-    display: inline-block;
-    width: 10rem;
-    height: 2rem;
-    box-shadow: 0px 4px 4px rgb(0 0 0 / 20%);
-    /*アニメーションの指定*/
-    transition: all 0.2s ease;
-}
-
-.event-link-btn a:hover {
-    background-color: #999999;
-    border: 1px solid #999999;
-    opacity: 1;
-    box-shadow: 0px 1px 1px rgb(0 0 0 / 20%);
-    transform: translateY(3px);
-}
-
-.event-link-btn a span {
-    font-size: 0.9rem;
-    font-weight: 400;
-    line-height: 2;
-    letter-spacing: 0.02em;
-}
-
-
-/* SLIDER
-------------------------------------------------------------------------------------- */
-/* slick slider基本設定 */
-.slider {
+    /* circle-svg用 */
     position: relative;
-    width: 94%;
-    margin: 0 auto;
 }
 
-/* fadeを使用する場合 */
-/* .slider-item { */
-    /*width: 100%;*/
-    /*各スライダー全体の横幅を画面の高さいっぱい（100%）にする*/
-    /*height:35vw;*/
-    /*各スライダー全体の縦幅を画面の高さいっぱい（100vh）にする*/
-    /*background-repeat: no-repeat;背景画像をリピートしない*/
-    /*background-position: center;背景画像の位置を中央に*/
-    /*background-size: cover;背景画像が.slider-item全体を覆い表示*/
-/* } */
+/* .concept-img-inner{
+    
+} */
 
-.slick-slide img{
-    height: 30vw;
-    /* min-height: 300px; */
-    width: 40vw;
-    /* min-width: 400px; */
-    object-fit: cover;
-    vertical-align: bottom;/*画像の下にできる余白を削除*/
-}
-
-/*スライドの余白*/
-.slick-slide {
-    margin: 0 10px;
-}
-
-/*矢印の設定
--------------------------------------*/
-/*戻る、次へ矢印の位置*/
-.slick-prev, 
-.slick-next {
-    position: absolute;/*絶対配置にする*/
-    /* z-index: 3; */
-    top: 42%;
-    cursor: pointer;/*マウスカーソルを指マークに*/
-    outline: none;/*クリックをしたら出てくる枠線を消す*/
-    border-top: 2px solid #ccc;/*矢印の色*/
-    border-right: 2px solid #ccc;/*矢印の色*/
-    height: 15px;
-    width: 15px;
-}
-
-.slick-prev {/*戻る矢印の位置と形状*/
-    left:1.5%;
-    transform: rotate(-135deg);
-}
-
-.slick-next {/*次へ矢印の位置と形状*/
-    right:1.5%;
-    transform: rotate(45deg);
-}
-
-/* ドットナビゲーションの設定
----------------------------------------*/
-.slick-dots {
-    text-align:center;
-	margin:20px 0 0 0;
-}
-
-.slick-dots li {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 5px;
-}
-
-.slick-dots button {
-    color: transparent;
-    outline: none;
-    width: 8px;
-    height: 8px;
-    display: block;
-    border-radius: 50%;
-    background: #ccc;/*ドットボタンの色*/
-    opacity: 0.7;
-}
-
-.slick-dots .slick-active button {
-    background: #333;/*ドットボタンの現在地表示の色*/
-    opacity: 1;
-}
-
-
-/* .e-slider 等速スライダー
-------------------------------*/
-.event-slider {
-    padding-top: 50px;
-}
-
-/* ワイドを100％に変更 */
-.e-slider {
-    position: relative;
+.concept-img-area img{
     width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* 画像サイズ調整 */
-.e-slider .slick-slide img {
-    height: 22.5vw;
-    width: 30vw;
-    backface-visibility: hidden;/*画像がぼやけ解消*/
+.circle-svg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
 }
 
-/* 画像間の余白をなくす */
-.e-slider .slick-slide {
-    margin: 0 4px;
+textpath{
+  font-size:9px;
+}
+
+/* shake アニメーション 
+---------------------------------*/
+.concept-img-area img:hover {
+    animation:shake 0.8s ease-out;
+}
+
+@keyframes shake {
+    0%   { transform:rotate(0); }
+    16%  { transform:rotate(12deg); }
+    32%  { transform:rotate(-10deg); }
+    48%  { transform:rotate(8deg); }
+    64%  { transform:rotate(-6deg); }
+    80%  { transform:rotate(4deg); }
+    96%  { transform:rotate(-2deg); }
+    100% { transform:rotate(0deg); }
 }
 
 
+/* fadeUp,fadeIn
+------------------------------- */
+/*滑らか*/
+.smoothText {
+  overflow: hidden;
+  display: block;
+}
 
-/* ITEMS
-------------------------------------------------------------------------------------- */
-#items {
-    background: #fff;
+/* 初期値 */
+span.smoothTextTrigger{
+  transition: 1s ease-in-out;
+  transform: translate3d(0,100%,0) skewY(6deg);
+  transform-origin: top left;
+  display: inline-block;
+}
+/* アニメーションで傾斜がついている文字列を水平に戻す*/
+span.smoothTextTrigger.smoothTextAppear{
+    transform: translate3d(0,0,0) skewY(0);
+}
+/* ディレイ調整
+------------------------- */
+/* #home */
+.home-title .smoothTextAppear:nth-child(1){
+    transition-delay: 4s;
+}
+.home-title .smoothTextAppear:nth-child(2){
+    transition-delay: 4.25s;
+}
+.home-title .smoothTextAppear:nth-child(3){
+    transition-delay: 4.5s;
+}
+.home-title .smoothTextAppear:nth-child(4){
+    transition-delay: 4.75s;
+}
+
+/* #concept */
+.smooth-01 .smoothTextAppear{
+    transition-delay: 0.85s;
+}
+.smooth-02 .smoothTextAppear{
+    transition-delay: 1s;
+}
+.smooth-03 .smoothTextAppear{
+    transition-delay: 1.15s;
+}
+.smooth-04 .smoothTextAppear{
+    transition-delay: 1.3s;
+}
+
+/* スクロールをしたら出現する要素にはじめに透過0を指定　*/
+.fadeUpTrigger,
+.fadeInTrigger,
+.fadeLeftTrigger,
+.fadeRightTrigger,
+.fadeInOut {
+    opacity: 0;
+}
+
+/* 下から */
+.fadeUp {
+    animation-name: fadeUpAnime;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+    /* animation-delay: .1s; */
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeUpAnime {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* その場で */
+.fadeIn {
+    animation-name: fadeInAnime;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInAnime {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* 左から */
+.fadeLeft {
+    animation-name: fadeLeftAnime;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeLeftAnime {
+    from {
+        opacity: 0;
+        transform: translateX(-5%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 右から */
+.fadeRight {
+    animation-name: fadeRightAnime;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeRightAnime {
+    from {
+        opacity: 0;
+        transform: translateX(5%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* アニメーションスタートの遅延時間を決めるCSS*/
+.delay-time045 {
+    animation-delay: 0.45s;
+}
+.delay-time100 {
+    animation-delay: 1s;
+}
+.delay-time115 {
+    animation-delay: 1.15s;
+}
+.delay-time130 {
+    animation-delay: 1.3s;
+}
+.delay-time145 {
+    animation-delay: 1.45s;
+}
+.delay-time160 {
+    animation-delay: 1.6s;
+}
+.delay-time170 {
+    animation-delay: 1.7s;
+}
+.delay-time2 {
+    animation-delay: 2s;
+}
+.delay-time3 {
+    animation-delay: 3s;
+}
+.delay-time4 {
+    animation-delay: 4s;
+}
+.delay-time5 {
+    animation-delay: 5s;
 }
 
 /*矢印リンク
@@ -1260,9 +1075,6 @@ imgタグを使用して対策+filterで色変更*/
     padding: 8px 0;
     text-align: right;
     font-size: 0.5rem;
-    font-weight: 200;
-    line-height: 1.6;
-    letter-spacing: 0.02em;
 }
 
 .btn-arrow a:hover {
@@ -1319,8 +1131,416 @@ imgタグを使用して対策+filterで色変更*/
     right: -5%;
 }
 
-/* item
-------------------------------- */
+
+/* event
+------------------------------------------------------------------------------------- */
+#event {
+    padding-top: 150px;
+    overflow: hidden;
+}
+
+/* 上部で固定 */
+#brands{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+/* 紙芝居用に余白を増やす */
+#brands{
+    padding-bottom: 250px;
+}
+
+
+/*スライダー
+---------------------------------- */
+.slider-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+/* #monthly-pop-up .slider-content .slider-content-left,
+#event .slider-content .slider-content-right{
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2ch;
+    position: relative;
+}
+#monthly-pop-up .slider-content .slider-content-right,
+#event .slider-content .slider-content-left{
+    width: 65%;
+    position: relative;
+} */
+
+
+/*.wave-left, .wave-right{*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    height: 100%;*/
+/*    width: 20%;*/
+/*    z-index: 999;*/
+/*}*/
+/*.wave-left{*/
+/*    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 600"><path fill="%23f7f6f4" d="M138,0,124.5,16.7C111,33.3,84,66.7,70.3,100s-14,66.7-.8,100,39.8,66.7,47.8,100-2.6,66.7-13.1,100S83.3,466.7,79.3,500s-1.6,66.7-.5,83.3L80,600H0V0Z" /></svg>') no-repeat;*/
+/*    left: 0;*/
+/*}*/
+/*.wave-right{*/
+/*    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 600"><path fill="%23e6e2da" d="M138,0,124.5,16.7C111,33.3,84,66.7,70.3,100s-14,66.7-.8,100,39.8,66.7,47.8,100-2.6,66.7-13.1,100S83.3,466.7,79.3,500s-1.6,66.7-.5,83.3L80,600H0V0Z" /></svg>') no-repeat;*/
+/*    right: 0;*/
+/*    transform: scale(-1, 1);*/
+/*}*/
+
+/* タグ */
+.event-tag {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 4vw;
+    text-align:center;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    color: inherit;
+    /* 縦書きver */
+    /*-webkit-writing-mode: vertical-rl;*/
+    /*-ms-writing-mode: tb-rl;*/
+    /*writing-mode: vertical-rl;*/
+    z-index: 2;
+}
+
+/* slick-slider基礎設定
+------------------------------------------*/
+.slider {
+    position: relative;
+    width: 94%;
+    margin: 0 auto;
+}
+
+/* .slider-item { */
+    /*width: 100%;*/
+    /*各スライダー全体の横幅を画面の高さいっぱい（100%）にする*/
+    /*height:35vw;*/
+    /*各スライダー全体の縦幅を画面の高さいっぱい（100vh）にする*/
+    /*background-repeat: no-repeat;背景画像をリピートしない*/
+    /*background-position: center;背景画像の位置を中央に*/
+    /*background-size: cover;背景画像が.slider-item全体を覆い表示*/
+/* } */
+
+/*スライドの余白*/
+.slick-slide {
+    margin: 0;
+}
+
+.slick-slide img{
+    height: 43vw;
+    max-height: 500px;
+    min-height: 250px;
+    width: 100%;
+    object-fit: cover;
+    vertical-align: bottom;/*画像の下にできる余白を削除*/
+}
+
+
+/*矢印の設定*/
+
+/*戻る、次へ矢印の位置*/
+.slick-prev, 
+.slick-next {
+    position: absolute;/*絶対配置にする*/
+  z-index: 3;
+    top: 42%;
+    cursor: pointer;/*マウスカーソルを指マークに*/
+    outline: none;/*クリックをしたら出てくる枠線を消す*/
+    border-top: 2px solid #ccc;/*矢印の色*/
+    border-right: 2px solid #ccc;/*矢印の色*/
+    height: 15px;
+    width: 15px;
+}
+
+.slick-prev {/*戻る矢印の位置と形状*/
+    left:1.5%;
+    transform: rotate(-135deg);
+}
+
+.slick-next {/*次へ矢印の位置と形状*/
+    right:1.5%;
+    transform: rotate(45deg);
+}
+
+/*ドットナビゲーションの設定　 */
+.slick-dots {
+    width:80%;
+    text-align: center;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+.slick-dots li {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 5px;
+}
+
+.slick-dots button {
+    color: transparent;
+    outline: none;
+    width: 30px;
+    height: 2px;
+    display: block;
+    border-radius: initial;
+    background: #ccc;
+    /*ドットボタンの色*/
+    opacity: 0.7;
+}
+
+.slick-dots .slick-active button {
+    background: #fff;
+    /*ドットボタンの現在地表示の色*/
+    opacity: 1;
+}
+
+/* .slider
+------------------------------*/
+.slider .slick-slide img {
+    height: 43vw;
+    /*max-height: 500px;*/
+    min-height: 250px;
+    width: 100%;
+    object-fit: cover;
+}
+
+/*戻る、次へ矢印の位置*/
+.slider .slick-prev,
+.slider .slick-next {
+    position: absolute;
+    bottom: -6%;
+    z-index: 3;
+    cursor: pointer;
+    /*マウスカーソルを指マークに*/
+    outline: none;
+}
+.slider .slick-prev {
+    left: 1%;
+}
+.slider .slick-next {
+    right: 1%;
+}
+
+/* #monthly-pop-up .slider .slick-prev {
+    left: 10%;
+}
+#event .slider .slick-next {
+    right: 10%;
+} */
+
+/* 形状*/
+.slider .slick-prev:before,
+.slider .slick-prev:after,
+.slider .slick-next:before,
+.slider .slick-next:after{
+  content: '';
+  position: absolute;
+  background: #a7a7a7;
+}
+.slider .slick-prev:before {
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 35px;
+}
+.slider .slick-prev:after {
+  top: -7px;
+  left: -3px;
+  height: 1px;
+  width: 20px;
+  transform: rotate(-45deg);
+}
+.slider .slick-next:before {
+  top: 0;
+  right: 0;
+  height: 1px;
+  width: 35px;
+}
+.slider .slick-next:after {
+  top: -7px;
+  right: -3px;
+  height: 1px;
+  width: 20px;
+  transform: rotate(45deg);
+}
+/*ドット*/
+#event .slick-dots{
+    left:55%;
+}
+
+
+
+/* .side-scrollの基礎設定
+-----------------------------------------*/
+/* .side-scroll {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+} */
+
+.side-scroll-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* overflow: hidden; */
+    width: 80%;
+    margin: 0 auto;
+}
+
+.side-scroll-wrap{
+    position: relative;
+    width: 100%;
+    height: 27vw;
+    max-height: 400px;
+    min-height: 250px;
+}
+
+.side-scroll-list{
+    position: absolute;
+    display: flex;
+    gap: 0 50px;
+}
+
+.side-scroll-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40.5vw;
+    max-width: 600px;
+    min-width: 375px;
+    /*height: 420px;*/
+}
+
+.side-scroll-item img{
+    height: 27vw;
+    max-height: 400px;
+    min-height: 250px;
+    width: 100%;
+    object-fit: cover;
+}
+
+  
+/* イベント情報
+----------------------------------------- */
+.event-info {
+    /*子要素の中央揃え*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*gap: 1ch;*/
+    /*overflow-wrap: break-word;*/
+    word-break: break-word;
+    position: relative;
+    margin-top: 30px;
+    padding: 15px;
+    border: 1.5px solid #ddd;
+}
+
+.event-info::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100%;
+    height: 100%;
+    /* 背景色を透過させる */
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1.5px solid #ddd;
+    z-index: -1;
+}
+
+.event-title {
+    padding: 6px 10px;
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    font-size: 1.1rem;
+    /*font-size: 1.6vw;*/
+    font-weight: 500;
+    text-align: center;
+    line-height: 2.4;
+    letter-spacing: 0.3em;
+}
+
+.event-title a{
+    display: block;
+}
+
+/*左側ver--------*/
+/* .slider-content-left .event-info .event-title{
+    position: relative;
+    top: 0;
+    left: 5%;
+    text-align: left;
+} */
+/*右側ver--------*/
+/* .slider-content-right .event-info .event-title{
+    position: relative;
+    top: 0;
+    right: 5%;
+    text-align: right;
+} */
+
+.event-date {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    /*font-size: 1.2vw;*/
+    line-height: 2.4;
+    color: #cc3314;
+}
+
+
+.event-link-btn {
+    padding: 6px 10px;
+}
+
+.event-link-btn a {
+    color: #fff;
+    text-align: center;
+    background-color: #a7a7a7;
+    border: 1px solid #a7a7a7;
+    border-radius: 5rem;
+    box-sizing: border-box;
+    display: inline-block;
+    line-height: 2rem;
+    width: 10rem;
+    height: 2rem;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 20%);
+    /*アニメーションの指定*/
+    transition: all 0.2s ease;
+}
+
+.event-link-btn a:hover {
+    background-color: #999999;
+    border: 1px solid #999999;
+    opacity: 1;
+    box-shadow: 0px 1px 1px rgb(0 0 0 / 20%);
+    transform: translateY(3px);
+}
+
+.event-link-btn a span {
+    font-size: 0.9rem;
+    vertical-align: bottom;
+}
+
+/* items
+------------------------------------------------------------------------------------- */
 
 /*グリッド
 ------------------------------- */
@@ -1476,73 +1696,11 @@ imgタグを使用して対策+filterで色変更*/
     object-fit: cover;
 }
 
-/*グリッド下部アイテム名など
---------------------------------- */
-.item-lead {
-    width: 100%;
-    margin: 10px 0;
-    overflow-wrap: break-word;
-}
-
-.item-lead a {
-    display: block;
-}
-
-/* ブランド名 */
-.sub-lead {
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1.4em;
-    letter-spacing: 0.02em;
-}
-
-/* 商品名 */
-.main-lead {
-    margin-top: 5px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 1.6em;
-    letter-spacing: 0.02em;
-}
-
-/* 価格 */
-.mid-lead {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    font-weight: 400;
-    line-height: 1.4em;
-    letter-spacing: 0.02em;
-}
-
-/* (TAX IN) */
-.mid-lead .tax-in {
-    font-size: 0.75rem;
-}
-
-.tax-in {
-    margin-left: 5px;
-}
-
-
-/* BRANDS
+/* brands
 ------------------------------------------------------------------------------------- */
-#brands {
-    background: #fff;
-}
-
-#brands {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    /* 紙芝居用に余白を増やす */
-    padding-bottom: 250px;
-}
-
-/* brand
-------------------------------- */
 
 /* ロゴでmaskを使用
-------------------------------- */
+------------------------------*/
 #brands .mask{
     height: 21vw;
     max-height: 220px;
@@ -1578,6 +1736,7 @@ imgタグを使用して対策+filterで色変更*/
 
 /* ロゴがない場合 */
 .white .brand-logo-text {
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
     display: block;
     width: 75%;
     text-align: center;
@@ -1592,12 +1751,52 @@ imgタグを使用して対策+filterで色変更*/
     overflow-wrap: break-word;
 }
 
-
-/* SCHEDULE
-------------------------------------------------------------------------------------- */
-#schedule {
-    background: #f7f5f4;
+/*グリッド下部アイテム名など
+--------------------------------- */
+.item-lead {
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 7px;
+    overflow-wrap: break-word;
 }
+
+.item-lead a {
+    display: block;
+}
+
+/* ブランド名 */
+.sub-lead {
+    font-size: 0.75rem;
+    line-height: 1.4em;
+}
+
+/* 商品名 */
+.main-lead {
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.6em;
+}
+
+/* 価格 */
+.mid-lead {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+/* (TAX IN) */
+.mid-lead .tax-in {
+    font-size: 0.75rem;
+}
+
+.tax-in {
+    margin-left: 5px;
+}
+
+
+/* schedule
+------------------------------------------------------------------------------------- */
 
 .schedule-list {
     margin-bottom: 20px;
@@ -1605,6 +1804,7 @@ imgタグを使用して対策+filterで色変更*/
 
 .schedule-list article {
     /*width: 100%;*/
+    box-sizing: border-box;
     padding: 15px 0;
     border-top: 1px solid #ddd;
 }
@@ -1627,15 +1827,14 @@ imgタグを使用して対策+filterで色変更*/
 }
 
 .schedule-list-fig {
+    display: inline-block;
     width: 100%;
     vertical-align: bottom;
 }
 
 .schedule-list-fig img {
     width: 100%;
-    min-width: 225px;
     height: 15vw;
-    min-height: 150px;
     object-fit: cover;
 }
 
@@ -1643,50 +1842,40 @@ imgタグを使用して対策+filterで色変更*/
 .schedule-info {
     flex-basis: 65%;
     padding: 0 3%;
-    /* 内容が定まるまで幅の決まらない要素には効かない */
-    /* overflow-wrap: break-word; */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5ch;
-}
-
-.schedule-tag {
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 2;
-    letter-spacing: 0.02em;
-    color: #cc3314;
-    display: inline-block;
+    overflow-wrap: break-word;
+    min-width: 0;
 }
 
 .schedule-title {
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 2;
-    letter-spacing: 0.3em;
-    /* word-break: break-word; 非推奨 */
-    word-break: break-all;
+    font-family: "Marcellus", "游明朝体", YuMincho, "YuMincho", "Yu Mincho", 'Yu Mincho Light', "游明朝", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    overflow-wrap: break-word;
+}
+
+.schedule-tag {
+    text-align: center;
+    font-size: 0.5rem;
+    color: #fff;
+    background: #a7a7a7;
+    border: 1px solid #a7a7a7;
+    border-radius: 3px;
+    box-shadow: 0px 2px 4px rgb(0 0 0 / 20%);
+    padding: 2px 12px;
+    display: inline-block;
+    margin-top: 10px;
 }
 
 .schedule-date {
+    margin-top: 10px;
     font-size: 0.7rem;
-    font-weight: 400;
-    line-height: 2;
-    letter-spacing: 0.02em;
 }
 
 /* originals
 ------------------------------------------------------------------------------------- */
-#originals {
-    background: #f7f5f4;
-}
 
 /* information
 ------------------------------------------------------------------------------------- */
-#information {
-    background: #f7f5f4;
-}
 
 #information .section-title {
     margin-bottom: 10px;
@@ -1701,7 +1890,6 @@ imgタグを使用して対策+filterで色変更*/
 }
 
 .information-list li {
-    font-size: 1rem;
     letter-spacing: 0.04em;
     padding: 7px 0;
 }
@@ -1735,6 +1923,12 @@ imgタグを使用して対策+filterで色変更*/
     /*text-transform: uppercase;*/
 }
 
+.f-nav-area li {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 2.8;
+}
+
 .f-nav-area li a {
     display: inline-block;
 }
@@ -1745,14 +1939,8 @@ imgタグを使用して対策+filterで色変更*/
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-.f-nav-list-main li {
-    text-transform: uppercase;
+    font-weight: bold;
     font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    line-height: 2.8;
 }
 
 /* フッターサブナビ */
@@ -1762,14 +1950,6 @@ imgタグを使用して対策+filterで色変更*/
     gap: 10px;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     font-size: 0.65rem;
-}
-
-.f-nav-list-sub li {
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    line-height: 2.8;
 }
 
 /* ホバーで下線が伸びるアニメーション */
@@ -1947,15 +2127,6 @@ footer p {
     position: absolute;
     bottom: -15px;
     right: 25px;
-}
-
-
-.slider-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    position: relative;
 }
 
 
@@ -3325,92 +3496,109 @@ cart order------------------------*/
 ------------------------------------------------------------------------------------- */
 @media (max-width: 600px) {
     /* Loading背景画面設定　*/
-    #splash_logo svg{
-        width: 300px;
+    #splash_logo {
+        width: 270px;
     }
-
-    /* header */
     .logo {
         width: 150px;
     }
+    .home-title {
+        font-size: 3.5rem;
+    }
+    .home-text {
+        font-size: 1rem;
+    }
+    .page-title {
+        font-size: 2.5rem;
+    }
 
+    /* HEADER */
     .account {
         display: none;
     }
 
-    /* g-nav */
     .g-nav-content {
         width: 250px;
     }
 
-    /* bb画像 */
-    .bb-1 {
-        min-width: 290px;
-        top: 50%;
-        left: 55%;
+    /* HOME 
+    ----------------------------*/
+    /* .home {} */
+
+    .concept-content {
+        flex-direction: column;
     }
-    .bb-2 {
-        min-width: 250px;
-        top: -10%;
-        left: -20%;
+    .concept-text-area {
+        width: 100%;
     }
-    .bb-3 {
-        min-width: 210px;
-        left: -8%;
-        bottom: 2%;
+    .concept-img-area{
+        width: 70%;
+        top: 15px;
+        left: 15px;
     }
-    .bb-4 {
-        min-width: 235px;
-        top: 5%;
-        right: -15%;
-    }
-    .bb-5 {
-        min-width: 220px;
-        right: -9%;
-        bottom: -6%;
+    
+    /* EVENT
+    ----------------------------*/
+
+    .slider-content {
+        flex-direction: column;
     }
 
-    /* top ロゴとテキスト */
-    .top-title {
-        width: 300px;
+    /* 
+    #monthly-pop-up .slider-content .slider-content-left,
+    #monthly-pop-up .slider-content .slider-content-right,
+    #event .slider-content .slider-content-left,
+    #event .slider-content .slider-content-right{
+        width: 100%;
     }
-    .top-text {
-        font-size: 0.95rem;
+    #monthly-pop-up .slider-content .slider-content-left{
+        order:3;
+    }
+    #monthly-pop-up .slider-content .slider-content-right{
+        order:2;
+    }
+    #event .slider-content .slider-content-left{
+        order:2;
+    }
+    #event .slider-content .slider-content-right{
+        order:3;
+    } */
+    
+    .slick-slide img{
+        height:66vw;
+    }
+    .event-tag{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-size: 7vw;
+        -webkit-writing-mode: horizontal-tb;
+        -ms-writing-mode: rl-tb;
+        writing-mode: horizontal-tb;
+    }
+    .slider-content .event-info .event-title{
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-top: 15px;
     }
 
-    /* caption */
-    .caption-text {
-        font-size: 0.75rem;
+    /*grid*/
+    /*.grid {*/
+    /*    display: grid;*/
+    /*    gap: 10px;*/
+    /*    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));*/
+    /*}*/
+    .grid {
+        box-sizing: border-box;
     }
 
-    /* event */
-    .event-area-layout {
-        justify-content: space-around;
-    }
-
-    .event-image, .event-lead {
-        width: calc(100% - 15px);
-    }
-
-    .event-title {
-        font-size: 1rem;
-        line-height: 2;
-    }
-
-    .event-text {
-        font-size: 0.8rem;
-        line-height: 1.8;
-    }
-
-    .e-slider .slick-slide img {
-        height: 60vw;
-        width: 80vw;
-    }
-
-    /* items */    
     .item,
     .brand {
         width: calc(50% - 10px);
+        box-sizing: border-box;
     }
 
     .mask img {
@@ -3430,19 +3618,9 @@ cart order------------------------*/
     }
 
     /*schedule*/
-    .schedule-list article a {
-        flex-direction: column;
-        gap: 1ch;
+    .schedule-list-fig img{
+        height: 23vw;
     }
-    
-    .schedule-info {
-        width: 95%;
-    }
-
-    .schedule-title {
-        font-size: 0.8rem;
-    }
-
 
     /*information*/
     .information-list-title {

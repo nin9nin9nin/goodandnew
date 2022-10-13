@@ -73,8 +73,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <select id="parent_id" name="parent_id">
-                    <!--<option value="">選択してください</option>-->
-                    <option value="0">未設定</option>
+                    <option value="">選択してください</option>
                     <?php foreach ($records['categorys'] as $record) { ?>
                     <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_name)?></option>
                     <?php } ?>

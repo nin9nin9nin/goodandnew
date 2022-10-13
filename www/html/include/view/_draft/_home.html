@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ページのタイトル</title>
-    <meta name="description" content="GOOD&NEWは、暮らしの中で見つけた良い物(GOOD)新しい発見(NEW)を共有し、ブランドと人を繋げるコミニュケーションサービスです。毎月変わるポップアップショップや">
+    <meta name="description" content="ページの説明文">
     <!-- og -->
     <meta property="og:title" content="ページのタイトル">
     <meta property="og:description" content="ページの説明文">
@@ -31,10 +31,11 @@
     <!-- css -->
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
-    <link rel="stylesheet" href="../css/user/style.css">
+    <link rel="stylesheet" href="../css/user/_style.css">
 </head>
 
 <body>
+    <!-- loading 3.5s-->
     <div id="splash">
         <div id="splash_logo">
             <img src="../images/baby/page-top.png" alt="">
@@ -50,10 +51,8 @@
                     <path d="M837,60l25,49,25-49h20l25,49,25-49h19l-40,80h-8L897,79l-31,61h-8L818,60Z" transform="translate(-24 -59)" />
                 </g>
             </svg>
-        </div>
-        <!--/splash-logo-->
+        </div><!--/splash-logo-->
     </div>
-    <!--loading /splash 3000ms-->
     <header id="header">
         <div class="openbtn1"><span></span><span></span><span></span></div>
         <nav id="g-nav">
@@ -93,11 +92,11 @@
                         <li><a href="#">特定商取引に関する表示</a></li>
                         <li><a href="#">お問い合わせ</a></li>
                     </ul>
-                </div>
-            </div>
+                </div><!-- /g-nav-content-->
+            </div><!-- /g-nav-list-->
         </nav>
         <h1 class="logo">
-            <a href="index.php">
+            <a href="index.php" alt="GOODANDNEW">
                 <svg>
                     <use xlink:href="../images/logo/logo.svg#logo"></use>
                 </svg>
@@ -142,54 +141,51 @@
         </div>
     </header>
     <main>
-        <section class="area" id="home">
-            <div class="home-sticky-bg">
-                <ul class="banner">
-                    <li class="slider-item slider-item01"></li>
-                    <li class="slider-item slider-item02"></li>
-                    <li class="slider-item slider-item03"></li>
-                </ul>
-            </div><!-- / #home sticky-bg .banner-->
-            <div class="home-content wrapper">
-                <h1 class="home-title">
-                    <span class="smoothText smooth">
-                        <span class="smoothTextTrigger">Good</span><span class="smoothTextTrigger"> & </span><span class="smoothTextTrigger">New</span><span class="smoothTextTrigger"> Goods!!</span>
-                    </span>
-                </h1>
-                <h3 class="home-text fadeInTrigger delay-time5">おしゃれなカフェで癒やされてみませんか？<br>無添加の食材で体の中からリフレッシュ。</h3>
-            </div><!-- / .home-content -->
-            <div class="scrolldown"><span>Scroll</span></div><!-- / .scrolldown -->
-        </section>
+        <div class="home-sticky-bg" id="home">
+            <ul class="banner">
+                <li class="slider-item slider-item01"></li>
+                <li class="slider-item slider-item02"></li>
+                <li class="slider-item slider-item03"></li>
+            </ul>
+        </div><!-- / #home .home-sticky-bg-->
+        <div class="home-content wrapper">
+            <h2 class="home-title">
+                <span class="smoothText smooth">
+                    <span class="smoothTextTrigger">Good</span><span class="smoothTextTrigger"> & </span><span class="smoothTextTrigger">New</span><span class="smoothTextTrigger"> Goods!!</span>
+                </span>
+            </h2>
+            <p class="home-text fadeInTrigger delay-time5">テキストテキストテキストテキスト<br>テキストテキストテキストテキスト。</p>
+        </div><!-- / .home-content -->
+        <div class="scrolldown">
+            <span>Scroll</span>
+        </div><!-- / .scrolldown -->
         <section class="area" id="concept">
             <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">CONCEPT</div>
-                <div class="circle-svg">
-                    <svg viewBox="0 0 200 200">
-                        <path id="circle" fill="transparent" 
-                              d="M114.17 66.88C114.17 88.95 96.24 106.88 74.17 106.88C52.09 106.88 34.17 88.95 34.17 66.88C34.17 44.8 52.09 26.88 74.17 26.88C96.24 26.88 114.17 44.8 114.17 66.88Z"/>
-                        <text width="300">
-                            <textPath xlink:href="#circle">
-                            Go above and beyond your expectations! <tspan class="color-red">NITTY GRITTY</tspan>
-                            </textPath>
-                        </text>
-                                  
-                        <animateTransform
-                        xlink:href = "#circle"
-                        attributeName = "transform"
-                        type = "rotate"
-                        from = "0 75 66"
-                        to = "360 75 66"
-                        dur = "10s"
-                        repeatCount = "indefinite"
-                        />
-                    </svg>
-                </div>
+                <h3 class="section-title">CONCEPT</h3>
                 <div class="concept-content">
                     <div class="concept-text-area">
-                        <h3 class="concept-text fadeInTrigger delay-time115">新たな発見素直な欲望<br>新たな発見素直な欲望</h3>
-                        <h3 class="concept-text fadeInTrigger delay-time2">新たな発見素直な欲望<br>新たな発見素直な欲望</h3>
+                        <p class="concept-text fadeInTrigger delay-time100">テキストテキストテキスト<br>テキストテキストテキスト</p>
+                        <p class="concept-text fadeInTrigger delay-time160">テキストテキストテキスト<br>テキストテキストテキスト</p>
                     </div>
-                    <div class="concept-img-area">
+                    <div class="concept-img-area fadeInTrigger">
+                        <div class="circle-svg">
+                            <svg viewBox="20 17 200 200">
+                                <path id="circle" fill="transparent" 
+                                      d="M114.17 66.88C114.17 88.95 96.24 106.88 74.17 106.88C52.09 106.88 34.17 88.95 34.17 66.88C34.17 44.8 52.09 26.88 74.17 26.88C96.24 26.88 114.17 44.8 114.17 66.88Z"/>
+                                <text>
+                                <textPath xlink:href="#circle">
+                                Text text text text text text text text text <tspan class="color-red">TEXT TEXT!!!!</tspan>
+                                </textPath>
+                                </text>
+                                <animateTransform xlink:href = "#circle"
+                                attributeName = "transform"
+                                type = "rotate"
+                                from = "0 75 66"
+                                to = "360 75 66"
+                                dur = "10s"
+                                repeatCount = "indefinite"/>
+                            </svg>
+                        </div><!-- / .circle-svg-->
                         <div class="concept-img-inner">
                             <img src="../images/baby/concept-home.png" alt="concept">
                         </div>
@@ -197,34 +193,36 @@
                 </div><!-- / .concept-content -->
                 <div class="btn-arrow fadeRightTrigger">
                     <a href="#" class="btnarrow4">VIEW&nbsp;MORE</a>
-                </div>
-            </div><!-- .box .fadeupTrigger #concept-->
+                </div><!-- / .btn-arrow -->
+            </div><!-- /.box .wrapper-->
         </section>
-        <section class="area side-scroll" id="monthly-pop-up">
-            <div class="box fadeUpTrigger side-scroll-container">
-                <div class="slider-title">MONTHLY&nbsp;POP&nbsp;UP</div>
-                <div class="side-scroll-wrap">
-                    <ul class="side-scroll-list zoomIn">
-                        <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/01.jpg" alt=""></span></a></li>
-                        <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/02.jpg" alt=""></span></a></li>
-                        <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/03.jpg" alt=""></span></a></li>
-                        <li class="side-scroll-item"><a href="#"><span class="clip"><img src="../images/elephant-g733d67634_1920.jpg" alt=""></span></a></li>
-                    </ul><!-- .side-scroll-list -->
-                </div>
-                <div class="slider-info">
-                    <h3 class="slider-info-title"><a href="#" class="">ポップアップのタイトル<br>あああああああああああああああああああああ</a></h3>
-                    <p class="slider-info-date">February&ensp;2022</p>
-                    <div class="slider-link-btn">
+        <section class="area side-scroll" id="event">
+            <div class="box fadeUpTrigger wrapper">
+                <div class="side-scroll-container">
+                    <div class="side-scroll-wrap">
+                        <h3 class="event-tag">MONTHLY&nbsp;POP&nbsp;UP</h3>
+                        <ul class="side-scroll-list zoomIn">
+                            <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/01.jpg" alt=""></span></a></li>
+                            <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/02.jpg" alt=""></span></a></li>
+                            <li class="side-scroll-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/03.jpg" alt=""></span></a></li>
+                            <li class="side-scroll-item"><a href="#"><span class="clip"><img src="../images/elephant-g733d67634_1920.jpg" alt=""></span></a></li>
+                        </ul>
+                    </div><!-- .side-scroll-wrap -->
+                </div><!-- /.side-scroll-container -->
+                <div class="event-info">
+                    <h4 class="event-title"><a href="#" class="">ポップアップのタイトル<br>タイトルタイトルタイトルタイトルタイトルタイトル</a></h4>
+                    <div class="event-date">February&ensp;2022</div>
+                    <div class="event-link-btn">
                         <a href="#" class="">
                             <span>POP&nbsp;UP&emsp;Index</span>
                         </a>
                     </div>
-                </div><!-- .slider-info -->
-            </div><!-- .box .fadeupTrigger #monthly-pop-up .side-scroll-container -->
+                </div><!-- .event-info -->
+            </div><!-- /.box -->
         </section>
-        <section class="area" id="monthly-items">
+        <section class="area" id="items">
             <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">MONTHLY&nbsp;ITEMS</div>
+                <h3 class="section-title">ITEMS</h3>
                 <div class="grid">
                     <div class="item">
                         <div class="bgUD zoomIn item-img">
@@ -235,7 +233,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -259,7 +257,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -283,7 +281,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -307,7 +305,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -322,174 +320,15 @@
                             <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                         </div>
                     </div>
-                </div><!-- / .grid -->
+                </div><!-- /.grid -->
                 <div class="btn-arrow fadeRightTrigger">
                     <a href="#" class="btnarrow4">VIEW&nbsp;MORE</a>
-                </div><!-- / .btn-arrow -->
-            </div><!-- .box .fadeupTrigger #monthly-items-->
+                </div><!-- /.btn-arrow -->
+            </div><!-- /.box .wrapper-->
         </section>
-        <section class="area" id="monthly-brands">
+        <section class="area" id="brands">
             <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">MONTHLY&nbsp;BRANDS</div>
-                <div class="grid">
-                    <div class="brand">
-                        <div class="bgUD zoomIn">
-                            <a href="index.php?module=brands&action=detail&brand_id=<?php print h($record->brand_id); ?>">
-                                <span class="mask white">
-                                    <!--<span class="brand-logo-name">brand_name</span>-->
-                                    <span class="brand-logo">
-                                        <img src="../images/logo/logo.png" alt="brand_logo">
-                                    </span>
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                            ブランド説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div><!-- / .grid -->
-            </div><!-- /.box fadeUpTrigger #monthly-brands-->
-        </section>
-        <section class="area" id="event">
-            <div class="box fadeUpTrigger">
-                <div class="slider-content fadeInTrigger">
-                    <div class="slider-content-left">
-                        <ul class="slider zoomIn">
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/01.jpg" alt=""></span></a></li>
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="../images/banner/pexels-serhii-volyk-10865058.jpg" alt=""></span></a></li>
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/02.jpg" alt=""></span></a></li>
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/03.jpg" alt=""></span></a></li>
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="../images/elephant-g733d67634_1920.jpg" alt=""></span></a></li>
-                            <li class="slider-item"><a href="#"><span class="clip"><img src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/6-2-4/img/02.jpg" alt=""></span></a></li>
-                        </ul><!-- .slider -->
-                        <div class="wave-right"></div>
-                    </div><!-- content-left -->
-                    <div class="slider-content-right">
-                        <div class="slider-info wrapper  fadeInTrigger delay-time100">
-                            <h3 class="slider-info-title"><a href="#" class="">イベントのタイトル<br>あああああああああああああああああああああ</a></h3>
-                            <p class="slider-info-date">Jan 17. 1. 2022&ensp;&ndash;&ensp;Feb 14. 2. 2022</p>
-                            <div class="slider-link-btn">
-                                <a href="#" class="">
-                                    <span>EVENT&emsp;Index</span>
-                                </a>
-                            </div>
-                        </div><!-- .slider-info-->
-                    </div><!-- content-right -->
-                    <div class="slider-title">EVENT</div>
-                </div>
-            </div><!-- .box .fadeupTrigger #event-->
-        </section>
-        <section class="area" id="event-items">
-            <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">EVENT&nbsp;ITEMS</div>
-                <div class="grid">
-                    <div class="item">
-                        <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                            商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="item-lead">
-                            <p class="sub-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">brand_name</a>
-                            </p>
-                            <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq</a>
-                            </p>
-                            <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../images/elephant-g733d67634_1920.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                            商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="item-lead">
-                            <p class="sub-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">brand_nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>
-                            </p>
-                            <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">item_name</a>
-                            </p>
-                            <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                            商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="item-lead">
-                            <p class="sub-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">brand_name</a>
-                            </p>
-                            <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">item_name</a>
-                            </p>
-                            <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                            商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="item-lead">
-                            <p class="sub-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">brand_name</a>
-                            </p>
-                            <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">item_name</a>
-                            </p>
-                            <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                        </div>
-                    </div>
-                </div><!-- / .grid -->
-                <div class="btn-arrow fadeRightTrigger">
-                    <a href="#" class="btnarrow4">view&nbsp;more</a>
-                </div><!-- / .btn-arrow -->
-            </div><!-- .box .fadeupTrigger #event-items-->
-        </section>
-        <section class="area" id="event-brands">
-            <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">EVENT&nbsp;BRANDS</div>
+                <h3 class="section-title">BRANDS</h3>
                 <div class="grid">
                     <div class="brand">
                         <div class="bgUD zoomIn">
@@ -543,13 +382,13 @@
                         </div>
                     </div>
                 </div><!-- / .grid -->
-            </div><!-- /.box fadeUpTrigger #event-brands-->
+            </div><!-- /.box .wrapper-->
         </section>
         <section class="area" id="schedule">
             <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">SCHEDULE</div>
+                <h3 class="section-title">SCHEDULE</h3>
                 <div class="schedule-list">
-                    <article>
+                    <article class="zoomIn">
                         <a href="#">
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
@@ -557,13 +396,13 @@
                                 </figure>
                             </div>
                             <div class="schedule-info">
-                                <h3 class="schedule-info-title">イベントのタイトルaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h3>
-                                <div class="schedule-icon">EVENT</div>
-                                <p class="schedule-info-date">February&ensp;2022</p>
+                                <h4 class="schedule-title">イベントのタイトルイベントのタイトルイベントのタイトルイベントのタイトル</h4>
+                                <div class="schedule-tag">EVENT</div>
+                                <div class="schedule-date">February&ensp;2022</div>
                             </div>
                         </a>
                     </article>
-                    <article>
+                    <article class="zoomIn">
                         <a href="#">
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
@@ -571,13 +410,13 @@
                                 </figure>
                             </div>
                             <div class="schedule-info">
-                                <h3 class="schedule-info-title">イベントのタイトル</h3>
-                                <div class="schedule-icon">POP&ensp;UP</div>
-                                <p class="schedule-info-date">February&ensp;2022</p>
+                                <h4 class="schedule-title">イベントのタイトルイベントのタイトルイベントのタイトルイベントのタイトル</h4>
+                                <div class="schedule-tag">EVENT</div>
+                                <div class="schedule-date">February&ensp;2022</div>
                             </div>
                         </a>
                     </article>
-                    <article>
+                    <article class="zoomIn">
                         <a href="#">
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
@@ -585,13 +424,13 @@
                                 </figure>
                             </div>
                             <div class="schedule-info">
-                                <h3 class="schedule-info-title">イベントのタイトル</h3>
-                                <div class="schedule-icon">POP&ensp;UP</div>
-                                <p class="schedule-info-date">February&ensp;2022</p>
+                                <h4 class="schedule-title">イベントのタイトルイベントのタイトルイベントのタイトルイベントのタイトル</h4>
+                                <div class="schedule-tag">EVENT</div>
+                                <div class="schedule-date">February&ensp;2022</div>
                             </div>
                         </a>
                     </article>
-                    <article>
+                    <article class="zoomIn">
                         <a href="#">
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
@@ -599,13 +438,13 @@
                                 </figure>
                             </div>
                             <div class="schedule-info">
-                                <h3 class="schedule-info-title">イベントのタイトル</h3>
-                                <div class="schedule-icon">EVENT</div>
-                                <p class="schedule-info-date">February&ensp;2022</p>
+                                <h4 class="schedule-title">イベントのタイトルイベントのタイトルイベントのタイトルイベントのタイトル</h4>
+                                <div class="schedule-tag">EVENT</div>
+                                <div class="schedule-date">February&ensp;2022</div>
                             </div>
                         </a>
                     </article>
-                    <article>
+                    <article class="zoomIn">
                         <a href="#">
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
@@ -613,21 +452,21 @@
                                 </figure>
                             </div>
                             <div class="schedule-info">
-                                <h3 class="schedule-info-title">イベントのタイトル</h3>
-                                <div class="schedule-icon">EVENT</div>
-                                <p class="schedule-info-date">February&ensp;2022</p>
+                                <h4 class="schedule-title">イベントのタイトルイベントのタイトルイベントのタイトルイベントのタイトル</h4>
+                                <div class="schedule-tag">EVENT</div>
+                                <div class="schedule-date">February&ensp;2022</div>
                             </div>
                         </a>
                     </article>
                 </div><!-- / .schedule-list -->
                 <div class="btn-arrow fadeRightTrigger">
-                    <a href="#" class="btnarrow4">スケジュールを見る</a>
+                    <a href="#" class="btnarrow4">VIEW&nbsp;MORE</a>
                 </div><!-- / .btn-arrow -->
-            </div><!-- .box .fadeupTrigger #schedule-->
+            </div><!-- /.box .wrapper-->
         </section>
         <section class="area" id="original-items">
             <div class="box fadeUpTrigger wrapper">
-                <div class="section-title">ORIGINAL&nbsp;ITEMS</div>
+                <h3 class="section-title">ORIGINAL&nbsp;ITEMS</h3>
                 <div class="grid">
                     <div class="item">
                         <div class="bgUD zoomIn item-img">
@@ -638,7 +477,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -659,7 +498,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -680,7 +519,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -701,7 +540,7 @@
                                         <span class="cap-description">
                                             商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
                                         </span>
-                                        <span class="cap-stock">在庫数：50</span>
+                                        <span class="cap-stock">在庫数&emsp;50</span>
                                     </span>
                                 </span>
                             </a>
@@ -713,15 +552,15 @@
                             <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                         </div>
                     </div>
-                </div><!-- / .grid .home -->
+                </div><!-- / .grid-->
                 <div class="btn-arrow fadeRightTrigger">
-                    <a href="#" class="btnarrow4">view&nbsp;more</a>
+                    <a href="#" class="btnarrow4">VIEW&nbsp;MORE</a>
                 </div><!-- / .btn-arrow -->
-            </div><!-- /.box fadeUpTrigger #originals-->
+            </div><!-- /.box .wrapper-->
         </section>
         <section class="area" id="information">
             <div class="box fadeUpTrigger content">
-                <div class="section-title">INFORMATION</div>
+                <h3 class="section-title">INFORMATION</h3>
                 <div class="information-area">
                     <ul class="information-list">
                         <li>
@@ -738,7 +577,7 @@
                         </li>
                     </ul>
                 </div><!-- / .information-area -->
-            </div><!-- .box .fadeupTrigger #information-->
+            </div><!-- /.box .content-->
         </section>
         <section class="area" id="f-nav">
             <div class="box fadeUpTrigger content">
@@ -769,7 +608,7 @@
                         <li><a href="#">お問い合わせ</a></li>
                     </ul>
                 </div><!-- / .f-nav-area -->
-            </div><!-- /.box fadeUpTrigger #f-nav-->
+            </div><!-- /.box .content-->
         </section>
     </main>
     <footer>
@@ -785,7 +624,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/TextPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.4/vivus.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
-    <script src="../js/user/home.js"></script>
+    <script src="../js/user/_home.js"></script>
 </body>
 
 </html>

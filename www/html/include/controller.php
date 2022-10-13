@@ -1,7 +1,7 @@
 <?php
-//ディレクトリを定数定義
+//includeディレクトリを定数定義
 define('INCLUDE_DIR',dirname(__FILE__));
-//''=/include+/各ディレクトリ
+//INCLUDE_DIR/各ディレクトリを定数定義
 define('CONFIG_DIR', INCLUDE_DIR . '/config');
 define('LIB_DIR', INCLUDE_DIR . '/lib');
 define('CONTROLLER_DIR', INCLUDE_DIR . '/controller');
