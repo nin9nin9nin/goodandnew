@@ -73,8 +73,9 @@ function execute_action() {
     Cookie::setCookie($cookie_check, $name);
     
     
-    //登録して登録完了+ログイン画面を読み込む
+    //フラッシュメッセージを持ってsignin.phpへリダイレクト
     return View::redirectTo('admin_accounts', 'signin');
         
+    //不採用　登録完了ページ+ログインページへ
     // return View::render('admin_accounts', 'register');
 }

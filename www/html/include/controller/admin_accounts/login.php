@@ -62,6 +62,6 @@ function execute_action() {
     Cookie::setCookie($cookie_check, $name);
     
     //ログインした状態でダッシュボードにリダイレクト
-    return View::redirectTo('dashboard', 'index');
+    return View::redirectTo('admin_dashboard', 'index');
     
 }

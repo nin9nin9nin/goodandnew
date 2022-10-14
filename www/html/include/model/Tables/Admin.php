@@ -128,8 +128,6 @@ class Admin {
      * return CommonError::errorAdd
      */
     public function checkUniqueAdminName() {
-        Validator::paramClear();
-        
         $sql = 'SELECT COUNT(admin_id) AS id_count ' .PHP_EOL
               .'FROM admin' .PHP_EOL
               .'WHERE admin_name = :admin_name';
@@ -159,8 +157,6 @@ class Admin {
      * return CommonError::errorAdd
      */
     public function checkLogin_PasswordHash() {
-        Validator::paramClear();
-        
         $sql = 'SELECT password FROM admin WHERE admin_name = :admin_name';
         
         $params = [':admin_name' => $this->admin_name];
@@ -180,8 +176,6 @@ class Admin {
      * return CommonError::errorAdd
      */
     public function checkUpdate_PasswordHash() {
-        Validator::paramClear();
-        
         $sql = 'SELECT password FROM admin WHERE admin_name = :admin_name';
         
         $params = [':admin_name' => $this->old_admin_name];

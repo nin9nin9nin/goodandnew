@@ -8,11 +8,12 @@
       
       <nav class="header-nav">
         <ul>
+          <li><a href="<?php echo url_for('admin_events', 'index'); ?>"><span>イベント管理</span></a></li>
           <li><a href="<?php echo url_for('admin_categorys', 'index'); ?>"><span>カテゴリー管理</span></a></li>
           <li><a href="<?php echo url_for('admin_brands', 'index'); ?>"><span>ブランド管理</span></a></li>
-          <li><a href="<?php echo url_for('admin_shops', 'index'); ?>"><span>ショップ管理</span></a></li>
           <li><a href="<?php echo url_for('admin_items', 'index'); ?>"><span>商品管理</span></a></li>
           <li><a href="<?php echo url_for('admin_users', 'index'); ?>"><span>ユーザー管理</span></a></li>
+          <li><a href="<?php echo url_for('admin_orders', 'index'); ?>"><span>オーダー管理</span></a></li>
           <!--<li><a href=""><span>購入管理</span></a></li>-->
           <!--<li><a href=""><span>顧客管理</span></a></li>-->
           <!--<li><a href=""><span>データ管理</span></a></li>-->
