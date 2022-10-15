@@ -10,7 +10,7 @@ ini_set('display_errors', "On");
 require_once('./include/controller.php');
 
 //$urlの定数定義（Viewクラス内render()時に使用）
-// define('BASE_URL',basename(__FILE__));
+define('BASE_URL',basename(__FILE__));
 
 //defaultのアクセス
 dispatch('items', 'index');

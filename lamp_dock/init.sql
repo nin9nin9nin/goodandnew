@@ -8,6 +8,8 @@ CREATE TABLE admin (
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(admin_id)
 );
+ALTER TABLE users ADD enabled boolean NOT NULL default true COMMENT '有効';
+-- 論理削除にしておく
 
  -- イベント管理
 CREATE TABLE  events (
@@ -104,9 +106,10 @@ CREATE TABLE stocks (
   stock int(11) NOT NULL COMMENT '在庫数',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  foreign key(item_id) references items (item_id) on delete set null on update cascade,
+  foreign key(item_id) references items (item_id) on update cascade,
   primary key(stock_id)
 );
+-- 外部制約キーの指定(delete set nullだと)
 
 -- ユーザー
 CREATE TABLE users (
@@ -118,6 +121,7 @@ CREATE TABLE users (
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(user_id)
 );
+ALTER TABLE users ADD enabled boolean NOT NULL default true COMMENT '有効';
 
 -- お気に入り
 CREATE TABLE favorites (
@@ -158,18 +162,22 @@ CREATE TABLE orders (
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(order_id)
+  primary key(order_id, customer_id)
 );
 
 -- 注文詳細
 CREATE TABLE order_detail (
+  order_detail_id int(11) NOT NULL COMMENT '注文詳細ID' AUTO_INCREMENT,
   order_id int(11) NOT NULL COMMENT '注文ID',
   item_id int(11) NOT NULL COMMENT '商品ID',
   quantity int(11) NOT NULL COMMENT '注文数',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(order_id, item_id)
+  foreign key(order_id) references orders (order_id),
+  primary key(order_detail_id)
 );
+ALTER TABLE order_detail ADD price int(11) NOT NULL COMMENT '値段';
+-- 集約　結果整合性を考慮し値段も含めた商品データを格納(item_idに外部制約キーは使用しない)
 
 -- カート
 CREATE TABLE carts (
