@@ -648,3 +648,63 @@ input[type="reset"]:hover {
 #footer p {
   text-align:center;
 }
+
+/* ページネーション ----------------------------------------------------------------------*/
+/* レコード件数テキスト */
+.paginations-text {
+  padding: 5px 0;
+  margin: 0 auto;
+}
+.from-to {
+  font-size: 1rem;
+  /*font-size: 1.6vw;*/
+  font-weight: 400;
+  text-align: center;
+  line-height: 2.4;
+  letter-spacing: 0.3em;
+}
+/* 戻る・進む */
+a:link {text-decoration:none }
+a.page_number:visited {color: black; text-decoration:none }
+.paginations {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
+.page_feed {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  text-align: center;
+  background: #b8b8b8;
+  color: black;
+}
+.first_last_page {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  text-align: center;
+  background: #f0f0f0;
+  color: black;
+}
+
+/* ページ番号 */
+a:link {text-decoration:none }
+a.page_number:visited {color: black; text-decoration:none }
+.page_number {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+  background: #b8b8b8;
+  color: black;
+}
+.now_page_number {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+  background: #f0f0f0;
+  color: black;
+  font-weight: bold;
+}

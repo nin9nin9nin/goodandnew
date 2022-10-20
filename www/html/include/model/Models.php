@@ -50,7 +50,7 @@ class Models {
      * 
      * return array
      */
-    public static function setPaginations($total_record = '') {
+    public static function setPaginations($total_record) {
         $paginations = [];
 
         //トータルレコード数の取得
