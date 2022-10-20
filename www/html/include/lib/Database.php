@@ -1,7 +1,11 @@
 <?php
-
-//データベースにアクセス
-//命令実行まで接続を遅らせる
+/**
+ * データベースアクセス機能
+ * メリット：命令実行まで接続を遅らせることで不要な接続を防ぐ
+ * Modelsで拡張しMessagesに継承し、各モデルにて使用
+ * 
+ * $db = new PDO()
+ */
 class Database {
     //まずはプロパティを用意（PDOをいれるため）
     private $db;
@@ -140,7 +144,7 @@ class Database {
         //              }
         while ($record = $statement->fetchObject($class_name)) {
             //オブジェクトごとに$records[]配列に入れていく
-            //($records[0]=オブジェクト,$records[1]=オブジェクト...)
+            //($records[0]=オブジェクト1,$records[1]=オブジェクト2...)
             $records[] = $record;
         }
 
@@ -183,7 +187,7 @@ class Database {
             }
         }
 
+        //$statement=$db->execute()
         return $statement->execute();
-        //$statement=$db->prepare()の中にbindValueとexecuteを入れるイメージ？
-    }
+    }    
 }

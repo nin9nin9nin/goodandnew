@@ -1,10 +1,13 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //itemsテーブル
 class Items {
     
+    public $table_name = 'items'; //count(*)するテーブル
+    public $diplay_record = '20'; //1ページの表示件数
+    public $page_id;
     public $item_id;
     public $item_name;
     public $category_id;
@@ -30,6 +33,7 @@ class Items {
     
     
     public function __construct() {
+        $this -> page_id = null;
         $this -> item_id = null;
         $this -> item_name = null;
         $this -> category_id = null;
@@ -100,38 +104,103 @@ class Items {
             return CommonError::errorAdd('値段は半角数字、10桁以内で入力してください');
         }
     }
+
+    /**
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getPaginations() {
+        $total_record = Messages::getTotalRecord();
+        // $total_record = self::getItemsTotalRecord();
+
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record);
+    }
+
+    /**
+     * itemsテーブルのみ
+     * 
+     */
+    public static function getItemsTotalRecord($event_id, $keyword, $category_id, $sorting) {
+
+        $normalSql ='SELECT COUNT(*) as cnt FROM :table_name WHERE enabled = true';
+        
+        $params = [':table_name' => $this->table_name];
+
+        if ($event_id !== '') {
+            $addSql = 'AND event_id = :event_id';
+            $sql = $nomalSql . $addSql;
+            $params = array_merge($params,array(':event_id' => $event_id));
+        } else {
+            $sql = $normalSql;
+        }
+
+
+        return Messages::findBySql($sql, $params);
+    }
     
     /**
      * テーブル一覧の取得
      * 4テーブルの結合
      * 論理有効のみ(enabled = true)
      * 未設定表示なし
+     * 
+     * データの取得数を表示分だけに変更
      */
     //items-index stocks-edit
     public function indexItems() {
+        // 配列の何番目から取得するか決定(OFFSET句)
+        $start_record = ($this->page_id - 1) * $this->display_record;
+
         //A=items,B=stocks,C=brands,D=categorys,E=shops  enabled=trueのみ
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
         $sql = 'SELECT A.item_id, A.item_name, A.price, A.icon_img, A.status,' . PHP_EOL
-             . '       B.stock_id, B.stock,' . PHP_EOL
-             . '       COALESCE(C.category_id,0) AS category_id, C.category_name,' . PHP_EOL
-             . '       COALESCE(D.brand_id,0) AS brand_id, D.brand_name,' . PHP_EOL
-             . '       COALESCE(E.shop_id,0) AS shop_id, E.shop_name' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_name,' . PHP_EOL
+             . '       D.brand_name,' . PHP_EOL
+             . '       E.shop_name' . PHP_EOL
              . 'FROM ' .PHP_EOL
-             . '    (SELECT * FROM items WHERE enabled = true) AS A' . PHP_EOL
+             . '    (SELECT * FROM items WHERE enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT stock_id, item_id, stock FROM stocks) AS B' . PHP_EOL
+             . '    (SELECT stock FROM stocks) AS B' . PHP_EOL //stocksテーブルから在庫数
              . 'ON A.item_id = B.item_id' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT category_id, category_name FROM categorys) AS C' . PHP_EOL
+             . '    (SELECT category_name FROM categorys) AS C' . PHP_EOL //categoryテーブル
              . 'ON A.category_id = C.category_id' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT brand_id, brand_name FROM brands) AS D' . PHP_EOL
+             . '    (SELECT brand_name FROM brands) AS D' . PHP_EOL //brandsテーブル
              . 'ON A.brand_id = D.brand_id' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT shop_id, shop_name FROM shops) AS E' . PHP_EOL
-             . 'ON A.shop_id = E.shop_id';
-             
-        return Models::findBySql($sql);
+             . '    (SELECT shop_name FROM shops) AS E' . PHP_EOL
+             . 'ON A.shop_id = E.shop_id' . PHP_EOL
+             . 'ORDER BY A.item_id DESC' . PHP_EOL
+             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
+
+        
+        $params = [
+            ':start_record' => $start_record,
+            ':display_record' => $this->display_record,
+        ];
+            
+        // return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
+    }
+
+    /**
+     * 
+     */
+    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
+        $value = $default;
+
+        if (isset($_REQUEST[$keyword]) === true) {
+            $value = $_REQUEST[$keyword];
+        } else if (isset($_REQUEST[$category_id]) === true){
+            $value = $_REQUEST[$category_id];
+        } else if (isset($_REQUEST[$sorting]) === true){
+            $value = $_REQUEST[$sorting];
+        } 
+
+        return $value;
     }
     
     
