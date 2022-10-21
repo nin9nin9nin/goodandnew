@@ -1,4 +1,4 @@
-渡ってくる値
+<!-- 渡ってくる値
 $page_id
 $paginations['total_record']
 $paginations['page_total']
@@ -7,6 +7,7 @@ $paginations['next_page']
 $paginations['page_range']-array
 $paginations['from_record']
 $paginations['to_record']
+ -->
    <div id="home">
       <div class="container">
         <div class="paginations-text">
