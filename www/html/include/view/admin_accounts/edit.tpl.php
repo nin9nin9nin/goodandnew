@@ -112,6 +112,16 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <?php print h($record -> getCreateDateTime()); ?>
                 </td>
               </tr>
+              <?php if(isset($record->update_datetime)) { ?>
+              <tr class="form-text">
+                <th>
+                  最終更新日時:
+                </th>
+                <td>
+                  <?php print h($record -> getUpdateDateTime()); ?>
+                </td>
+              </tr>
+              <?php } ?>
             </table>
               <!--submit+hidden-->
               <div class="form-buttonwrap">
@@ -128,19 +138,8 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    
-    <div id="home">
-      <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
-  
  <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 

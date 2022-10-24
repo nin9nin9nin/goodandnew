@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //admin テーブル
 class Admin {
@@ -48,28 +48,15 @@ class Admin {
         
         if (!Validator::checkInputempty($this->admin_name)) {
             return CommonError::errorAdd('管理者ネームを入力してください');
+        } else if (!Validator::checkSpace($this->admin_name)) {
+            return CommonError::errorAdd('管理者ネームは空白文字を使用しないでください');
         } else if (!Validator::checkAlphanumeric($this->admin_name)) {
             return CommonError::errorAdd('管理者ネームは半角英数字で入力してください');
         } else if (!Validator::checkLength($this->admin_name, 6, 128)) {
             return CommonError::errorAdd('管理者ネームは6文字以上、128文字以内で入力してください');
         }
-        
     }
-    /**
-     * ログイン用
-     * 文字数指定なし(adminのため)
-     * 
-     */
-    public function checkloginAdminName() {
-        Validator::paramClear();
-        
-        if (!Validator::checkInputempty($this->admin_name)) {
-            return CommonError::errorAdd('管理者ネームを入力してください');
-        } else if (!Validator::checkAlphanumeric($this->admin_name)) {
-            return CommonError::errorAdd('管理者ネームは半角英数字で入力してください');
-        }
-        
-    }
+
     /**
      * メールアドレス　'/^[a-zA-Z0-9_.+-]+[@][a-zA-Z0-9.-]+$/'
      * 
@@ -105,9 +92,59 @@ class Admin {
             return CommonError::errorAdd('パスワードは6文字以上、255文字以内で入力してください');
         }
     }
+    
+    /**
+     * 新規登録用
+     * admin_nameに重複がないか
+     * 一致がなければ0 = trueを返す
+     * SQLの実行結果は文字列型になるので'0'と比較
+     * return CommonError::errorAdd
+     */
+    public function checkUniqueAdminName() {
+        $sql = 'SELECT COUNT(admin_id) AS id_count ' .PHP_EOL
+        .'FROM admin' .PHP_EOL
+        .'WHERE admin_name = :admin_name';
+        
+        $params = [':admin_name' => $this->admin_name];
+        
+        $record = Messages::retrieveBySql($sql, $params);
+        
+        $count = $record -> id_count;
+        
+        if ($count > 0) {
+            return CommonError::errorAdd('管理者ネームはすでに使われています');
+        }
+    }
+    
+    /**
+     * 新規登録用
+     * パスワードをハッシュ化させる
+     * 
+     */
+    public function passwordHash() {
+        $this -> password_hash = password_hash($this->password, PASSWORD_DEFAULT);
+    }
+    
     /**
      * ログイン用
      * 文字数指定なし(adminのため)
+     * 
+     */
+    public function checkloginAdminName() {
+        Validator::paramClear();
+        
+        if (!Validator::checkInputempty($this->admin_name)) {
+            return CommonError::errorAdd('管理者ネームを入力してください');
+        } else if (!Validator::checkAlphanumeric($this->admin_name)) {
+            return CommonError::errorAdd('管理者ネームは半角英数字で入力してください');
+        }
+        
+    }
+
+    /**
+     * ログイン用
+     * 文字数指定なし(adminのため)
+     * 
      */
     public function checkloginPassword() {
         Validator::paramClear();
@@ -120,37 +157,9 @@ class Admin {
             $this -> checkLogin_PasswordHash();
         }
     }
-    
+
     /**
-     * admin_nameに重複がないか
-     * 一致がなければ0 = trueを返す
-     * SQLの実行結果は文字列型になるので'0'と比較
-     * return CommonError::errorAdd
-     */
-    public function checkUniqueAdminName() {
-        $sql = 'SELECT COUNT(admin_id) AS id_count ' .PHP_EOL
-              .'FROM admin' .PHP_EOL
-              .'WHERE admin_name = :admin_name';
-              
-        $params = [':admin_name' => $this->admin_name];
-        
-        $record = Models::retrieveBySql($sql, $params);
-        
-        $count = $record -> id_count;
-        
-        if ($count > 0) {
-            return CommonError::errorAdd('管理者ネームはすでに使われています');
-        }
-    }
-    
-    /**
-     * パスワードをハッシュ化させる
-     */
-    public function passwordHash() {
-        $this -> password_hash = password_hash($this->password, PASSWORD_DEFAULT);
-    }
-    
-    /**
+     * ログイン用
      * adminテーブルからpasswordのみ取得(ハッシュ化されたパスワード)
      * password_verify()でパスワードのチェックを行う
      * 
@@ -161,7 +170,7 @@ class Admin {
         
         $params = [':admin_name' => $this->admin_name];
         
-        $hash = Models::retrieveBySql($sql, $params);
+        $hash = Messages::retrieveBySql($sql, $params);
         
         if (!password_verify($this->password, $hash->password)) {
             return CommonError::errorAdd('管理者ネームかパスワードが正しくありません');
@@ -169,6 +178,7 @@ class Admin {
     }
 
     /**
+     * 更新用
      * 旧パスワードの確認
      * adminテーブルからpasswordのみ取得(ハッシュ化されたパスワード)
      * password_verify()でパスワードのチェックを行う
@@ -180,7 +190,7 @@ class Admin {
         
         $params = [':admin_name' => $this->old_admin_name];
         
-        $hash = Models::retrieveBySql($sql, $params);
+        $hash = Messages::retrieveBySql($sql, $params);
         
         if (!password_verify($this->old_password, $hash->password)) {
             return CommonError::errorAdd('旧パスワードが正しくありません');
@@ -205,10 +215,11 @@ class Admin {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
+     * インデックス
      * admin_idで指定
      * 指定レコード取得(全カラム)
      */
@@ -218,7 +229,7 @@ class Admin {
              
         $params = [':admin_id' => $this->admin_id];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
 
     }
     /**
@@ -233,7 +244,7 @@ class Admin {
              
         $params = [':admin_name' => $this->admin_name];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
 
     }
     
@@ -257,7 +268,7 @@ class Admin {
             ':admin_id' => $this->admin_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
 }

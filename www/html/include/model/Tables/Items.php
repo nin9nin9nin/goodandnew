@@ -182,7 +182,7 @@ class Items {
             ':display_record' => $this->display_record,
         ];
             
-        // return Models::findBySql($sql, $params);
+        // return Messages::findBySql($sql, $params);
         return Messages::findBySql($sql, $params);
     }
 
@@ -227,7 +227,7 @@ class Items {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     
@@ -261,7 +261,7 @@ class Items {
         //NULLを未設定に代替   
         $params = [':item_id' => $this->item_id, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
         //1レコードのみ
-        return Models::retrieveBySql($sql,$params); 
+        return Messages::retrieveBySql($sql,$params); 
     }
     
     /**
@@ -294,7 +294,7 @@ class Items {
             ':item_id' => $this->item_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -313,7 +313,7 @@ class Items {
             ':item_id' => $this->item_id,
         ];
     
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -327,7 +327,7 @@ class Items {
         
         $params = [':item_id' => $this->item_id, ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -340,7 +340,7 @@ class Items {
         
         $params = [':table' => $table];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -357,7 +357,7 @@ class Items {
             ':item_id' => $this->item_id,
             ];
             
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     //ユーザー側に使用 (status = 1 )---------------------------------------------------------------------------
@@ -419,7 +419,7 @@ class Items {
             
         $params = [':category_id' => $monthly, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -443,7 +443,7 @@ class Items {
             
         $params = [':category_id' => $monthly, ':null' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -477,7 +477,7 @@ class Items {
             
         $params = [':category_id' => $genre, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -511,7 +511,7 @@ class Items {
             
         $params = [':brand_id' => $brand, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -545,7 +545,7 @@ class Items {
             
         $params = [':brand_id' => $brand, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -581,7 +581,7 @@ class Items {
              
         $params = [':keyword' => $any_keyword, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
              
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -614,7 +614,7 @@ class Items {
         //NULLを未設定に代替   
         $params = [':item_id' => $this->item_id, ':null1' => '未設定', ':null2' => '未設定', ':null3' => '未設定'];
         //1レコードのみ
-        return Models::retrieveBySql($sql,$params); 
+        return Messages::retrieveBySql($sql,$params); 
     }
     
 }

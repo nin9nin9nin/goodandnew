@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //shopsテーブル
 class Shops {
@@ -166,7 +166,7 @@ class Shops {
              . '    (SELECT shop_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY shop_id) AS C' . PHP_EOL
              . 'ON A.shop_id = C.shop_id';
              
-        return Models::findBySql($sql); 
+        return Messages::findBySql($sql); 
     }
     
     /**
@@ -196,7 +196,7 @@ class Shops {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -217,7 +217,7 @@ class Shops {
         
         $params = [':shop_id' => $this->shop_id ];
         //return $records[0]のみ
-        return Models::retrieveBySql($sql,$params);
+        return Messages::retrieveBySql($sql,$params);
     }
     
     /**
@@ -256,7 +256,7 @@ class Shops {
             ':shop_id' => $this->shop_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -268,7 +268,7 @@ class Shops {
         
         $params = [':shop_id' => $this->shop_id];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -279,7 +279,7 @@ class Shops {
     
         $params = [':table' => $table];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -296,7 +296,7 @@ class Shops {
             ':shop_id' => $this->shop_id,
             ];
             
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -307,7 +307,7 @@ class Shops {
     public static function selectOption_Shops() {
         $sql = 'SELECT shop_id, shop_name FROM shops';
         
-        return Models::findBySql($sql);
+        return Messages::findBySql($sql);
     }
     
     // ユーザー側　-------------------------------------------
@@ -322,6 +322,6 @@ class Shops {
         
         $params = [':shop_id' => $id];
         
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
 }

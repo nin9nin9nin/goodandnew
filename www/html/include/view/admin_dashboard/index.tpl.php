@@ -24,7 +24,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         <div class="message">
           <div class="completed">
             <h1 class="display-2 text-muted">Login Complete</h1>
-            <p class="h4 text-muted">ようこそ<?php print h($admin_name); ?></p>
+            <p class="h4 text-muted">ようこそ<?php print h($admin_name); ?>様</p>
           </div>
         </div>
         <div class="news">

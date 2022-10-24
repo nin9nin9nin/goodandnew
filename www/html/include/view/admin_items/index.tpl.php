@@ -6,7 +6,6 @@ $flash_message = Session::getFlash();
 include 'inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
   <?php include 'inc/admin/header.php'; ?>
   

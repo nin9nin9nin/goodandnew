@@ -10,10 +10,16 @@ class Session {
     
     /**
      * コンストラクタ
-     * セッションを開始する
-     * 値をtrueに
      */
-    public function __construct()
+    public function __construct() {
+
+    }  
+    
+    /**
+     * センションスタート
+     * 
+     */
+    public static function start()
     {   
         if (!self::$sessionStarted) {
             session_start();
@@ -21,25 +27,7 @@ class Session {
             self::$sessionStarted = true;
         }
     }
-    
-    
-    /**
-     * インスタントとsession_start()
-     * getInstanceを実行することで、コンストラクトでsession_start()される
-     * $sessionStarted = trueになる
-     * return new Session();
-     */
-    public static function getInstance() {
-        //static として宣言することで、 クラスのインスタンス化の必要なしにアクセスできる
-        static $instance;
-        
-        if ($instance === null) {
-            $instance = new self();
-        }
-        
-        return $instance;
-    }    
-    
+
     /**
      * セッションに値を設定
      *
@@ -179,7 +167,7 @@ class Session {
     
     /**
      * セッションを変数に入れる
-     * 配列と値を空に
+     * 配列の'falsh_message'を破棄
      */
     public static function getFlash() {
         

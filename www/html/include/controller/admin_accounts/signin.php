@@ -1,15 +1,19 @@
 <?php
+
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
     
-    // //$_SESSION['admin']を受け取る (なければfalse)
-    // $admin = Session::getSession('admin',false);
-    
-    // //クッキーも受け取る（なければ空）
-    // $cookie_check = Cookie::getCookieCheck();
-    // $cookie_name = Cookie::getCookieName();
-    
+    Session::start();
+    //認証済みか判定 ($_SESSION['_authenticated']を受け取る)
+    $session = Session::isAuthenticated();
+
+    if ($session === true) {
+        //認証済みであればダッシュボードにリダイレクト
+        return View::redirectTo('admin_dashboard', 'index');
+        exit;
+        
+    }
     
     //ログイン画面へ（初期値はそれぞれ空の状態）
     return View::render('signin');

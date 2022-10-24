@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //cartsテーブル+cart_detailテーブル
 class Carts {
@@ -67,7 +67,7 @@ class Carts {
              
         $params = [':cart_id' => $this->cart_id,];
         
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     /**
@@ -109,8 +109,9 @@ class Carts {
              
         $params = [':user_id' => $this->user_id];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
     }
+    
     /**
      * (すでにカートの存在は確認済み)
      * ユーザーの既存カートで同一アイテムがないか確認
@@ -127,7 +128,7 @@ class Carts {
         
         $params = [':cart_id' => $this -> cart_id, ':item_id' => $this -> item_id,];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
     }
     
     // carts テーブル ------------------------------------------------------------------------
@@ -147,7 +148,7 @@ class Carts {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -165,7 +166,7 @@ class Carts {
             ':update_datetime' => $this -> update_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     /**
      * カートの削除（無効化）
@@ -183,7 +184,7 @@ class Carts {
             ':update_datetime' => $this->update_datetime,
         ];
         
-        return Models::executeBySql($sql, $params);
+        return Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -206,7 +207,7 @@ class Carts {
              
         $params = [':cart_id' => $this->cart_id,];
         
-        return Models::findBySql($sql, $params);
+        return Messages::findBySql($sql, $params);
     }
     
     // cart_detail --------------------------------------------------------------------
@@ -229,7 +230,7 @@ class Carts {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     /**
      * cart_detailの更新
@@ -253,7 +254,7 @@ class Carts {
             ':item_id' => $this -> item_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     /**
      * cart_detailの更新
@@ -277,7 +278,7 @@ class Carts {
             ':item_id' => $this -> item_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     /**
      * cart_detailの削除
@@ -295,7 +296,7 @@ class Carts {
             ':item_id' => $this -> item_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     // 動作をまとめた関数 -------------------------------------------------
@@ -356,7 +357,7 @@ class Carts {
               
         $params = [':cart_id' => $this->cart_id];
         
-        $record = Models::retrieveBySql($sql, $params);
+        $record = Messages::retrieveBySql($sql, $params);
         
         Session::getInstance() -> set('cart_count',$record->cart_count);
     }

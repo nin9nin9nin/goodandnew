@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //usersテーブル
 class Users {
@@ -130,7 +130,7 @@ class Users {
               
         $params = [':user_name' => $this->user_name];
         
-        $record = Models::retrieveBySql($sql, $params);
+        $record = Messages::retrieveBySql($sql, $params);
         
         $count = $record -> id_count;
         
@@ -159,7 +159,7 @@ class Users {
         
         $params = [':user_name' => $this->user_name];
         
-        $hash = Models::retrieveBySql($sql, $params);
+        $hash = Messages::retrieveBySql($sql, $params);
         
         if (!password_verify($this->password, $hash->password)) {
             return CommonError::errorAdd('ユーザーネームかパスワードが正しくありません');
@@ -180,7 +180,7 @@ class Users {
         
         $params = [':user_name' => $this->old_user_name];
         
-        $hash = Models::retrieveBySql($sql, $params);
+        $hash = Messages::retrieveBySql($sql, $params);
         
         if (!password_verify($this->old_password, $hash->password)) {
             return CommonError::errorAdd('旧パスワードが正しくありません');
@@ -195,7 +195,7 @@ class Users {
         $sql = 'SELECT * FROM users' . PHP_EOL
              . 'ORDER BY create_datetime DESC';
         
-        return Models::findBySql($sql);
+        return Messages::findBySql($sql);
     }
     
     
@@ -216,7 +216,7 @@ class Users {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -229,7 +229,7 @@ class Users {
              
         $params = [':user_id' => $this->user_id];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
 
     }
     /**
@@ -244,7 +244,7 @@ class Users {
              
         $params = [':user_name' => $this->user_name];
         
-        return Models::retrieveBySql($sql, $params);
+        return Messages::retrieveBySql($sql, $params);
 
     }
     
@@ -267,7 +267,7 @@ class Users {
             ':user_id' => $this->user_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     

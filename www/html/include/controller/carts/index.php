@@ -33,16 +33,16 @@ function execute_action() {
         //カート情報の取得(商品詳細含む)
         $records['cart_items'] = $classCarts -> getUserCartItems();
         
-        //数量の計算・取得
+        //合計数量の計算・取得
         $records['total_quantity'] = $classCarts->getTotalQuantity($records['cart_items']);
         
-        //小計の計算・取得
+        //合計金額の計算・取得
         $records['total_amount'] = $classCarts->getTotalAmount($records['cart_items']);
         
     } else {
-        //数量表示を変更
+        //合計数量を変更
         $records['total_quantity'] =  0;
-        //小計表示を変更
+        //合計金額を変更
         $records['total_amount'] =  '-';
     }
     

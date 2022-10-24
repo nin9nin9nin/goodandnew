@@ -11,7 +11,7 @@ function execute_action() {
     $item_id = Request::get('item_id');
     $new_quantity = Request::get('new_quantity');//更新後の値
     $quantity = Request::get('quantity');//更新前の値
-    $subtraction = $new_quantity - $quantity;//差し引きした値(stockの更新時に使用)
+    $subtraction = $new_quantity - $quantity;//加算された値(stockの更新時に使用)
 
     if (preg_match('/^\d+$/', $item_id) !== 1) {
         return View::render404();

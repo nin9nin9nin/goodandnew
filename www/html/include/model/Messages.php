@@ -1,13 +1,12 @@
 <?php
+
+require_once(MODEL_DIR . '/Models.php');
 /**
  * Models機能にメッセージ機能を追加
  * html上で関数をそのまま使用
  * 各モデルでinclude
  * Massages::でオブジェクトの内部からスコープ
  */
-
-require_once(MODEL_DIR . '/Models.php');
-
 class Messages extends Models {
     /**
      * 登録日時のフォーマット変更
@@ -16,6 +15,17 @@ class Messages extends Models {
      */
     public function getCreateDateTime($format = 'Y年m月d日 H時i分') {
         $time = strtotime($this->create_datetime);
+
+        return date($format, $time);
+    }
+
+    /**
+     * 更新日時のフォーマット変更
+     * h($record->getCreateDateTime());
+     * 
+     */
+    public function getUpdateDateTime($format = 'Y年m月d日 H時i分') {
+        $time = strtotime($this->update_datetime);
 
         return date($format, $time);
     }
@@ -30,14 +40,16 @@ class Messages extends Models {
     }
     
     /**
-     * 3桁カンマ区切り
-     * 
+     * 値段の3桁カンマ区切り
      * カンマ区切りになっているため戻り値は数値ではなく文字列であることに注意
+     * 
      */
     public function getPrice() {
         return number_format($this->price);
     }
+
     /**
+     * 在庫の3桁カンマ区切り
      */
     public function getStock() {
         return number_format($this->stock);
@@ -55,29 +67,43 @@ class Messages extends Models {
     }
 
     /**
-     * 税込み価格
-     */
-    public function getTotalQuantity($records=[]) {
-        $total_quantity = 0;
-        foreach($records as $record){
-            $total_quantity += $record->quantity;
-        }
-        return number_format($total_quantity);
-    }
-    
-    public function getTotalAmount($records=[]) {
-        $total_amount = 0;
-        foreach($records as $record){
-            $total_amount += $record->price * $record->quantity;
-        }
-        return number_format($total_amount);
-    }
-    
-    /**
      * descriptionの省略
      * 98文字以上は…
      */
     public function getDescription() {
-        return mb_strimwidth( $record->description , 0, 98, '…', 'UTF-8' );
+        return mb_strimwidth( $this->description , 0, 98, '…', 'UTF-8' );
     }
+
+    /**
+     * 小計計算
+     */
+    public function getSubTotal() {
+        $sub_total = $this->price * $this->quantity;
+
+        return number_format($sub_total);
+    }
+
+    /**
+     * 合計数量
+     */
+    public function getTotalQuantity() {
+        $total_quantity = 0;
+        
+        $total_quantity += $this->quantity;
+        
+        return number_format($total_quantity);
+    }
+    
+    /**
+     * 合計金額
+     */
+    public function getTotalAmount() {
+        $total_amount = 0;
+        
+        $total_amount += $this->price * $this->quantity;
+        
+        return number_format($total_amount);
+    }
+    
+    
 }

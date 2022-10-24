@@ -28,7 +28,7 @@ class Request {
 
     /**
      * $_GET,$_POSTの内容を受け取る
-     * フィルタリング　空白を削除
+     * フィルタリング　先頭と末尾の空白を削除
      * param str
      * return str $value $_REQUEST 連想配列
      */

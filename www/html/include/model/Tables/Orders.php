@@ -1,10 +1,9 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
-//継承して機能を追加
 //adminに追加する機能
-class Orders extends Models {
+class Orders {
     /**
      * 
      */
