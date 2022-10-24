@@ -13,6 +13,7 @@ class Request {
 
         return false;
     }
+
     /**
      * リクエストメゾット(GET)
      * return bool
@@ -24,9 +25,10 @@ class Request {
 
         return false;
     }
+
     /**
      * $_GET,$_POSTの内容を受け取る
-     * フィルタリング　空白を削除
+     * フィルタリング　先頭と末尾の空白を削除
      * param str
      * return str $value $_REQUEST 連想配列
      */
@@ -52,6 +54,7 @@ class Request {
             return $_SEVER['HTTP_HOST'];
         }
     }
+
     /**
      * HTTPSでアクセスされたかどうかの判定
      */
@@ -61,6 +64,7 @@ class Request {
         }
         return false;
     }
+
     /**
      * リクエストされたURLの情報を格納
      */
@@ -68,6 +72,7 @@ class Request {
     public static function getRequestUri() {
         return $_SERVER['REQUEST_URI'];
     }
+
     /**
      * ベースURLの特定 (index.phpなど)
      * SCRIPT_NAME,REQUEST_URLの値を用いて取得
@@ -92,6 +97,7 @@ class Request {
         }
         return '';
     }
+
     /**
      * PATH_INFOの特定 (/itemsなど)
      * 基本REQUEST_URIからベースURLを除いた値になる
@@ -107,5 +113,22 @@ class Request {
         $path_info = (string)substr($request_uri, strlen($base_url));
         
         return $path_info;
+    }
+
+    /**
+     * ページネーション
+     * page_idの取得と決定
+     * $_GET['page_id'] はURLに渡された現在のページ数
+     */
+    public static function getPageId($name, $default = '') {
+        $value = $default;
+
+        if (isset($_REQUEST[$name]) === true) {
+            $value = 1;// 設定されてない場合は1ページ目にする
+        } else {
+            $value = $_REQUEST[$name];
+        }
+
+        return $value;
     }
 }

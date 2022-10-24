@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //categorys テーブル
 class Categorys {
@@ -56,7 +56,7 @@ class Categorys {
         //NULLを未設定に代替
         $params = [':null' => '未設定'];
         
-        return Models::findBySql($sql,$params); 
+        return Messages::findBySql($sql,$params); 
     } 
     
     /**
@@ -76,7 +76,7 @@ class Categorys {
             ':create_datetime' => $this->create_datetime,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -97,7 +97,7 @@ class Categorys {
             ':category_id' => $this->category_id, 
         ];
         
-        return Models::retrieveBySql($sql, $params); 
+        return Messages::retrieveBySql($sql, $params); 
     }
     
     /**
@@ -109,7 +109,7 @@ class Categorys {
         $sql = 'SELECT category_id, category_name' . PHP_EOL
              . 'FROM categorys';
         
-        return Models::findBySql($sql); 
+        return Messages::findBySql($sql); 
     } 
     
     /**
@@ -132,7 +132,7 @@ class Categorys {
             ':category_id' => $this->category_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -144,7 +144,7 @@ class Categorys {
         
         $params = [':category_id' => $this->category_id];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -155,7 +155,7 @@ class Categorys {
     
         $params = [':table' => $table];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -172,7 +172,7 @@ class Categorys {
             ':category_id' => $this->category_id,
             ];
             
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -184,7 +184,7 @@ class Categorys {
     public static function selectOption_Monthly() {
         $sql = 'SELECT category_id, category_name FROM categorys WHERE parent_id = 2';
         
-        return Models::findBySql($sql);
+        return Messages::findBySql($sql);
     }
     
     /**
@@ -196,6 +196,6 @@ class Categorys {
     public static function selectOption_Genre() {
         $sql = 'SELECT category_id, category_name FROM categorys  WHERE parent_id NOT IN (2)';
         
-        return Models::findBySql($sql);
+        return Messages::findBySql($sql);
     }
 }

@@ -1,11 +1,12 @@
 <?php
-//機能を継承し拡張したクラスの読み込み
+
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
     
+    Session::start();
     //認証済みか判定 ($_SESSION['_authenticated']を受け取る)
-    $session = Session::getInstance() -> isAuthenticated();
+    $session = Session::isAuthenticated();
     
     if ($session !== true) {
         //認証済みでなければサインアップにリダイレクト (ログイン画面に移行される)

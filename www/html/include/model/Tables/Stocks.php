@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //stocksテーブル
 class Stocks {
@@ -55,7 +55,7 @@ class Stocks {
             ':create_datetime' => $this->create_datetime,
         ];
     
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     /**
@@ -74,7 +74,7 @@ class Stocks {
             ':item_id' => $this->item_id,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
     
     //ユーザー側-------------------------------------------------------
@@ -93,7 +93,7 @@ class Stocks {
         
         $params = ['item_id' => $id];
         
-        $record = Models::retrieveBySql($sql, $params);
+        $record = Messages::retrieveBySql($sql, $params);
         
         if ($record !== false) {
             return true;
@@ -122,7 +122,7 @@ class Stocks {
             
             $params = [':item_id' => $id];
             
-            Models::executeBySql($sql, $params);
+            Messages::executeBySql($sql, $params);
             
         } else {
             CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
@@ -149,7 +149,7 @@ class Stocks {
             ':subtraction' => $subtraction,
         ];
         
-        $record = Models::retrieveBySql($sql, $params);
+        $record = Messages::retrieveBySql($sql, $params);
         
         if ($record !== false) {
             return true;
@@ -178,7 +178,7 @@ class Stocks {
                 ':subtraction' => $subtraction,
             ];
             
-            Models::executeBySql($sql, $params);
+            Messages::executeBySql($sql, $params);
             
         } else {
             CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
@@ -200,6 +200,6 @@ class Stocks {
             ':quantity' => $quantity,
         ];
         
-        Models::executeBySql($sql, $params);
+        Messages::executeBySql($sql, $params);
     }
 }

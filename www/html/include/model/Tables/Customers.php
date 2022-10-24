@@ -1,6 +1,6 @@
 <?php
 
-require_once(MODEL_DIR . '/Models.php');
+require_once(MODEL_DIR . '/Messages.php');
 
 //customersテーブル
 class Customers {
@@ -57,7 +57,7 @@ class Customers {
              . 'ON A.customer_id = B.customer_id';
              //Max(order_date)で最終利用日、COUNT(order_id)で利用回数を取得
         
-        return Models::findBySql($sql);
+        return Messages::findBySql($sql);
     }
     
     

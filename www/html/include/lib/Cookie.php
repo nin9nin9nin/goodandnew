@@ -40,6 +40,7 @@ class Cookie {
           return $cookie_check = '';
         }
     }
+    
     public static function getCookieName() {
         //クッキーを取得
         if (isset($_COOKIE['cookie_name'])) {

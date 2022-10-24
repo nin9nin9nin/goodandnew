@@ -2,6 +2,9 @@
 $title = 'ec site 管理画面';
 $description = '説明（新規登録ページ）';
 $is_home = true; //トップページの判定用の変数
+$flash_message = Session::getFlash();
+$cookie_check = Cookie::getCookieCheck();
+$cookie_name = Cookie::getCookieName();
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
@@ -17,7 +20,12 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
             <h1>管理システム</h1>
           </a>
         </header>
-        
+        <!--フラッシュメッセージ-->
+        <?php if ($flash_message !== '') { ?>
+          <div class="message">
+            <p class="flash"><?php echo $flash_message; ?></p>
+          </div>
+        <?php } ?>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
         <div class="message">

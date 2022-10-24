@@ -35,17 +35,18 @@ function execute_action() {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
         
-        //クッキーも受け取る（なければ空）
-        $cookie_check = Cookie::getCookieCheck();
-        $cookie_name = Cookie::getCookieName();
+        Session::start();
+        //フラッシュメッセージ
+        Session::setFlash('ログインに失敗しました');
 
-        return View::render('signin', ['cookie_check' => $cookie_check, 'cookie_name' => $cookie_name, 'errors' => $errors]);
+        return View::render('signin', ['errors' => $errors]);
         exit;
     }
-                
+              
+    Session::start();
     //$_SESSION['_authenticated']を認証済みにする
     //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
-    Session::getInstance() -> setAuthenticated(true);
+    Session::setAuthenticated(true);
     
     //情報登録------------------------------------------------
     //admin_nameからadmin情報取得(passwprd除く)
@@ -53,6 +54,7 @@ function execute_action() {
     
     //$_SESSION['admin']を作成・値を入れる
     Session::set('admin_name', $record->admin_name);
+    //アカウント管理の際に使用
     Session::set('admin_id', $record->admin_id);
     
     //フラッシュメッセージをセット
@@ -62,6 +64,6 @@ function execute_action() {
     Cookie::setCookie($cookie_check, $name);
     
     //ログインした状態でダッシュボードにリダイレクト
-    return View::redirectTo('dashboard', 'index');
+    return View::redirectTo('admin_dashboard', 'index');
     
 }

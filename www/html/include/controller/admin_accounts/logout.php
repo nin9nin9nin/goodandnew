@@ -7,8 +7,9 @@ function execute_action() {
         return View::render404();
     }
     
+    Session::start();
     //セッションを空にする $_SESSION = array();
-    Session::getInstance() -> clear();
+    Session::clear();
     
     //$_SESSION['_authenticated']をfalseにする（認証状態を解除する）
     //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える(session_destory()と動作がかぶる？)
@@ -24,14 +25,15 @@ function execute_action() {
     session_destroy();
     
     
-    //　クッキーはそのまま(cookie_checkしてるから)
+    //　クッキーはそのまま
     // Cookie::clearCookieCheck();
     // Cookie::clearCookieName();
     
     //フラッシュメッセージをセット
-    // Session::setFlash('ログアウトしました');
+    Session::setFlash('ログアウトしました');
+    // var_dump($_SESSION['flash_message']);
     
-    //ログイン画面へリダイレクト
-    return View::redirectTo('admin_accounts', 'signin');
+    //ログイン画面へ戻る
+    return View::render('signin');
 
 }

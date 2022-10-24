@@ -16,11 +16,20 @@ function execute_action() {
         exit;
         
     }
-    
+
+    //ページIDの取得（なければ1が格納される）
+    $page_id = Request::getPageId('page_id');
+
     //クラスの生成（初期化）
     $classItems = new Items();
-    
-    //items,stocks 結合テーブルの取得
+
+    //プロパティに値をセット(ページネーション)
+    $classItems -> page_id = $page_id;
+
+    //ページネーションに必要な値一式
+    $paginations = $classItems -> getPaginations();
+
+    //itemsの取得　（page_idから指定した分だけ/10アイテムのみ）
     $records['items'] = $classItems -> indexItems();
     
     //categorysテーブルの取得　select/option用
@@ -32,7 +41,7 @@ function execute_action() {
     //shopsテーブルの取得　select/option用
     $records['shops'] = Shops::selectOption_Shops();
     
-    
     //render()にて$filename作成・読み込み ・・・〇〇.tpl.php
-    return View::render('index', ['records' => $records]);
+    //params[]に値の受け渡し
+    return View::render('index', ['records' => $records, 'page_id' => $page_id, 'paginations' => $paginations]);
 }

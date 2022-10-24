@@ -3,11 +3,13 @@ CREATE TABLE admin (
   admin_id int(11) NOT NULL COMMENT'管理者ID' AUTO_INCREMENT,
   admin_name varchar(128) NOT NULL unique COMMENT '管理者名' COLLATE utf8_general_ci,
   email varchar(128) NOT NULL COMMENT 'メールアドレス' COLLATE utf8_general_ci,
-  password varchar(255) NOT NULL COMMENT 'パスワード' COLLATE utf8_general_ci,
+  password varchar(255) NOT NULL COMMENT 'パスワードハッシュ' COLLATE utf8_general_ci,
+  enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(admin_id)
 );
+-- 論理削除にしておく（同じ管理者名を使用できなくする）
 
  -- イベント管理
 CREATE TABLE  events (
@@ -72,7 +74,7 @@ CREATE TABLE items (
   item_name varchar(64) NOT NULL COMMENT '商品名' COLLATE utf8_general_ci,
   category_id int(11) NOT NULL default 0 COMMENT 'カテゴリーID',
   brand_id int(11) NOT NULL default 0 COMMENT 'ブランドID',
-  event_id int(11) NOT NULL default 0 COMMENT 'イベントID',
+  event_id int(11) default 0 COMMENT 'イベントID',
   price int(11) NOT NULL COMMENT '値段',
   description text COMMENT '商品説明' COLLATE utf8_general_ci,
   icon_img varchar(128) NOT NULL COMMENT 'アイコン画像',
@@ -90,12 +92,13 @@ CREATE TABLE items (
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  -- foreign key(brand_id) references brands (brand_id) on delete set null on update cascade,
-  -- foreign key(category_id) references categorys (category_id) on delete set null on update cascade,
-  -- foreign key(event_id) references shops (event_id) on delete set null on update cascade,
+  foreign key(brand_id) references brands (brand_id),
+  foreign key(category_id) references categorys (category_id),
+  foreign key(event_id) references events (event_id) on delete set null on update cascade,
   primary key(item_id)
 );
 -- int(11)の11は、カラムの表示幅であり、2147483647まで格納が可能。
+-- 外部制約キー　event_idのみNULLを許容する
 
 -- 在庫
 CREATE TABLE stocks (
@@ -104,20 +107,23 @@ CREATE TABLE stocks (
   stock int(11) NOT NULL COMMENT '在庫数',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  foreign key(item_id) references items (item_id) on delete set null on update cascade,
+  foreign key(item_id) references items (item_id) on update cascade,
   primary key(stock_id)
 );
+-- 外部制約キーの指定(delete set nullだと)
 
 -- ユーザー
 CREATE TABLE users (
   user_id int(11) NOT NULL COMMENT 'ユーザーID' AUTO_INCREMENT,
   user_name varchar(128) NOT NULL unique COMMENT 'ユーザー名' COLLATE utf8_general_ci,
   email varchar(128) NOT NULL COMMENT 'メールアドレス' COLLATE utf8_general_ci,
-  password varchar(255) NOT NULL COMMENT 'パスワード' COLLATE utf8_general_ci,
+  password varchar(255) NOT NULL COMMENT 'パスワードハッシュ' COLLATE utf8_general_ci,
+  enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(user_id)
 );
+-- 論理削除にしておく（同じユーザー名を使用できなくする）
 
 -- お気に入り
 CREATE TABLE favorites (
@@ -128,6 +134,7 @@ CREATE TABLE favorites (
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(favorite_id)
 );
+-- 柔軟性を考慮し外部制約はなしにしておく
 
 -- 顧客
 CREATE TABLE customers (
@@ -149,16 +156,17 @@ CREATE TABLE customers (
   foreign key(user_id) references users (user_id) on delete set null on update cascade,
   primary key(customer_id)
 );
+-- payment,deliveryを今後追加していく
 
 -- 注文管理
 CREATE TABLE orders (
   order_id int(11) NOT NULL COMMENT '注文ID' AUTO_INCREMENT,
   customer_id int(11) COMMENT '顧客ID',
   order_date datetime NOT NULL COMMENT '注文日',
-  enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(order_id)
+  foreign key(customer_id) references customers (customer_id),
+  primary key(order_id, customer_id)
 );
 
 -- 注文詳細
@@ -166,19 +174,21 @@ CREATE TABLE order_detail (
   order_id int(11) NOT NULL COMMENT '注文ID',
   item_id int(11) NOT NULL COMMENT '商品ID',
   quantity int(11) NOT NULL COMMENT '注文数',
+  price int(11) NOT NULL COMMENT '注文時の値段',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(order_id, item_id)
+  primary key(order_id,item_id)
 );
+-- 集約　結果整合性を考慮し値段も含めた商品データを格納(item_idに外部制約キーは使用しない)
 
 -- カート
 CREATE TABLE carts (
   cart_id int(11) NOT NULL COMMENT 'カートID' AUTO_INCREMENT,
   user_id int(11) COMMENT 'ユーザーID',
-  enabled boolean NOT NULL default true COMMENT '有効',
   cart_date datetime NOT NULL COMMENT '追加日',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
+  foreign key(user_id) references users (user_id),
   primary key(cart_id)
 );
 
@@ -194,14 +204,15 @@ CREATE TABLE cart_detail (
 
 -- ダッシュボード
 CREATE TABLE dashboards (
-  id int(11) NOT NULL COMMENT 'ID',
+  dashboard_id int(11) NOT NULL COMMENT 'ID',
   news text NOT NULL COMMENT 'ニュース',
   topics text NOT NULL COMMENT 'トピックス',
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(id)
+  primary key(dashboard_id)
 );
+
 
 -- memo
 -- AUTO_INCREMENT 初期化

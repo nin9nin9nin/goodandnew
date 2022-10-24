@@ -1,5 +1,5 @@
 <?php
-//機能を継承し拡張したクラスの読み込み
+
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {

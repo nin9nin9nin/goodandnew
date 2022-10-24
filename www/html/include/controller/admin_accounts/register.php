@@ -41,6 +41,10 @@ function execute_action() {
         
         $errors = CommonError::errorWhile();
 
+        Session::start();
+        //フラッシュメッセージをセット
+        Session::setFlash('登録に失敗しました');
+
         return View::render('signup', ['errors' => $errors]);
         exit;
     }
@@ -59,22 +63,15 @@ function execute_action() {
     $classAdmin->insertAdmin();
     
     //情報取得------------------------------------------------
-    //admin_nameからadmin情報取得(passwprd除く)
-    // $record = $classAdmin -> selectAdminName();
-    
-    //$_SESSION['admin']を作成・値を入れる
-    // Session::set('admin_name', $record->admin_name);
-    // Session::set('admin_id', $record->admin_id);
-    
+    //この時点ではセッションへの登録はまだしない（クッキーのみ）
+
+    Session::start();
     //フラッシュメッセージをセット
-    Session::getInstance() -> setFlash('登録に成功しました');
+    Session::setFlash('登録に成功しました');
         
     //['cookie_check']によってクッキーを保存or削除
     Cookie::setCookie($cookie_check, $name);
     
-    
-    //登録して登録完了+ログイン画面を読み込む
+    //フラッシュメッセージを持ってsignin.phpへリダイレクト(正式にログインを行う)
     return View::redirectTo('admin_accounts', 'signin');
-        
-    // return View::render('admin_accounts', 'register');
 }

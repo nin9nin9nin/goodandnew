@@ -81,21 +81,22 @@ function execute_action() {
     
     $classAdmin -> update_datetime = $now_date;
 
-    //adminテーブルに登録
+    //adminテーブルを更新
     $classAdmin -> updateAdmin();
             
             
-    //更新データ取得(passwordを除く)
+    //更新確認用データ取得(passwordを除く)
     $record = $classAdmin -> selectAdminName();
     
+    Session::start();
     //セッションから値を削除 unset($_SESSION['admin'])
-    Session::getInstance() -> remove('admin_name');
-    //再度登録
-    Session::set('admin_name', $record->admin_name);
+    Session::remove('admin_name');
+    //再度登録（念のためデータベースのデータを格納）
+    Session::set('admin_name', $record -> admin_name);
     
-    // //クッキーネームを削除
+    //クッキーネームを削除
     Cookie::clearCookieName();
-    // //削除してからクッキーネームのみ再登録
+    //削除してからクッキーネームのみ再登録
     $now = time();
     setcookie('cookie_name', $name, $now + 60 * 60 * 24 * 365);
     
@@ -103,7 +104,6 @@ function execute_action() {
     //フラッシュメッセージをセット
     Session::setFlash('アカウント情報を変更しました');
     
-    
+    //
     return View::redirectTo('admin_accounts', 'index');
-    // return View::render('complete', ['admin' => $admin]);
 }

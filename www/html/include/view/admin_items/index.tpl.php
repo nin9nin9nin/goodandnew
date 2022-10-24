@@ -6,7 +6,6 @@ $flash_message = Session::getFlash();
 include 'inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
   <?php include 'inc/admin/header.php'; ?>
   
@@ -270,7 +269,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
       </div>
     </div>
     
-    <div id="home">
+    <!-- <div id="home">
       <div class="container">
         <div class="home">
           <div class="form-buttonwrap">
@@ -278,8 +277,9 @@ include 'inc/admin/head.php'; // head.php の読み込み
           </div>
         </div>
       </div>
-    </div>
-    
+    </div> -->
+    <?php include 'inc/admin/pagination.php'; ?>
+    <?php include 'inc/admin/home.php'; ?>
   </main>
   
   <?php include 'inc/admin/footer.php'; ?>

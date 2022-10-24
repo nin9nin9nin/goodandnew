@@ -3,12 +3,12 @@ $title = 'ec site 管理画面';
 $description = '説明（アカウント管理ページ）';
 //$is_home = true; //トップページの判定用の変数
 $flash_message = Session::getFlash();
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -78,6 +78,16 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <?php print h($record -> getCreateDateTime()); ?>
                 </td>
               </tr>
+              <?php if(isset($record->update_datetime)) { ?>
+              <tr class="form-text">
+                <th>
+                  最終更新日時:
+                </th>
+                <td>
+                  <?php print h($record -> getUpdateDateTime()); ?>
+                </td>
+              </tr>
+              <?php } ?>
             </table>
               <!--submit+hidden-->
               <div class="form-buttonwrap">
@@ -87,26 +97,15 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <input type="submit" value="ログアウト">
                 <input type="hidden" name="module" value="admin_accounts">
                 <input type="hidden" name="action" value="logout">
-                <input type="hidden" name="admin_id" value="<?php print h($record->admin_id); ?>">
               </div>
           </form>
         </div>
       </div>
     </div>
-    
-    <div id="home">
-      <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   
- <?php include 'inc/admin/footer.php'; ?>
+ <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 
 </html>

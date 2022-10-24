@@ -4,7 +4,7 @@ $description = '説明（新規登録完了ページ）';
 $is_home = true; //トップページの判定用の変数
 $cookie_check = Cookie::getCookieCheck();
 $cookie_name = Cookie::getCookieName();
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 

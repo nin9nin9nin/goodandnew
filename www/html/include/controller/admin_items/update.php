@@ -59,15 +59,16 @@ function execute_action() {
         $errors = CommonError::errorWhile();
         
         //指定レコードの取得
-        $records[0] = $classItems -> editItem();
+        // $records[0] = $classItems -> editItem();
         //categorysテーブルの取得　select/option用
-        $records['categorys'] = Categorys::selectOption_Genre();
+        // $records['categorys'] = Categorys::selectOption_Genre();
         //brandsテーブルの取得　select/option用
-        $records['brands'] = Brands::selectOption_Brands();
+        // $records['brands'] = Brands::selectOption_Brands();
         //shopsテーブルの取得　select/option用
-        $records['shops'] = Shops::selectOption_Shops();
+        // $records['shops'] = Shops::selectOption_Shops();
         
-        return View::render('edit', ['records' => $records, 'errors' => $errors]);
+        // return View::render('edit', ['records' => $records, 'errors' => $errors]);
+        return View::redirectTo('admin_items', 'edit', ['item_id' => $id, 'errors' => $errors]);
         exit;
     }
     

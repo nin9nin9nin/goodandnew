@@ -13,4 +13,4 @@ require_once('./include/controller.php');
 define('BASE_URL',basename(__FILE__));
 
 //defaultのアクセス
-dispatch('dashboard','index');
+dispatch('admin_dashboard','index');

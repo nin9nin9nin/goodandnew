@@ -51,6 +51,20 @@ class Validator {
         }
         return false;
     }
+
+    /**
+     * 空白文字のチェック
+     * 全角半角の空白文字があればfalseを返す
+     * @return bool
+     */
+    //admin_name user_nameの取得時に行う
+    public static function checkSpace($arg) {
+        if (preg_match('/[　\s]/u', $arg)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     
     /**
      * 文字列型チェック<br>
