@@ -213,6 +213,7 @@ CREATE TABLE dashboards (
   primary key(dashboard_id)
 );
 
+
 -- memo
 -- AUTO_INCREMENT 初期化
 -- ALTER TABLE `tablename` auto_increment = 1;
