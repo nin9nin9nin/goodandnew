@@ -5,15 +5,19 @@ require_once(MODEL_DIR . '/Messages.php');
 //brands テーブル
 class Brands {
     
+    public $table_name = 'brands'; //count(*)するテーブル
+    public $diplay_record = '20'; //1ページの表示件数
+    public $page_id; //ページ番号
     public $brand_id;
     public $brand_name;
-    public $category_id;
     public $description;
+    public $brand_logo;
     public $brand_hp;
-    public $brand_link1;
-    public $brand_link2;
-    public $brand_link3;
-    public $brand_link4;
+    public $brand_instagram;
+    public $brand_twitter;
+    public $brand_facebook;
+    public $brand_youtube;
+    public $brand_line;
     public $phone_number;
     public $email;
     public $address;
@@ -23,15 +27,17 @@ class Brands {
     
     
     public function __construct() {
+        $this -> page_id = null;
         $this -> brand_id = null;
         $this -> brand_name = null;
-        $this -> category_id = null;
         $this -> description = null;
+        $this -> brand_logo = null;
         $this -> brand_hp = null;
-        $this -> brand_link1 = null;
-        $this -> brand_link2 = null;
-        $this -> brand_link3 = null;
-        $this -> brand_link4 = null;
+        $this -> brand_instagram = null;
+        $this -> brand_twitter = null;
+        $this -> brand_facebook = null;
+        $this -> brand_youtube = null;
+        $this -> brand_line = null;
         $this -> phone_number = null;
         $this -> email = null;
         $this -> address = null;
@@ -56,12 +62,13 @@ class Brands {
             return CommonError::errorAdd('ブランド名は64文字以内で入力してください');
         }
     }
+
     /**
      * URL　 任意
      * 
      * Validatorがfalseの場合メッセージを入れて返す
      * エラーがなければ何も返さない
-     * @param hp,link~
+     * @param hp~
      * return CommonError::errorAdd()
      * 
      * /^(https?|ftp)(://[-_.!~*'()a-zA-Z0-9;/?:@&amp;amp;=+$,%#]+)$/
@@ -74,24 +81,29 @@ class Brands {
                 return CommonError::errorAdd('ブランドHPが正しくありません');
             }
         }
-        if ($this->brand_link1 !== "") {
-            if (!Validator::checkUrl($this->brand_link1)) {
-                return CommonError::errorAdd('ブランドLINK_1が正しくありません');
+        if ($this->brand_instagram !== "") {
+            if (!Validator::checkUrl($this->brand_instagram)) {
+                return CommonError::errorAdd('リンクinstagramが正しくありません');
             }
         }
-        if ($this->brand_link2 !== "") {
-            if (!Validator::checkUrl($this->brand_link2)) {
-                return CommonError::errorAdd('ブランドLINK_2が正しくありません');
+        if ($this->brand_twitter !== "") {
+            if (!Validator::checkUrl($this->brand_twitter)) {
+                return CommonError::errorAdd('リンクtwitterが正しくありません');
             }
         }
-        if ($this->brand_link3 !== "") {
-            if (!Validator::checkUrl($this->brand_link3)) {
-                return CommonError::errorAdd('ブランドLINK3が正しくありません');
+        if ($this->brand_facebook !== "") {
+            if (!Validator::checkUrl($this->brand_facebook)) {
+                return CommonError::errorAdd('リンクfacebookが正しくありません');
             }
         }
-        if ($this->brand_link4 !== "") {
-            if (!Validator::checkUrl($this->brand_link4)) {
-                return CommonError::errorAdd('ブランドLINK_4が正しくありません');
+        if ($this->brand_youtube !== "") {
+            if (!Validator::checkUrl($this->brand_youtube)) {
+                return CommonError::errorAdd('リンクyoutubeが正しくありません');
+            }
+        }
+        if ($this->brand_line !== "") {
+            if (!Validator::checkUrl($this->brand_line)) {
+                return CommonError::errorAdd('リンクlineが正しくありません');
             }
         }
         
@@ -186,10 +198,10 @@ class Brands {
     public function insertBrand() 
         {
         $sql = 'INSERT INTO brands ' . PHP_EOL
-             . '    (brand_name, category_id, description, brand_hp, brand_link1, brand_link2, brand_link3, brand_link4,' . PHP_EOL
+             . '    (brand_name, category_id, description, brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
              . '    phone_number, email, address, status, create_datetime)' . PHP_EOL
              . 'VALUES ' . PHP_EOL
-             . '    (:brand_name, :category_id, :description, :brand_hp, :brand_link1, :brand_link2, :brand_link3, :brand_link4,' . PHP_EOL
+             . '    (:brand_name, :category_id, :description, :brand_hp, :brand_instagram, :brand_twitter, :brand_facebook, :brand_youtube, :brand_line,' . PHP_EOL
              . '    :phone_number, :email, :address, :status, :create_datetime)';
              
         $params = [
@@ -197,10 +209,11 @@ class Brands {
             ':category_id' => $this->category_id,
             ':description' => $this->description,
             ':brand_hp' => $this->brand_hp,
-            ':brand_link1' => $this->brand_link1,
-            ':brand_link2' => $this->brand_link2,
-            ':brand_link3' => $this->brand_link3,
-            ':brand_link4' => $this->brand_link4,
+            ':brand_instagram' => $this->brand_instagram,
+            ':brand_twitter' => $this->brand_twitter,
+            ':brand_facebook' => $this->brand_facebook,
+            ':brand_youtube' => $this->brand_youtube,
+            ':brand_line' => $this->brand_line,
             ':phone_number' => $this->phone_number,
             ':email' => $this->email,
             ':address' => $this->address,
@@ -217,7 +230,7 @@ class Brands {
     public function editBrand() {
         //A brands+ B categorys+ C itemsで左辺結合
         $sql = 'SELECT A.brand_id, A.brand_name, A.status,' . PHP_EOL
-             . '       description, brand_hp, brand_link1, brand_link2, brand_link3, brand_link4,' . PHP_EOL
+             . '       description, brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
              . '       phone_number, email, address,' . PHP_EOL
              . '       COALESCE(B.category_id,0) AS category_id, COALESCE(B.category_name,:null) AS category_name,' . PHP_EOL
              . '       COALESCE(C.item_count, 0) AS item_count' . PHP_EOL
@@ -245,10 +258,11 @@ class Brands {
              . '    category_id = :category_id,'. PHP_EOL
              . '    description = :description,'. PHP_EOL
              . '    brand_hp = :brand_hp,'. PHP_EOL
-             . '    brand_link1 = :brand_link1,'. PHP_EOL
-             . '    brand_link2 = :brand_link2,'. PHP_EOL
-             . '    brand_link3 = :brand_link3,'. PHP_EOL
-             . '    brand_link4 = :brand_link4,'. PHP_EOL
+             . '    brand_instagram = :brand_instagram,'. PHP_EOL
+             . '    brand_twitter = :brand_twitter,'. PHP_EOL
+             . '    brand_facebook = :brand_facebook,'. PHP_EOL
+             . '    brand_youtube = :brand_youtube,'. PHP_EOL
+             . '    brand_line = :brand_line,'. PHP_EOL
              . '    phone_number = :phone_number,'. PHP_EOL
              . '    email = :email,'. PHP_EOL
              . '    address = :address,'. PHP_EOL
@@ -261,10 +275,11 @@ class Brands {
             ':category_id' => $this->category_id,
             ':description' => $this->description,
             ':brand_hp' => $this->brand_hp,
-            ':brand_link1' => $this->brand_link1,
-            ':brand_link2' => $this->brand_link2,
-            ':brand_link3' => $this->brand_link3,
-            ':brand_link4' => $this->brand_link4,
+            ':brand_instagram' => $this->brand_instagram,
+            ':brand_twitter' => $this->brand_twitter,
+            ':brand_facebook' => $this->brand_facebook,
+            ':brand_youtube' => $this->brand_youtube,
+            ':brand_line' => $this->brand_line,
             ':phone_number' => $this->phone_number,
             ':email' => $this->email,
             ':address' => $this->address,
