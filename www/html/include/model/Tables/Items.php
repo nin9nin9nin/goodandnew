@@ -7,7 +7,7 @@ class Items {
     
     public $table_name = 'items'; //count(*)するテーブル
     public $diplay_record = '20'; //1ページの表示件数
-    public $page_id;
+    public $page_id; //ページ番号
     public $item_id;
     public $item_name;
     public $category_id;
@@ -92,17 +92,50 @@ class Items {
             return CommonError::errorAdd('値段は半角数字、10桁以内で入力してください');
         }
     }
-    
+
     /**
+     * アップロード画像ファイル
+     * 拡張子の確認とファイル名(ユニーク)の作成
+     * プロパティに登録
+     * params $_FILES[''], $プロパティ名
+     * 
      */
-    public function checkStatus() {
-        Validator::paramClear();
+    public function checkIconImg() {
         
-        if (!Validator::checkInputempty($this->price)) {
-            return CommonError::errorAdd('値段を入力してください');
-        } else if (!Validator::checkRange($this->price, 1, 10)) {
-            return CommonError::errorAdd('値段は半角数字、10桁以内で入力してください');
+        Messages::checkImg($_FILES['icon_img'], $this->icon_img);
+    }
+    /**
+     * 
+     */
+    public function checkImg() {
+        if (isset($_FILES['img1'])) {
+            Messages::checkImg($_FILES['img1'], $this->img1);
         }
+        if (isset($_FILES['img2'])) {
+            Messages::checkImg($_FILES['img2'], $this->img2);
+        }
+        if (isset($_FILES['img3'])) {
+            Messages::checkImg($_FILES['img3'], $this->img3);
+        }
+        if (isset($_FILES['img4'])) {
+            Messages::checkImg($_FILES['img4'], $this->img4);
+        }
+        if (isset($_FILES['img5'])) {
+            Messages::checkImg($_FILES['img5'], $this->img5);
+        }
+        if (isset($_FILES['img6'])) {
+            Messages::checkImg($_FILES['img6'], $this->img6);
+        }
+        if (isset($_FILES['img7'])) {
+            Messages::checkImg($_FILES['img7'], $this->img7);
+        }
+        if (isset($_FILES['img8'])) {
+            Messages::checkImg($_FILES['img8'], $this->img8);
+        }
+        if (isset($_FILES['img9'])) {
+            Messages::checkImg($_FILES['img9'], $this->img9);
+        }
+
     }
 
     /**
@@ -185,24 +218,6 @@ class Items {
         // return Messages::findBySql($sql, $params);
         return Messages::findBySql($sql, $params);
     }
-
-    /**
-     * 
-     */
-    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
-        $value = $default;
-
-        if (isset($_REQUEST[$keyword]) === true) {
-            $value = $_REQUEST[$keyword];
-        } else if (isset($_REQUEST[$category_id]) === true){
-            $value = $_REQUEST[$category_id];
-        } else if (isset($_REQUEST[$sorting]) === true){
-            $value = $_REQUEST[$sorting];
-        } 
-
-        return $value;
-    }
-    
     
     /**
      * itemsテーブルに新規登録
@@ -228,6 +243,54 @@ class Items {
         ];
         
         Messages::executeBySql($sql, $params);
+    }
+
+    /**
+     * 画像のファイルアップロード
+     * アップロードできなければロールバック(コミットさせない)
+     */
+    public function uploadIconImg() {
+
+        Messages::uploadImg($_FILES['icon_img'], $this -> icon_img);
+    }
+    /**
+     * 
+     */
+    public function uploadImg() {
+
+        if (isset($_FILES['img1'])) {
+            Messages::uploadImg($_FILES['img1'], $this -> img1);
+        }
+        if (isset($_FILES['img2'])) {
+            Messages::uploadImg($_FILES['img2'], $this -> img2);
+        }
+        if (isset($_FILES['img3'])) {
+            Messages::uploadImg($_FILES['img3'], $this -> img3);
+        }
+        if (isset($_FILES['img4'])) {
+            Messages::uploadImg($_FILES['img4'], $this -> img4);
+        }
+        if (isset($_FILES['img5'])) {
+            Messages::uploadImg($_FILES['img5'], $this -> img5);
+        }
+        if (isset($_FILES['img6'])) {
+            Messages::uploadImg($_FILES['img6'], $this -> img6);
+        }
+        if (isset($_FILES['img7'])) {
+            Messages::uploadImg($_FILES['img7'], $this -> img7);
+        }
+        if (isset($_FILES['img8'])) {
+            Messages::uploadImg($_FILES['img8'], $this -> img8);
+        }
+        if (isset($_FILES['img9'])) {
+            Messages::uploadImg($_FILES['img9'], $this -> img9);
+        }
+        if (isset($_FILES['img10'])) {
+            Messages::uploadImg($_FILES['img10'], $this -> img10);
+        }
+        if (isset($_FILES['img10'])) {
+            Messages::checkImg($_FILES['img10'], $this->img10);
+        }
     }
     
     
