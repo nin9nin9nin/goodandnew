@@ -43,25 +43,27 @@ function execute_action() {
         $classItems -> checkItemName();
         $classItems -> checkPrice();
         $classStocks -> checkStock();
+        $classItems -> checkIconImg();
+        $classItems -> checkImg();
         
-        //画像の取得とファイル名の作成
-        if (is_uploaded_file($_FILES['icon_img']['tmp_name']) === TRUE) {
-            $extension = pathinfo($_FILES['icon_img']['name'], PATHINFO_EXTENSION);
-            $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
-            if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
-                $icon_img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
-                if (is_file(IMG_DIR . $icon_img) !== TRUE) {
-                    //プロパティに登録
-                    $classItems -> icon_img = $icon_img;
-                } else {
-                    CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
-                }
-            } else {
-                CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
-            }
-        } else {
-            CommonError::errorAdd('ファイルを選択してください');
-        }
+        // //画像の取得とファイル名の作成
+        // if (is_uploaded_file($_FILES['icon_img']['tmp_name']) === TRUE) {
+        //     $extension = pathinfo($_FILES['icon_img']['name'], PATHINFO_EXTENSION);
+        //     $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
+        //     if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
+        //         $icon_img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
+        //         if (is_file(IMG_DIR . $icon_img) !== TRUE) {
+        //             //プロパティに登録
+        //             $classItems -> icon_img = $icon_img;
+        //         } else {
+        //             CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
+        //         }
+        //     } else {
+        //         CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
+        //     }
+        // } else {
+        //     CommonError::errorAdd('ファイルを選択してください');
+        // }
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -107,15 +109,19 @@ function execute_action() {
         //stocksテーブルに新規登録　executeBySql()
         $classStocks -> insertStock();
         
-        //画像のファイルアップロード
-        if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
-            $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
-            throw $e;
+        //画像のファイルアップロード（できなければrollback）
+        $classItems -> uploadIconImg();
+        $classItems -> uploadImg();
+
+        // if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
+        //     $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
+        //     throw $e;
             
-            Database::rollback();
-        } else {
-            Database::commit();
-        }
+        //     Database::rollback();
+        // } else {
+        //     Database::commit();
+        // }
+        Database::commit();
       
     } catch (Exception $e) {
         $e = new Exception('データベースに接続できませんでした', 0, $e);
@@ -125,6 +131,7 @@ function execute_action() {
         Database::rollback();
     }
     
+    Session::start();
     //フラッシュメッセージをセット
     Session::setFlash('商品を登録しました');
     

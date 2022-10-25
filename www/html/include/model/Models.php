@@ -21,6 +21,19 @@ class Models {
         return Database::executeBySql($sql, $params);
     }
 
+    
+    /**
+     * 画像のファイルアップロード
+     * アップロードできなければロールバック(コミットさせない)
+     */
+    public function uploadImg($file = [], $img_property) {
+
+        if (move_uploaded_file($file['tmp_name'], IMG_DIR . $img_property) !== TRUE) {
+            $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
+            throw $e;
+        }
+        Database::rollback();
+    }
 
     /**
      * public $table_name プロパティから
@@ -35,6 +48,7 @@ class Models {
 
         return self::findBySql($sql, $params);
     }
+
     
     /**
      * @params total_record
@@ -145,8 +159,11 @@ class Models {
      * 検索機能の追加
      */
     //入力された検索条件からSQl文を生成
-    public static function setSearchValue($value) {
+    public static function setSearchValue($params) {
 
+        if (array_key_exists('keyword', $params)) {
+            $searchSql = "name like '%{$params['keyword']}%'"; //キーワード検索
+        }
         $search = array_key($value);
 
         //keyの値でwhere句の内容を変更
@@ -164,6 +181,23 @@ class Models {
             }
         }
         return $searchSql;
+    }
+
+    /**
+     * 
+     */
+    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
+        $value = $default;
+
+        if (isset($_REQUEST[$keyword]) === true) {
+            $value = $_REQUEST[$keyword];
+        } else if (isset($_REQUEST[$category_id]) === true){
+            $value = $_REQUEST[$category_id];
+        } else if (isset($_REQUEST[$sorting]) === true){
+            $value = $_REQUEST[$sorting];
+        } 
+
+        return $value;
     }
 
 }
