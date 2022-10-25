@@ -26,13 +26,14 @@ class Models {
      * 画像のファイルアップロード
      * アップロードできなければロールバック(コミットさせない)
      */
-    public function uploadImg($file = [], $img_property) {
+    public function uploadImg($file = [], $img_dir, $img_property) {
 
-        if (move_uploaded_file($file['tmp_name'], IMG_DIR . $img_property) !== TRUE) {
+        if (move_uploaded_file($file['tmp_name'], $img_dir . $img_property) !== TRUE) {
             $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
             throw $e;
+
+            Database::rollback();
         }
-        Database::rollback();
     }
 
     /**
@@ -48,7 +49,6 @@ class Models {
 
         return self::findBySql($sql, $params);
     }
-
     
     /**
      * @params total_record
@@ -198,6 +198,17 @@ class Models {
         } 
 
         return $value;
+    }
+
+    /**
+     * 全レコード削除
+     */
+    public function deleteAll() {
+        $sql = 'TRUNCATE TABLE :table_name';
+    
+        $params = [':table_name' => $this ->table_name];
+        
+        Messages::executeBySql($sql, $params);
     }
 
 }
