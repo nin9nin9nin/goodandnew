@@ -8,7 +8,7 @@ $paginations['page_range']-array
 $paginations['from_record']
 $paginations['to_record']
  -->
-   <div id="home">
+   <div id="paginations">
       <div class="container">
         <div class="paginations-text">
             <p class="from_to"><?php print h($paginations['total_record']); ?>件中 <?php print h($paginations['from_record']); ?> - <?php print h($paginations['to_record']);?> 件目を表示</p>

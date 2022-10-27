@@ -2,7 +2,7 @@
 $title = 'ec site 管理画面';
 $description = '説明（アカウント管理ページ）';
 //$is_home = true; //トップページの判定用の変数
-$flash_message = Session::getFlash();
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>

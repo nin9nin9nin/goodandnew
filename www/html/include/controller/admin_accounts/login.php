@@ -35,16 +35,15 @@ function execute_action() {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
         
-        Session::start();
         //フラッシュメッセージ
         Session::setFlash('ログインに失敗しました');
 
         return View::render('signin', ['errors' => $errors]);
         exit;
     }
-              
+    
     Session::start();
-    //$_SESSION['_authenticated']を認証済みにする
+    //$_SESSION['_authenticated']を認証済みにする(true)
     //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
     Session::setAuthenticated(true);
     

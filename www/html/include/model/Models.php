@@ -41,11 +41,12 @@ class Models {
      * 各テーブルのトータルレコード数を返す
      * return $count['cnt']
      */
-    public static function getTotalRecord() {
+    public static function getTotalRecord($table_name) {
         
         $sql ='SELECT COUNT(*) as cnt FROM :table_name';
         
-        $params = [':table_name' => $this->table_name];
+        $params = [':table_name' => $table_name];
+        var_dump($params);
 
         return self::findBySql($sql, $params);
     }
@@ -64,25 +65,25 @@ class Models {
      * 
      * return array
      */
-    public static function setPaginations($total_record) {
+    public static function setPaginations($total_record, $display_records, $page_id) {
         $paginations = [];
 
         //トータルレコード数の取得
         $paginations['total_record'] = $total_record;
 
         //トータルページ数の決定(ceilで端数の切り上げ)
-        $paginations['page_total'] = ceil($total_record / $this->display_record);
+        $paginations['page_total'] = ceil($total_record / $display_records);
 
         //戻る・進む
-        $paginations['prev_page'] = max($this->page_id - 1, 1); // 前のページ番号
-        $paginations['next_page'] = min($this->page_id + 1, $paginations['page_total']); // 次のページ番号
+        $paginations['prev_page'] = max($page_id - 1, 1); // 前のページ番号
+        $paginations['next_page'] = min($page_id + 1, $paginations['page_total']); // 次のページ番号
 
         //表示するページのレンジ決定
-        $paginations['page_range'] = self::setPageRange($paginations['page_total']);
+        $paginations['page_range'] = self::setPageRange($paginations['page_total'], $page_id);
 
         //◯ - ◯件目
-        $paginations['from_record'] = self::fromRecord();
-        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record);
+        $paginations['from_record'] = self::fromRecord($display_records, $page_id);
+        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record, $display_records, $page_id);
 
         return $paginations;
     }
@@ -95,19 +96,19 @@ class Models {
      * 途中から前後2ページづつのレンジとなる
      * 
      */
-    public static function setPageRange($page_total) {
+    public static function setPageRange($page_total, $page_id) {
 
         //rangeの決定
-        if($this->page_id === 1 || $this->page_id === $page_total) { // 1ページ目と最後のページ
+        if($page_id === 1 || $page_id === $page_total) { // 1ページ目と最後のページ
             $range = 4;
-        } elseif ($this->page_id === 2 || $this->page_id === $page_total - 1) { // 2ページ目と最後の前のページ
+        } elseif ($page_id === 2 || $page_id === $page_total - 1) { // 2ページ目と最後の前のページ
             $range = 3;
         } else {
             $range = 2;
         }
         
-        $start_page = max($this->page_id - $range, 1); // ページ番号始点
-        $end_page = min($this->page_id + $range, $page_total); // ページ番号終点
+        $start_page = max($page_id - $range, 1); // ページ番号始点
+        $end_page = min($page_id + $range, $page_total); // ページ番号終点
         //1-2=-1,1 =1 //1+4=5,7 =5
         //2-2=0,1 =1 //2+3=5,7 =5
         //3-2=1,1 =1 //3+2=5,7 =5
@@ -128,29 +129,29 @@ class Models {
 
     /**
      * ◯件目 -
-     * 現在のページ*display_recordに1を足した数字
+     * 現在のページ*display_recordsに1を足した数字
      * ページ1 =　(1-1)*10+1 = 1~
      * ページ2 = (2-1)*10+1 = 11~
      */
-    public static function fromRecord() {
+    public static function fromRecord($display_records, $page_id) {
 
-        return ($this->page_id - 1) * $this->display_record + 1;
+        return ($page_id - 1) * $display_records + 1;
     }
     
     /**
      * - ◯件目
-     * 現在のページから１引いてdisplay_recordをかけた数に
-     * 全件数をdisplay_recordで割ったあまりの数を足す
+     * 現在のページから１引いてdisplay_recordsをかけた数に
+     * 全件数をdisplay_recordsで割ったあまりの数を足す
      * 最大件数48 
      * ページ5 (5-1)*10=40 + 48%10=8　~48
      * ページ2 2*10= ~20
      */
-    public static function toRecord($page_total, $total_record) {
+    public static function toRecord($page_total, $total_record, $display_records, $page_id) {
 
-        if($this->page_id === $page_total && $total_record % $this->display_record !== 0) {
-            return $to_record = ($this->page_id - 1) * 5 + $total_record % $this->display_record;
+        if($page_id === $page_total && $total_record % $display_records !== 0) {
+            return $to_record = ($page_id - 1) * 5 + $total_record % $display_records;
         } else {
-            return $to_record = $this->page_id * $this->display_record;
+            return $to_record = $page_id * $display_records;
         }
     }
 
@@ -209,6 +210,5 @@ class Models {
         $params = [':table_name' => $this ->table_name];
         
         Messages::executeBySql($sql, $params);
-    }
-
+    }   
 }

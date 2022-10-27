@@ -438,6 +438,7 @@ input[type="reset"]:hover {
 }
 .home .form-buttonwrap input[type="button"] {
   color: #384359;
+  background: #ccc;
 }
 
 /*商品一覧------------------------------------------------------------------------------------------*/

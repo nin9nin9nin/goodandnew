@@ -3,6 +3,11 @@
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
+
+    Session::start();
+    // CSRF対策トークンの作成(POST投稿を行うフォームに対して必ず行う)
+    Session::setCsrfToken();
+    
     $admin_id = Request::get('admin_id');
     
     if (preg_match('/^\d+$/', $admin_id) !== 1) {

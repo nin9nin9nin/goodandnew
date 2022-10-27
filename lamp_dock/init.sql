@@ -17,7 +17,7 @@ CREATE TABLE  events (
   event_name varchar(64) NOT NULL COMMENT 'イベント名' COLLATE utf8_general_ci,
   description text COMMENT 'イベント説明' COLLATE utf8_general_ci,
   event_date varchar(64) NOT NULL COMMENT '開催期間' COLLATE utf8_general_ci,
-  event_tag int(11) NOT NULL default 0 COMMENT 'ステータス（0:ポップアップ、1:イベント）',
+  event_tag int(11) NOT NULL default 0 COMMENT 'タグ（0:ポップアップ、1:イベント）',
   event_svg varchar(128) COMMENT 'svg画像',
   event_png varchar(128) COMMENT 'png画像',
   img1 varchar(128) COMMENT '画像1',
@@ -156,7 +156,6 @@ CREATE TABLE customers (
   foreign key(user_id) references users (user_id) on delete set null on update cascade,
   primary key(customer_id)
 );
--- payment,deliveryを今後追加していく
 
 -- 注文管理
 CREATE TABLE orders (
@@ -217,3 +216,7 @@ CREATE TABLE dashboards (
 -- memo
 -- AUTO_INCREMENT 初期化
 -- ALTER TABLE `tablename` auto_increment = 1;
+
+-- 今後の課題
+-- customer情報にpayment,deliveryを追加（支払い情報、お届け先情報）
+-- orderに対して管理者側で集計が行えるよう集計テーブルを作る

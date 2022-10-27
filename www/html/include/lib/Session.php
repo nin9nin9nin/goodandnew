@@ -109,51 +109,6 @@ class Session {
         return self::get('_authenticated', false);
     }
     
-    // ----------------------------------------------------------------------
-    // /**
-    //  * セッションに値を設定
-    //  * $_SESSION['$name']を作成し$valueを入れる
-    //  */
-    // public static function setSession($name, $value) {
-    //     //session_start()
-    //     return self::getInstance() ->set($name, $value);
-        
-    // }
-    
-    // /**
-    //  * セッションから値を取得
-    //  * return $_SESSION[$name] or $default
-    //  */
-    // public static function getSession($name, $default = null) {
-    //     //session_start()
-    //     return self::getInstance() ->get($name, $default);
-        
-    // }
-    
-    // /**
-    //  * 認証状態を設定
-    //  * session_start()からsetAuthenticated()まで行う
-    //  * $_SESSION['_authenticated']をtrueにする(認証済みの状態に)
-    //  * session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
-    //  * $sessionIdRegenerated = trueにする
-    //  * return 
-    //  */
-    // public static function setAuthentication($bool) {
-    //     //session_start()
-    //     return self::getInstance() -> setAuthenticated($bool);
-        
-    // }
-    // /**
-    //  * 認証済みか判定
-    //  * session_start() からisAuthenticated()で認証確認を行う
-    //  * $_SESSION['_authenticated']を取得（セットされていなければfalseが返る）
-    //  * return 
-    //  */
-    // public static function getAuthentication() {
-    //     //session_start()
-    //     return self::getInstance() -> isAuthenticated();
-        
-    // }
     
     //フラッシュメッセージ-----------------------------------------------------
     /**
@@ -180,23 +135,35 @@ class Session {
         return $flash_message;
     }
 
-    //トークン -----------------------------------------------------
+    //csrf対策　トークン -----------------------------------------------------
     // トークンの生成
-    public static function get_csrf_token(){
-        // get_random_string()はユーザー定義関数。
-        $token = get_random_string(30);
-        // set_session()はユーザー定義関数。
-        set_session('csrf_token', $token);
-        return $token;
-    }
-    
-    // トークンのチェック
-    public static function is_valid_csrf_token($token){
-        if($token === '') {
-        return false;
-        }
-        // get_session()はユーザー定義関数
-        return $token === get_session('csrf_token');
+    public static function setCsrfToken() {
+        // ランダムトークンを取得
+        $token = self::get_random_string();
+        // セッションに値をセット
+        self::set('csrf_token', $token);
     }
 
+    // ランダムトークン作成(64byteのランダムな文字列)
+    public static function get_random_string() {
+        // random_bytes()暗号論的に安全な、疑似ランダムなバイト列を生成する
+        $bytes = random_bytes(32);
+        // bin2hex()関数で16進数のASCII文字列に変換して使用
+        return bin2hex($bytes);
+    }
+
+    // トークンの取得
+    public static function getCsrfToken() {
+
+        return self::get('csrf_token', false);
+    }
+    
+    // トークンのチェック(bool)
+    public static function isValidCsrfToken($token){
+        if($token === '') {
+            return false;
+        }
+        // トークンの取得
+        return $token === self::get('csrf_token');
+    }
 }

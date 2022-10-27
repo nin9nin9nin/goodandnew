@@ -2,6 +2,7 @@
 $title = 'ec site 管理画面';
 $description = '説明（アカウント情報変更ページ）';
 // $is_home = true; //トップページの判定用の変数
+$token = Session::getCsrfToken(); // トークンの取得
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
@@ -133,6 +134,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="admin_id" value="<?php print h($record -> admin_id); ?>">
                 <input type="hidden" name="old_admin_name" value="<?php print h($record -> admin_name); ?>">
+                <input type="hidden" name="token" value="<?=$token?>">
               </div>
           </form>
         </div>

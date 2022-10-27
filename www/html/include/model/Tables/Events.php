@@ -6,7 +6,7 @@ require_once(MODEL_DIR . '/Messages.php');
 class Events {
     
     public $table_name = 'events'; //count(*)するテーブル
-    public $diplay_record = '20'; //1ページの表示件数
+    public $display_records = '10'; //１ページの表示件数
     public $page_id; //ページ番号
     public $event_id;
     public $event_name;
@@ -164,10 +164,10 @@ class Events {
      */
     public function getPaginations() {
         //$table_nameからトータルレコードの取得
-        $total_record = Messages::getTotalRecord();
-
+        $total_record = Messages::getTotalRecord($this->table_name);
+        
         //page_idを取得してページネーションを取得してくる
-        return Messages::setPaginations($total_record);
+        return Messages::setPaginations($total_record, $this->display_records, $this->page_id);
     }
 
     /**
@@ -175,18 +175,20 @@ class Events {
      * ページ表示分のみ取得(LIMIT/OFFSET)
      */
     public function indexEvents() {
+        // 1ページに表示する件数
+        $display_records = $this -> display_records;
         // 配列の何番目から取得するか決定(OFFSET句)
-        $start_record = ($this->page_id - 1) * $this->display_record;
+        $start_record = ($this->page_id - 1) * $display_records;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
         $sql = 'SELECT event_id, event_name, event_date, event_tag, status' . PHP_EOL
              . 'FROM events' . PHP_EOL
-             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
+             . 'LIMIT :display_records OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
 
         
         $params = [
+            ':display_records' => $display_records,
             ':start_record' => $start_record,
-            ':display_record' => $this->display_record,
         ];
         
         return Messages::findBySql($sql,$params); 
@@ -448,6 +450,7 @@ class Events {
 
     // ユーザー画面 ------------------------------------------------------------------------
     /**
+     * トップ画面
      * イベント情報
      * 
      */
@@ -465,14 +468,50 @@ class Events {
     }
 
     /**
+     * トップ画面下部
+     * スケジュール一覧(一部)
+     * 
+     */
+    public function scheduleIndexPart() {
+        // 1ページに表示する件数
+        $display_records = '5';
+        // 配列の何番目から取得するか決定(OFFSET句)
+        $start_record = ($this->page_id - 1) * $display_records;
+
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, img1,' . PHP_EOL
+             . 'FROM events' . PHP_EOL
+             . 'ORDER BY event_id DESC' . PHP_EOL 
+             . 'LIMIT :display_records OFFSET :start_record'; 
+        
+        $params = [
+            ':display_records' => $display_records,
+            ':start_record' => $start_record,
+        ];
+        
+        return Messages::findBySql($sql, $params);
+    }
+
+    /**
      * スケジュール一覧
      * 
      */
     public function scheduleIndex() {
+        // 1ページに表示する件数
+        $display_records = $this -> display_records;
+        // 配列の何番目から取得するか決定(OFFSET句)
+        $start_record = ($this->page_id - 1) * $display_records;
 
         $sql = 'SELECT event_id, event_name, event_date, event_tag, img1,' . PHP_EOL
-             . 'FROM events';
+             . 'FROM events' . PHP_EOL
+             . 'ORDER BY event_id DESC' . PHP_EOL // 新しいイベント順
+             . 'LIMIT :display_records OFFSET :start_record'; 
         
-        return Messages::findBySql($sql);
+        $params = [
+            ':display_records' => $display_records,
+            ':start_record' => $start_record,
+        ];
+
+        return Messages::findBySql($sql, $params);
     }
+
 }

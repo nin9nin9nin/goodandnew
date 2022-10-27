@@ -237,7 +237,7 @@ class Items {
              . 'VALUES' .PHP_EOL
              . '    (:item_name, :category_id, :brand_id, :shop_id, :price, :description, :icon_img, :status, :create_datetime)';
         
-        //手前に:は$みたいなイメージ？
+        // bindValue
         $params = [
             ':item_name' => $this->item_name,
             ':category_id' => $this->category_id,

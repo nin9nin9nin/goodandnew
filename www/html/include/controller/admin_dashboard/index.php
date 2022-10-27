@@ -6,9 +6,7 @@ function execute_action() {
     
     Session::start();
     //認証済みか判定 ($_SESSION['_authenticated']を受け取る)
-    $session = Session::isAuthenticated();
-
-    if ($session !== true) {
+    if (Session::isAuthenticated() !== true) {
         //認証済みでなければサインインにリダイレクト
         return View::redirectTo('admin_accounts', 'signin');
         exit;

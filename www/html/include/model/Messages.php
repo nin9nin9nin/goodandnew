@@ -104,6 +104,4 @@ class Messages extends Models {
         
         return number_format($total_amount);
     }
-    
-    
 }

@@ -123,7 +123,7 @@ class Request {
     public static function getPageId($name, $default = '') {
         $value = $default;
 
-        if (isset($_REQUEST[$name]) === true) {
+        if (isset($_REQUEST[$name]) !== true) {
             $value = 1;// 設定されてない場合は1ページ目にする
         } else {
             $value = $_REQUEST[$name];
