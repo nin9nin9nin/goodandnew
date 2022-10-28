@@ -21,29 +21,30 @@ function execute_action() {
         exit;
     }
 
-    $name = Request::get('item_name');
-    $category_id = Request::get('category_id');
-    $brand_id = Request::get('brand_id');
-    $shop_id = Request::get('shop_id');
-    $price = Request::get('price');
-    $stock = Request::get('stock');
+    //ページIDの取得（なければ1が格納される）
+    $page_id = Request::getPageId('page_id');
+
+    // フォームの値を取得
+    $name = Request::get('event_name');
     $description = Request::get('description');
+    $event_date = Request::get('event_date');
+    $event_tag = Request::get('event_tag');
+    $event_svg = Request::get('event_svg');
+    $event_png = Request::get('event_png');
     $status = Request::get('status');
-    $icon_img = '';
     
     //クラス生成（初期化）
-    $classItems = new Items();
-    $classStocks = new Stocks();
+    $classEvents = new Events();
     
     //プロパティに値をセット
-    $classItems -> item_name = $name;
-    $classItems -> category_id = $category_id;
-    $classItems -> brand_id = $brand_id;
-    $classItems -> shop_id = $shop_id;
-    $classItems -> price = $price;
-    $classItems -> description = $description;
-    $classItems -> status = $status;
-    $classStocks -> stock = $stock;
+    $classEvents -> page_id = $page_id;
+    $classEvents -> event_name = $name;
+    $classEvents -> description = $description;
+    $classEvents -> event_date = $event_date;
+    $classEvents -> event_tag = $event_tag;
+    $classEvents -> event_svg = $event_svg;
+    $classEvents -> event_png = $event_png;
+    $classEvents -> status = $status;
     
     //エラーチェック
     try {
@@ -51,30 +52,10 @@ function execute_action() {
         CommonError::errorClear();
         
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
-        $classItems -> checkItemName();
-        $classItems -> checkPrice();
-        $classStocks -> checkStock();
-        $classItems -> checkIconImg();
-        $classItems -> checkImg();
-        
-        // //画像の取得とファイル名の作成
-        // if (is_uploaded_file($_FILES['icon_img']['tmp_name']) === TRUE) {
-        //     $extension = pathinfo($_FILES['icon_img']['name'], PATHINFO_EXTENSION);
-        //     $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
-        //     if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
-        //         $icon_img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
-        //         if (is_file(IMG_DIR . $icon_img) !== TRUE) {
-        //             //プロパティに登録
-        //             $classItems -> icon_img = $icon_img;
-        //         } else {
-        //             CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
-        //         }
-        //     } else {
-        //         CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
-        //     }
-        // } else {
-        //     CommonError::errorAdd('ファイルを選択してください');
-        // }
+        $classEvents -> checkEventName();
+        $classEvents -> checkEventDate();
+        $classEvents -> checkEventSvg();
+        $classEvents -> checkEventPng();
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -82,18 +63,15 @@ function execute_action() {
     } catch (Exception $e) {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
-            
-        //items,stocks 結合テーブルの取得
-        $records['items'] = $classItems -> indexItems();
-        //categorysテーブルの取得　select/option用
-        $records['categorys'] = Categorys::selectOption_Genre();
-        //brandsテーブルの取得　select/option用
-        $records['brands'] = Brands::selectOption_Brands();
-        //shopsテーブルの取得　select/option用
-        $records['shops'] = Shops::selectOption_Shops();
+
+        //ページネーションに必要な値一式
+        $paginations = $classEvents -> getPaginations();
+
+        //recordの取得　（page_idから指定した分だけ/10アイテムのみ）
+        $records['events'] = $classEvents -> indexEvents();
         
-        
-        return View::render('index', ['records' => $records, 'errors' => $errors]);
+        //renderでエラーメッセージを表示
+        return View::render('index', ['records' => $records, 'paginations' => $paginations, 'errors' => $errors]);
         exit;
     }
     
@@ -105,11 +83,11 @@ function execute_action() {
         $now_date = date('Y-m-d H:i:s');
         
         //プロパティ登録日時
-        $classItems -> create_datetime = $now_date;
+        $classEvents -> create_datetime = $now_date;
         $classStocks -> create_datetime = $now_date;
         
         //itemsテーブルに新規登録　executeBySql()
-        $classItems -> insertItem();
+        $classEvents -> insertEvent();
         
         //item_idの取得
         $item_id = Database::lastInsertId();
@@ -121,8 +99,8 @@ function execute_action() {
         $classStocks -> insertStock();
         
         //画像のファイルアップロード（できなければrollback）
-        $classItems -> uploadIconImg();
-        $classItems -> uploadImg();
+        $classEvents -> uploadIconImg();
+        $classEvents -> uploadImg();
 
         // if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
         //     $e = new Exception('ファイルアップロードに失敗しました', 0, $e);

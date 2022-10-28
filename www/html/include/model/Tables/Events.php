@@ -6,7 +6,7 @@ require_once(MODEL_DIR . '/Messages.php');
 class Events {
     
     public $table_name = 'events'; //count(*)するテーブル
-    public $display_records = '10'; //１ページの表示件数
+    public $display_record = '10'; //１ページの表示件数
     public $page_id; //ページ番号
     public $event_id;
     public $event_name;
@@ -159,15 +159,33 @@ class Events {
 
     // index ------------------------------------------------------------------------
     /**
+     * public $table_name プロパティから
+     * 各テーブルのトータルレコード数を返す
+     * return $count['cnt']
+     */
+    public static function getTotalRecord() {
+        // テーブルから全レコードの数をカウント
+        $sql ='SELECT COUNT(*) as cnt FROM events';
+        
+        // $params = [':table_name' => $this->table_name];
+    
+        $record = Messages::retrieveBySql($sql);
+
+        // カウントした数を返す
+        return $record->cnt;
+    }
+
+    /**
      * トータルレコードを取得し、ページネーションの値をセットして返す
      * return array
      */
     public function getPaginations() {
-        //$table_nameからトータルレコードの取得
-        $total_record = Messages::getTotalRecord($this->table_name);
+        //トータルレコードの取得
+        $total_record = self::getTotalRecord();
         
         //page_idを取得してページネーションを取得してくる
-        return Messages::setPaginations($total_record, $this->display_records, $this->page_id);
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
     }
 
     /**
@@ -176,18 +194,18 @@ class Events {
      */
     public function indexEvents() {
         // 1ページに表示する件数
-        $display_records = $this -> display_records;
+        $display_record = $this -> display_record;
         // 配列の何番目から取得するか決定(OFFSET句)
-        $start_record = ($this->page_id - 1) * $display_records;
+        $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
         $sql = 'SELECT event_id, event_name, event_date, event_tag, status' . PHP_EOL
              . 'FROM events' . PHP_EOL
-             . 'LIMIT :display_records OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
+             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
 
         
         $params = [
-            ':display_records' => $display_records,
+            ':display_record' => $display_record,
             ':start_record' => $start_record,
         ];
         
@@ -474,17 +492,17 @@ class Events {
      */
     public function scheduleIndexPart() {
         // 1ページに表示する件数
-        $display_records = '5';
+        $display_record = '5';
         // 配列の何番目から取得するか決定(OFFSET句)
-        $start_record = ($this->page_id - 1) * $display_records;
+        $start_record = ($this->page_id - 1) * $display_record;
 
         $sql = 'SELECT event_id, event_name, event_date, event_tag, img1,' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'ORDER BY event_id DESC' . PHP_EOL 
-             . 'LIMIT :display_records OFFSET :start_record'; 
+             . 'LIMIT :display_record OFFSET :start_record'; 
         
         $params = [
-            ':display_records' => $display_records,
+            ':display_record' => $display_record,
             ':start_record' => $start_record,
         ];
         
@@ -497,17 +515,17 @@ class Events {
      */
     public function scheduleIndex() {
         // 1ページに表示する件数
-        $display_records = $this -> display_records;
+        $display_record = $this -> display_record;
         // 配列の何番目から取得するか決定(OFFSET句)
-        $start_record = ($this->page_id - 1) * $display_records;
+        $start_record = ($this->page_id - 1) * $display_record;
 
         $sql = 'SELECT event_id, event_name, event_date, event_tag, img1,' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'ORDER BY event_id DESC' . PHP_EOL // 新しいイベント順
-             . 'LIMIT :display_records OFFSET :start_record'; 
+             . 'LIMIT :display_record OFFSET :start_record'; 
         
         $params = [
-            ':display_records' => $display_records,
+            ':display_record' => $display_record,
             ':start_record' => $start_record,
         ];
 

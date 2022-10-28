@@ -24,12 +24,14 @@ function execute_action() {
     //プロパティに値をセット(ページネーション)
     $classEvents -> page_id = $page_id;
 
-    //ページネーションに必要な値一式
-    $paginations = $classEvents -> getPaginations();
-
     //recordの取得　（page_idから指定した分だけ/10アイテムのみ）
     $records['events'] = $classEvents -> indexEvents();
-        
+    var_dump($records);
+
+    //ページネーションに必要な値一式
+    $paginations = $classEvents -> getPaginations();
+    var_dump($paginations);
+
     //index.tpl.phpにrecords,page_id,paginationsを渡す
-    return View::render('index', ['records' => $records, 'page_id' => $page_id, 'paginations' => $paginations]);
+    return View::render('index', ['records' => $records, 'paginations' => $paginations]);
 }

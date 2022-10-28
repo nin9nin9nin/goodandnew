@@ -36,43 +36,32 @@ class Models {
         }
     }
 
-    /**
-     * public $table_name プロパティから
-     * 各テーブルのトータルレコード数を返す
-     * return $count['cnt']
-     */
-    public static function getTotalRecord($table_name) {
-        
-        $sql ='SELECT COUNT(*) as cnt FROM :table_name';
-        
-        $params = [':table_name' => $table_name];
-        var_dump($params);
-
-        return self::findBySql($sql, $params);
-    }
     
     /**
-     * @params total_record
-     * 
+     * ページネーション作成
      * 配列で格納
-     * total_record トータルアイテム数
-     * page_total トータルページ数
-     * prev_page 戻るページ値
-     * next_page 進むページ値
-     * page_range ページレンジ(リンク表示数)
-     * from_record ◯件目-
-     * to_record -◯件目
+     * ['total_record'] トータルアイテム数
+     * ['page_total'] トータルページ数
+     * ['prev_page'] 戻るページ値
+     * ['next_page'] 進むページ値
+     * ['page_range'] ページレンジ(リンク表示数)
+     * ['from_record'] ◯件目-
+     * ['to_record'] -◯件目
      * 
      * return array
      */
-    public static function setPaginations($total_record, $display_records, $page_id) {
+    public static function setPaginations($total_record, $display_record, $page_id) {
         $paginations = [];
 
         //トータルレコード数の取得
         $paginations['total_record'] = $total_record;
+        //１ページに表示する件数の取得
+        $paginations['display_record'] = $display_record;
+        //現在のページ番号の取得
+        $paginations['page_id'] = $page_id;
 
-        //トータルページ数の決定(ceilで端数の切り上げ)
-        $paginations['page_total'] = ceil($total_record / $display_records);
+        //トータルページ数の決定(ceilで端数の切り上げ/return float)
+        $paginations['page_total'] = ceil($total_record / $display_record);
 
         //戻る・進む
         $paginations['prev_page'] = max($page_id - 1, 1); // 前のページ番号
@@ -82,8 +71,8 @@ class Models {
         $paginations['page_range'] = self::setPageRange($paginations['page_total'], $page_id);
 
         //◯ - ◯件目
-        $paginations['from_record'] = self::fromRecord($display_records, $page_id);
-        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record, $display_records, $page_id);
+        $paginations['from_record'] = self::fromRecord($display_record, $page_id);
+        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record, $display_record, $page_id);
 
         return $paginations;
     }
@@ -129,29 +118,31 @@ class Models {
 
     /**
      * ◯件目 -
-     * 現在のページ*display_recordsに1を足した数字
+     * 現在のページ*display_recordに1を足した数字
      * ページ1 =　(1-1)*10+1 = 1~
      * ページ2 = (2-1)*10+1 = 11~
      */
-    public static function fromRecord($display_records, $page_id) {
+    public static function fromRecord($display_record, $page_id) {
 
-        return ($page_id - 1) * $display_records + 1;
+        return ($page_id - 1) * $display_record + 1;
     }
     
     /**
      * - ◯件目
-     * 現在のページから１引いてdisplay_recordsをかけた数に
-     * 全件数をdisplay_recordsで割ったあまりの数を足す
+     * 現在のページから１引いてdisplay_recordをかけた数に
+     * 全件数をdisplay_recordで割ったあまりの数を足す
      * 最大件数48 
      * ページ5 (5-1)*10=40 + 48%10=8　~48
      * ページ2 2*10= ~20
+     * 
+     * floatを使うため厳密に等しいを使用しない
      */
-    public static function toRecord($page_total, $total_record, $display_records, $page_id) {
+    public static function toRecord($page_total, $total_record, $display_record, $page_id) {
 
-        if($page_id === $page_total && $total_record % $display_records !== 0) {
-            return $to_record = ($page_id - 1) * 5 + $total_record % $display_records;
+        if($page_id == $page_total && $total_record % $display_record !== 0) {
+            return $to_record = ($page_id - 1) * $display_record + $total_record % $display_record;
         } else {
-            return $to_record = $page_id * $display_records;
+            return $to_record = $page_id * $display_record;
         }
     }
 
@@ -209,6 +200,6 @@ class Models {
     
         $params = [':table_name' => $this ->table_name];
         
-        Messages::executeBySql($sql, $params);
+        Database::executeBySql($sql, $params);
     }   
 }

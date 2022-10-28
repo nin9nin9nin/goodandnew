@@ -4,11 +4,11 @@ $description = '説明（イベント管理ページ）';
 // $is_home = true; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $token = Session::getCsrfToken(); // トークンの取得
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -231,11 +231,11 @@ include 'inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    <?php include 'inc/admin/pagination.php'; ?>
-    <?php include 'inc/admin/home.php'; ?>
+    <?php include './include/view/_inc/admin/pagination.php'; ?>
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   
-  <?php include 'inc/admin/footer.php'; ?>
+  <?php include './include/view/_inc/admin/footer.php'; ?>
   <script>
       let delete_form = document.getElementById('delete_form');
       delete_form.addEventListener('submit', (e) => {
