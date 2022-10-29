@@ -154,7 +154,7 @@ class View {
      */
     public static function redirectTo($module_name = null, $action_name = null, $params = []) {
         $filename = self::urlFor($module_name, $action_name, $params);
-
+        
         header('Location: ' . $filename);
     }
 }

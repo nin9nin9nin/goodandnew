@@ -97,7 +97,7 @@ class Events {
      */
     public function checkFileName($files, $default = NULL) {
         $new_file_name = $default;
-        $file_dir = './include/img/events/';
+        $file_dir = './include/images/events/visual/';
         
         // is_uploaded_file($_FILES[] === true)であれば
         if (empty($files) !== true) {
@@ -244,11 +244,11 @@ class Events {
      * アップロードできなければロールバック(コミットさせない)
      */
     public function uploadFiles($files, $new_file_name) {
-        $file_dir = './include/img/events/';
+        $file_dir = './include/images/events/visual/';
         $to = $file_dir . $new_file_name;
 
-        if (empty($file) !== true) {
-            Messages::uploadFiles($file, $to);
+        if (empty($files) !== true) {
+            Messages::uploadFiles($files, $to);
         }
     }
 

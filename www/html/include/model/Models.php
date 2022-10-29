@@ -28,10 +28,8 @@ class Models {
      * 
      * アップロードできなければロールバック(コミットさせない)
      */
-    public static function uploadFiles($file = [], $to) {
-        $tmp_name = $file['tmp_name'];
-        print 'tmp_name';
-        var_dump($tmp_name);
+    public static function uploadFiles($files = [], $to) {
+        $tmp_name = $files['tmp_name'];
 
         if (move_uploaded_file($tmp_name, $to) !== TRUE) {
             $e = new Exception('ファイルアップロードに失敗しました', 0, $e);

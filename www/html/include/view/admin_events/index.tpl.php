@@ -116,7 +116,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <label for="event_img">画像：</label><span class="ninni">任意</span>
                 </th>
                 <td>
-                  <input id="event_img" type="file" name="img1" value="">
+                  <input id="event_img" type="file" name="img[]" value="">
                 </td>
               </tr>
               <!--ステータス-->
@@ -177,7 +177,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </td>
                 <td class="list-img">
                   <a href="dashboard.php?module=admin_events&action=edit&event_id=<?php print h($record->event_id); ?>">
-                    <img src="<?php print h('./include/img/events/' . $record->event_png); ?>">
+                    <img src="<?php print h('./include/images/events/visual/' . $record->event_png); ?>">
                   </a>
                 </td>
                 <td class="list-name">
