@@ -26,6 +26,7 @@ function execute_action() {
 
     //recordの取得　（page_idから指定した分だけ/10アイテムのみ）
     $records['events'] = $classEvents -> indexEvents();
+    print 'records';
     var_dump($records);
 
     //ページネーションに必要な値一式

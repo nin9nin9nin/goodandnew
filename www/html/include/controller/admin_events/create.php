@@ -29,21 +29,19 @@ function execute_action() {
     $description = Request::get('description');
     $event_date = Request::get('event_date');
     $event_tag = Request::get('event_tag');
-    $event_svg = Request::get('event_svg');
-    $event_png = Request::get('event_png');
-    $status = Request::get('status');
+    $event_svg = Request::getFiles('event_svg'); //初期値NULL
+    $event_png = Request::getFiles('event_png'); //初期値NULL
+    $status = Request::getStatus('status'); //初期値設定0
     
     //クラス生成（初期化）
     $classEvents = new Events();
     
-    //プロパティに値をセット
+    //プロパティに値をセット(画像ファイル名はバリデーション後にセット)
     $classEvents -> page_id = $page_id;
     $classEvents -> event_name = $name;
     $classEvents -> description = $description;
     $classEvents -> event_date = $event_date;
     $classEvents -> event_tag = $event_tag;
-    $classEvents -> event_svg = $event_svg;
-    $classEvents -> event_png = $event_png;
     $classEvents -> status = $status;
     
     //エラーチェック
@@ -54,8 +52,9 @@ function execute_action() {
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classEvents -> checkEventName();
         $classEvents -> checkEventDate();
-        $classEvents -> checkEventSvg();
-        $classEvents -> checkEventPng();
+        //生成したファイル名の受け取り
+        $svg_name = $classEvents -> checkFileName($event_svg);
+        $png_name = $classEvents -> checkFileName($event_png);
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -82,34 +81,18 @@ function execute_action() {
     try {
         $now_date = date('Y-m-d H:i:s');
         
-        //プロパティ登録日時
+        //プロパティ日時登録+生成したファイル名登録
         $classEvents -> create_datetime = $now_date;
-        $classStocks -> create_datetime = $now_date;
+        $classEvents -> event_svg = $svg_name;
+        $classEvents -> event_png = $png_name;
         
-        //itemsテーブルに新規登録　executeBySql()
+        //eventsテーブルに新規登録　executeBySql()
         $classEvents -> insertEvent();
         
-        //item_idの取得
-        $item_id = Database::lastInsertId();
-        
-        //プロパティ　stocksテーブルにitem_idをセット
-        $classStocks -> item_id = $item_id;
-        
-        //stocksテーブルに新規登録　executeBySql()
-        $classStocks -> insertStock();
-        
         //画像のファイルアップロード（できなければrollback）
-        $classEvents -> uploadIconImg();
-        $classEvents -> uploadImg();
+        $classEvents -> uploadFiles($event_svg, $svg_name);
+        $classEvents -> uploadFiles($event_png, $png_name);
 
-        // if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
-        //     $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
-        //     throw $e;
-            
-        //     Database::rollback();
-        // } else {
-        //     Database::commit();
-        // }
         Database::commit();
       
     } catch (Exception $e) {
@@ -120,9 +103,8 @@ function execute_action() {
         Database::rollback();
     }
     
-    Session::start();
     //フラッシュメッセージをセット
     Session::setFlash('商品を登録しました');
     
-    return View::redirectTo('admin_items', 'index');
+    return View::redirectTo('admin_events', 'index');
 }

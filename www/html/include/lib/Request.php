@@ -116,16 +116,46 @@ class Request {
     }
 
     /**
-     * ページネーション
-     * page_idの取得と決定
-     * $_GET['page_id'] はURLに渡された現在のページ数
+     * ページネーション用
+     * $_GET['page_id'] URLに渡された現在のページ数
+     * なければ1ページ目という判定をする
+     * 
      */
-    public static function getPageId($name, $default = '') {
+    public static function getPageId($name, $default = '1') {
         $value = $default;
 
-        if (isset($_REQUEST[$name]) !== true) {
-            $value = 1;// 設定されてない場合は1ページ目にする
-        } else {
+        if (isset($_REQUEST[$name]) === true) {
+            $value = $_REQUEST[$name];
+        }
+
+        return $value;
+    }
+
+    /**
+     * $_FILES[] 画像のファイル名を受け取る
+     */
+    public static function getFiles($name, $default = NULL) {
+        $value = $default;
+
+        if (is_uploaded_file($_FILES[$name]['tmp_name']) === true) {
+            $value = $_FILES[$name];
+        }
+        
+        return $value;
+    }
+
+    /**
+     * statusの初期値の設定
+     * 開発環境で生じた問題
+     * MYSQLにカラムの形式の厳密なチェック
+     * default0に設定しているが、型がintのため空文字だとエラーが生じる
+     * 0:非公開
+     * 
+     */
+    public static function getStatus($name, $default = '0') {
+        $value = $default;
+
+        if (isset($_REQUEST[$name]) === true) {
             $value = $_REQUEST[$name];
         }
 

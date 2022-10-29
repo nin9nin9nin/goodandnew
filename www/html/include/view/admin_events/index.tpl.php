@@ -31,6 +31,16 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
             <p class="flash"><?php echo $flash_message; ?></p>
           </div>
         <?php } ?>
+      </div>
+    </div>
+    <!---登録----------------------------------------------------------------------------------------------------------->
+    <div id="create">
+      <div class="container">
+        
+        <!--create タイトル-->
+        <div class="title">
+          <h2>新規イベント追加</h2>
+        </div>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
         <div class="message">
@@ -43,17 +53,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
           </ul>
         </div>
         <?php } ?>
-      </div>
-    </div>
-    <!---登録----------------------------------------------------------------------------------------------------------->
-    <div id="create">
-      <div class="container">
-        
-        <!--create タイトル-->
-        <div class="title">
-          <h2>新規イベント追加</h2>
-        </div>
-        
         <!--入力フォーム-->
         <div class="create-form">
           <form action="dashboard.php" method="post" enctype="multipart/form-data">
@@ -84,7 +83,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               </tr>
               <tr class="form-select">
                 <th>
-                  <label for="event_tag">タグ：</label><span class="hissu">必須</span>
+                  <label for="event_tag">タグ：</label><span class="ninni">任意</span>
                 </th>
                 <td>
                   <select id="event_tag" name="event_tag">
@@ -109,6 +108,15 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <input id="event_png" type="file" name="event_png" value="">
+                </td>
+              </tr>
+              <!--画像-->
+              <tr class="form-file">
+                <th>
+                  <label for="event_img">画像：</label><span class="ninni">任意</span>
+                </th>
+                <td>
+                  <input id="event_img" type="file" name="img1" value="">
                 </td>
               </tr>
               <!--ステータス-->
@@ -169,23 +177,17 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </td>
                 <td class="list-img">
                   <a href="dashboard.php?module=admin_events&action=edit&event_id=<?php print h($record->event_id); ?>">
-                    <img src="<?php print h('./assets/imges/event/svg/' . $record->event_svg); ?>">
+                    <img src="<?php print h('./include/img/events/' . $record->event_png); ?>">
                   </a>
                 </td>
                 <td class="list-name">
                   <a href="dashboard.php?module=admin_events&action=edit&event_id=<?php print h($record->event_id); ?>">
                     <ul>
-                      <li class="category_name"><?php print h($record->event_tag); ?></li>
+                      <li class="category_name"><?php print h($record->getEventTag()); ?></li>
                       <li class="brand_name"><?php print h($record->event_date); ?></li>
                     </ul>
                     <p class="event-name"><?php print h($record->event_name); ?></p>
                   </a>
-                </td>
-                <td class="list-price">
-                  <?php print h($record->getPrice()); ?>
-                </td>
-                <td class="list-stock">
-                  <?php print h($record->getStock()); ?>
                 </td>
                 <!--ステータス-->
                 <td class="list-status">

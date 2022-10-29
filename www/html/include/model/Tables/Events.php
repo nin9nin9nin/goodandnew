@@ -90,71 +90,61 @@ class Events {
     }
 
     /**
-     * svg画像
-     * 拡張子の確認とファイル名(ユニーク)の確認
-     * プロパティに登録
-     * 
-     * 保存先フォルダ指定
+     * アップロードファイルのチェック (アップロードがなければNULL)
+     * 拡張子の確認とファイル名(ユニーク)の確認     * 
+     * file_dir 保存先フォルダ指定
+     * @param array
      */
-    public function checkEvntSvg() {
-        $img_dir = './assets/imges/event/svg/';
+    public function checkFileName($files, $default = NULL) {
+        $new_file_name = $default;
+        $file_dir = './include/img/events/';
         
-        if (isset($_FILES['event_svg'])) {
+        // is_uploaded_file($_FILES[] === true)であれば
+        if (empty($files) !== true) {
             // 内部で正しくアップロードされたか確認
-            Validator::checkImg($_FILES['event_svg'], $img_dir, $this->event_svg);
+            // 拡張子の確認とユニークなファイル名の生成
+            $new_file_name = Validator::checkFileName($files, $file_dir);
         }
-        //アップロード自体なければ何も返さない
-    }
-
-    /**
-     * pmg画像
-     * 拡張子の確認とファイル名(ユニーク)の確認
-     * プロパティに登録
-     * 
-     * 保存先フォルダ指定
-     */
-    public function checkEvntPng() {
-        $img_dir = './assets/imges/event/png/';
-        
-        if (isset($_FILES['event_png'])) {
-            Validator::checkImg($_FILES['event_png'], $img_dir, $this->event_png);
-        }
+        //アップロード自体なければNULLを返す
+        return $new_file_name;
     }
 
     /**
      * 
      */
     public function checkEventImg() {
-        $img_dir = './assets/imges/event/img/';
+        $img_dir = ASSETS_DIR.'/images/event/img';
 
-        if (isset($_FILES['img1'])) {
-            Validator::checkImg($_FILES['img1'], $img_dir, $this->img1);
+        if (is_uploaded_file($_FILES['img1']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img1'], $img_dir, $this->img1);
         }
-        if (isset($_FILES['img2'])) {
-            Validator::checkImg($_FILES['img2'], $img_dir, $this->img2);
+        if (is_uploaded_file($_FILES['img2']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img2'], $img_dir, $this->img2);
         }
-        if (isset($_FILES['img3'])) {
-            Validator::checkImg($_FILES['img3'], $img_dir, $this->img3);
+        if (is_uploaded_file($_FILES['img3']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img3'], $img_dir, $this->img3);
         }
-        if (isset($_FILES['img4'])) {
-            Validator::checkImg($_FILES['img4'], $img_dir, $this->img4);
+        if (is_uploaded_file($_FILES['img4']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img4'], $img_dir, $this->img4);
         }
-        if (isset($_FILES['img5'])) {
-            Validator::checkImg($_FILES['img5'], $img_dir, $this->img5);
+        if (is_uploaded_file($_FILES['img5']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img5'], $img_dir, $this->img5);
         }
-        if (isset($_FILES['img6'])) {
-            Validator::checkImg($_FILES['img6'], $img_dir, $this->img6);
+        if (is_uploaded_file($_FILES['img6']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img6'], $img_dir, $this->img6);
         }
-        if (isset($_FILES['img7'])) {
-            Validator::checkImg($_FILES['img7'], $img_dir, $this->img7);
+        if (is_uploaded_file($_FILES['img7']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img7'], $img_dir, $this->img7);
         }
-        if (isset($_FILES['img8'])) {
-            Validator::checkImg($_FILES['img8'], $img_dir, $this->img8);
+        if (is_uploaded_file($_FILES['img8']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img8'], $img_dir, $this->img8);
         }
-        if (isset($_FILES['img9'])) {
-            Validator::checkImg($_FILES['img9'], $img_dir, $this->img9);
+        if (is_uploaded_file($_FILES['img9']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img9'], $img_dir, $this->img9);
         }
-
+        if (is_uploaded_file($_FILES['img10']['tmp_name']) === true) {
+            Validator::checkFileName($_FILES['img10'], $img_dir, $this->img10);
+        }
     }
 
     // index ------------------------------------------------------------------------
@@ -199,7 +189,7 @@ class Events {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
-        $sql = 'SELECT event_id, event_name, event_date, event_tag, status' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
 
@@ -253,23 +243,12 @@ class Events {
      * 画像のファイルアップロード
      * アップロードできなければロールバック(コミットさせない)
      */
-    public function uploadEvntSvg() {
-        $img_dir = './assets/imges/event/svg/';
+    public function uploadFiles($files, $new_file_name) {
+        $file_dir = './include/img/events/';
+        $to = $file_dir . $new_file_name;
 
-        if (isset($_FILES['event_svg'])) {
-            Messages::uploadImg($_FILES['event_svg'], $img_dir, $this -> event_svg);
-        }
-    }
-
-    /**
-     * 画像のファイルアップロード
-     * アップロードできなければロールバック(コミットさせない)
-     */
-    public function uploadEvntPng() {
-        $img_dir = './assets/imges/event/png/';
-
-        if (isset($_FILES['event_png'])) {
-            Messages::uploadImg($_FILES['event_png'], $img_dir, $this -> event_png);
+        if (empty($file) !== true) {
+            Messages::uploadFiles($file, $to);
         }
     }
 
@@ -277,40 +256,37 @@ class Events {
      * 
      */
     public function uploadEventImg() {
-        $img_dir = './assets/imges/event/img/';
+        $img_dir = ASSETS_DIR.'/images/event/img';
 
-        if (isset($_FILES['img1'])) {
+        if (empty($_FILES['img1']) !== true) {
             Messages::uploadImg($_FILES['img1'], $img_dir, $this -> img1);
         }
-        if (isset($_FILES['img2'])) {
+        if (empty($_FILES['img2']) !== true) {
             Messages::uploadImg($_FILES['img2'], $img_dir, $this -> img2);
         }
-        if (isset($_FILES['img3'])) {
+        if (empty($_FILES['img3']) !== true) {
             Messages::uploadImg($_FILES['img3'], $img_dir, $this -> img3);
         }
-        if (isset($_FILES['img4'])) {
+        if (empty($_FILES['img4']) !== true) {
             Messages::uploadImg($_FILES['img4'], $img_dir, $this -> img4);
         }
-        if (isset($_FILES['img5'])) {
+        if (empty($_FILES['img5']) !== true) {
             Messages::uploadImg($_FILES['img5'], $img_dir, $this -> img5);
         }
-        if (isset($_FILES['img6'])) {
+        if (empty($_FILES['img6']) !== true) {
             Messages::uploadImg($_FILES['img6'], $img_dir, $this -> img6);
         }
-        if (isset($_FILES['img7'])) {
+        if (empty($_FILES['img7']) !== true) {
             Messages::uploadImg($_FILES['img7'], $img_dir, $this -> img7);
         }
-        if (isset($_FILES['img8'])) {
+        if (empty($_FILES['img8']) !== true) {
             Messages::uploadImg($_FILES['img8'], $img_dir, $this -> img8);
         }
-        if (isset($_FILES['img9'])) {
+        if (empty($_FILES['img9']) !== true) {
             Messages::uploadImg($_FILES['img9'], $img_dir, $this -> img9);
         }
-        if (isset($_FILES['img10'])) {
+        if (empty($_FILES['img10']) !== true) {
             Messages::uploadImg($_FILES['img10'], $img_dir, $this -> img10);
-        }
-        if (isset($_FILES['img10'])) {
-            Messages::checkImg($_FILES['img10'], $img_dir, $this->img10);
         }
     }
 

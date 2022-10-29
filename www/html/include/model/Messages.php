@@ -74,9 +74,9 @@ class Messages extends Models {
     public function getEventTag() {
         $event_tag = $this->event_tag;
 
-        if($event_tag === '0') {
+        if($event_tag === 0) {
             return 'MONTHLY POP UP';
-        } else if ($event_tag === '1') {
+        } else if ($event_tag === 1) {
             return 'EVENT';
         }
     }
