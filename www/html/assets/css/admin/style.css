@@ -441,6 +441,48 @@ input[type="reset"]:hover {
   background: #ccc;
 }
 
+/* 検索・絞り込み・並べ替え 
+--------------------------------- */
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* 検索窓 */
+.search-input {
+  width: 40%;
+}
+.keyword form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.keyword form input:nth-child(1) {
+  margin-right: 10px;
+}
+.keyword form input[type="submit"] {
+  padding: 8px;
+}
+/* 絞り込み・並べ替え */
+.search-select {
+  width: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.search-select tr {
+  line-height: 3;
+}
+.search-select th {
+  font-size: 12px;
+}
+.search-select select {
+  font-size: 12px;
+  padding: 5px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
 /*商品一覧------------------------------------------------------------------------------------------*/
 .list-group {
   margin: 20px 0px;
@@ -470,8 +512,7 @@ input[type="reset"]:hover {
   font-size: 1rem;
 }
 .list-group .false {
-  background-color: #f0f8ff;
-  /*background-color: #e6e6e6;*/
+  background-color: #eee;
 }
 .list-img {
   width: 75px;
@@ -638,14 +679,20 @@ input[type="reset"]:hover {
 .message h1 {
   margin-bottom: 10px;
 }
+
+/*フラッシュ-----------------------------------------------------*/
 .fade-message {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: table;
-  width: 450px;
-  background: rgba(0, 0, 0, 0.8);
+  margin: 10px 0;
+  padding: 15px 0;
+  border-radius: 5px;
+  width: 900px;
   -webkit-animation: fade-in-out 7s ease 1s forwards;
   animation: fade-in-out 7s ease 1s forwards;
   visibility: hidden;
@@ -679,7 +726,6 @@ input[type="reset"]:hover {
     opacity: 0;
   }
 }
-/*フラッシュ-----------------------------------------------------*/
 .flash {
   color: blue;
   background: #ccf1ff;

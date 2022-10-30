@@ -95,7 +95,7 @@ class Events {
      * file_dir 保存先フォルダ指定
      * @param array
      */
-    public function checkFileName($files, $default = NULL) {
+    public function checkFileName($files = [], $default = NULL) {
         $new_file_name = $default;
         $file_dir = './include/images/events/visual/';
         
@@ -110,41 +110,22 @@ class Events {
     }
 
     /**
+     * 複数ファイルのアップロード
+     * $_FILES['img']['name'][0],$_FILES['img']['name'][1]...
      * 
      */
-    public function checkEventImg() {
-        $img_dir = ASSETS_DIR.'/images/event/img';
-
-        if (is_uploaded_file($_FILES['img1']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img1'], $img_dir, $this->img1);
+    public function checkImgFileName($files = [], $default = NULL) {
+        $new_file_name = $default;
+        $file_dir = './include/images/events/img/';
+        
+        // is_uploaded_file($_FILES[] === true)であれば
+        if (empty($files) !== true) {
+            // 内部で正しくアップロードされたか確認
+            // 拡張子の確認とユニークなファイル名の生成
+            $new_file_name = Validator::checkFileName($files, $file_dir);
         }
-        if (is_uploaded_file($_FILES['img2']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img2'], $img_dir, $this->img2);
-        }
-        if (is_uploaded_file($_FILES['img3']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img3'], $img_dir, $this->img3);
-        }
-        if (is_uploaded_file($_FILES['img4']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img4'], $img_dir, $this->img4);
-        }
-        if (is_uploaded_file($_FILES['img5']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img5'], $img_dir, $this->img5);
-        }
-        if (is_uploaded_file($_FILES['img6']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img6'], $img_dir, $this->img6);
-        }
-        if (is_uploaded_file($_FILES['img7']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img7'], $img_dir, $this->img7);
-        }
-        if (is_uploaded_file($_FILES['img8']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img8'], $img_dir, $this->img8);
-        }
-        if (is_uploaded_file($_FILES['img9']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img9'], $img_dir, $this->img9);
-        }
-        if (is_uploaded_file($_FILES['img10']['tmp_name']) === true) {
-            Validator::checkFileName($_FILES['img10'], $img_dir, $this->img10);
-        }
+        //アップロード自体なければNULLを返す
+        return $new_file_name;
     }
 
     // index ------------------------------------------------------------------------
@@ -185,12 +166,13 @@ class Events {
     public function indexEvents() {
         // 1ページに表示する件数
         $display_record = $this -> display_record;
-        // 配列の何番目から取得するか決定(OFFSET句)
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
         $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
         $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
              . 'FROM events' . PHP_EOL
+             . 'ORDER BY event_id DESC' . PHP_EOL 
              . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
 
         

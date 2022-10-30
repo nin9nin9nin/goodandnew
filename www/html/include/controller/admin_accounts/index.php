@@ -14,6 +14,11 @@ function execute_action() {
 
     //認証済みであれば$_SESSION['admin_id']を取得
     $admin_id = Session::get('admin_id', false);
+
+    // $admin_idの値を確認
+    if (preg_match('/^\d+$/', $admin_id) !== 1) {
+        return View::render404();
+    }
     
     //クラス生成
     $classAdmin = new Admin();

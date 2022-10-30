@@ -286,16 +286,6 @@ class Validator {
     }
     
     /**
-     */
-    public static function checkStatus($arg) {
-        if (self::checkString($arg) && $arg === '0' || '1') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
      * アップロード画像
      * 拡張子の確認とファイル名(ユニーク)の作成
      * @param $file_dir ファイルの保存先ディレクトリ
@@ -321,7 +311,7 @@ class Validator {
                 CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
             }
         } else {
-            CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
+            CommonError::errorAdd('ファイル形式が異なります。');
         } 
     }
 }

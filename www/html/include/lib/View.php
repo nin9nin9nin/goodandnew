@@ -119,9 +119,7 @@ class View {
             }
         }
 
-        //頭のindex.php
-        // $url = 'index.php';
-        
+        //頭のファイル名        
         //dashboardかindexか
         $url = BASE_URL;
 

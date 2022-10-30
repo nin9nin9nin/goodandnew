@@ -3,7 +3,7 @@
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
-    // postの確認
+    //POSTの確認
     if (!Request::isPost()) {
         return View::render404();
     }

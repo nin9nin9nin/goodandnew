@@ -8,8 +8,10 @@ function execute_action() {
     // CSRF対策トークンの作成(POST投稿を行うフォームに対して必ず行う)
     Session::setCsrfToken();
     
+    // $_REQUEST[]
     $admin_id = Request::get('admin_id');
     
+    //getの値を確認
     if (preg_match('/^\d+$/', $admin_id) !== 1) {
         return View::render404();
     }
