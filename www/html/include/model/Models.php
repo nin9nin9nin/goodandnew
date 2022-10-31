@@ -22,6 +22,7 @@ class Models {
     }
 
 
+    // ファイルのアップデート機能の追加 -----------------------------------------------
     /**
      * ファイルのアップロード
      * アップロードできなければロールバック(コミットさせない)
@@ -58,25 +59,8 @@ class Models {
         return $re_files;
         
     }
-
-    /**
-     * 複数ファイルのファイル名プロパティ登録
-     */
-    public static function registerFiles($img_names) {
-        //配列の数をカウント
-        $file_count = count($img_names);
-
-        //カウント数だけループを行いプロパティに登録を行う
-        for ($i=1; $i<$file_count; $i++) {
-            foreach ($img_names as $name) {
-                //ファイル名を順番にプロパティに登録していく
-                $property = $files[$key][$i];
-            }
-            //拡張子の確認＆ファイル名を生成
-            $new_file_names = Validator::checkFileName($file_ary, $file_dir);
-        }
-    }
     
+    // ページネーション機能の追加 -----------------------------------------------
     /**
      * ページネーション作成
      * 配列で格納
@@ -186,51 +170,117 @@ class Models {
         }
     }
 
-    
+    // 検索機能の追加 -----------------------------------------------
     /**
-     * 検索機能の追加
+     * 追加するSQL文の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
+     * 
      */
     //入力された検索条件からSQl文を生成
-    public static function setSearchValue($params) {
+    public static function setSearchSql($params = [], $keyword, $filter, $sorting = []) {
 
         if (array_key_exists('keyword', $params)) {
-            $searchSql = "name like '%{$params['keyword']}%'"; //キーワード検索
+            $searchSql = self::setKeywordSql($params, $keyword);
+        } else if (array_key_exists('filter', $params)) {
+            $searchSql = self::setFilterSql($params, $filter);
+        } else if (array_key_exists('sorting', $params)) {
+            $searchSql = self::setSortingSql($params, $sorting);
         }
-        $search = array_key($value);
 
-        //keyの値でwhere句の内容を変更
-        if($search === 'keyword'){
-            $searchSql = "name like '%{$value}%'"; //キーワード検索
-        } else if ($search === 'category_id') {
-            $searchSql = 'category_id = ' . $value; //カテゴリー指定
-        } else if ($search === 'sorting') {
-            if ($value === 'new_arrivals') {
-                $searchSql = 'ORDER BY create_datetime DESC'; //新着順
-            } else if ($value === 'expensive') {
-                $searchSql = 'ORDER BY price DESC'; //価格の高い順
-            } else if ($value === 'cheap') {
-                $searchSql = 'ORDER BY price ASC'; //価格の安い順
-            }
-        }
         return $searchSql;
     }
 
     /**
+     * $params getの値（検索キーワード）
+     * $keyword 各テーブル　どのカラムから検索を行うか
      * 
      */
-    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
-        $value = $default;
-
-        if (isset($_REQUEST[$keyword]) === true) {
-            $value = $_REQUEST[$keyword];
-        } else if (isset($_REQUEST[$category_id]) === true){
-            $value = $_REQUEST[$category_id];
-        } else if (isset($_REQUEST[$sorting]) === true){
-            $value = $_REQUEST[$sorting];
-        } 
-
-        return $value;
+    public static function setKeywordSql($params = [], $keyword) {
+        //テキストボックスの空白を半角スペースに置換し半角スペース区切りで配列に格納
+        $textboxs = explode(" ",mb_convert_kana($textbox,'s'));
+        
+        //SQL文に追加する字句の生成
+        foreach($textboxs as $textbox){
+            $textboxCondition[] = "([カラム名] LIKE ?)";
+            $values[] = '%'.preg_replace('/(?=[!_%])/', '', $textbox) . '%';
+        }
+        
+        //各Like条件を「OR」でつなぐ
+        $textboxCondition = implode(' OR ', $textboxCondition);
     }
+
+    /**
+     * $params getの値（絞り込みセレクト）
+     * $keyword 各テーブル　どのカラムから絞り込みを行うか
+     * 
+     */
+    public static function setFilterSql($params = [], $filter) {
+
+    }
+
+    /**
+     * $params getの値（並べ替えセレクト）
+     * $keyword 各テーブル　どのカラムから並べ替えを行うか
+     * 
+     */
+    public static function setSortingSql($params = [], $sorting = []) {
+
+    }
+
+    /**
+     * 追加する$params(bindValue)の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
+     * 
+     */
+    //入力された検索条件からSQl文を生成
+    public static function setSearchParams($params = [], $keyword, $filter, $sorting = []) {
+
+        if (array_key_exists('keyword', $params)) {
+            $searchParams = self::setKeywordParams($params, $keyword);
+        } else if (array_key_exists('filter', $params)) {
+            $searchParams = self::setFilterParams($params, $filter);
+        } else if (array_key_exists('sorting', $params)) {
+            $searchParams = self::setSortingParams($params, $params);
+        }
+
+        return $searchParams;
+    }
+
+    /**
+     * $params getの値（検索キーワード）
+     * $keyword 各テーブル　どのカラムから検索を行うか
+     * 
+     */
+    public static function setKeywordParams($params = [], $keyword) {
+        $params = [];
+
+        return $params;
+    }
+
+    /**
+     * $params getの値（絞り込みセレクト）
+     * $keyword 各テーブル　どのカラムから絞り込みを行うか
+     * 
+     */
+    public static function setFilterParams($params = [], $filter) {
+        $params = [];
+
+        return $params;
+    }
+
+    /**
+     * $params getの値（並べ替えセレクト）
+     * $keyword 各テーブル　どのカラムから並べ替えを行うか
+     * 
+     */
+    public static function setSortingParams($params = [], $sorting = []) {
+        $params = [];
+
+        return $params;
+    }
+
 
     /**
      * 全レコード削除

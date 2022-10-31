@@ -170,10 +170,10 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <table>
                       <tr>
                           <th class="select-title">
-                            <label for="event-tag">カテゴリ</label>
+                            <label for="filter">カテゴリ</label>
                           </th>
                           <td class="select-name">
-                            <select id="event-tag" name="event_tag" ONCHANGE="submit(this.form)">
+                            <select id="filter" name="filter" ONCHANGE="submit(this.form)">
                                 <option value="">選択してください</option>
                                 <option value="0">ポップアップ</option>
                                 <option value="1">イベント</option>

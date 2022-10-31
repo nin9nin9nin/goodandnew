@@ -184,6 +184,39 @@ class Events {
         
         return Messages::findBySql($sql,$params); 
     } 
+
+    /**
+     * 検索フォーム
+     */
+    public function searchEvents($search = []) {
+        //検索項目の確認
+        $keyword = 'event_name';
+        $filter = 'event_tag';
+        $sorting = array('event_id', 'event_name');
+
+        $searchSql = Messages::setSearchSql($search, $keyword, $filter, $sorting);
+        $searchParams = Messages::setSearchParams($search, $keyword, $filter, $sorting);
+
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
+             . 'FROM events' . PHP_EOL
+             . 'ORDER BY event_id DESC' . PHP_EOL 
+             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
+
+        $params = [
+            ':display_record' => $display_record,
+            ':start_record' => $start_record,
+        ];
+
+
+        
+        return Messages::findBySql($sql,$params); 
+    }
     
     // insert ------------------------------------------------------------------------
     /**
