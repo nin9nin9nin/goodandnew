@@ -111,21 +111,22 @@ class Events {
 
     /**
      * 複数ファイルのアップロード
-     * $_FILES['img']['name'][0],$_FILES['img']['name'][1]...
+     * reArrayされたファイルのエラーチェック
      * 
      */
-    public function checkImgFileName($files = [], $default = NULL) {
-        $new_file_name = $default;
+    public function checkImgFileName($re_files = []) {
+        $img_names = [];//配列にしておく
         $file_dir = './include/images/events/img/';
         
         // is_uploaded_file($_FILES[] === true)であれば
-        if (empty($files) !== true) {
-            // 内部で正しくアップロードされたか確認
-            // 拡張子の確認とユニークなファイル名の生成
-            $new_file_name = Validator::checkFileName($files, $file_dir);
+        if (empty($re_files) !== true) {
+            foreach ($re_files as $files) {
+
+                $img_names = Validator::checkFileName($files, $file_dir);
+            }
         }
-        //アップロード自体なければNULLを返す
-        return $new_file_name;
+        //アップロード自体なければ空の配列を返す
+        return $img_names;
     }
 
     // index ------------------------------------------------------------------------
@@ -235,40 +236,42 @@ class Events {
     }
 
     /**
-     * 
+     * 複数ファイルのアップロード
      */
-    public function uploadEventImg() {
-        $img_dir = ASSETS_DIR.'/images/event/img';
+    public function uploadImgFiles($re_files, $img_names) {
+        $file_dir = './include/images/events/img/';
+        
+        if (empty($re_files) !== true) {
+            $file_count = count($re_files);
 
-        if (empty($_FILES['img1']) !== true) {
-            Messages::uploadImg($_FILES['img1'], $img_dir, $this -> img1);
+            for ($i=0; $i<$file_count; $i++) {
+                //
+                $to = $file_dir . $img_names[$i];
+                $files = $re_files[$i];
+                //エラーがあればロールバックを行う  
+                Messages::uploadFiles($files, $to);
+            }
         }
-        if (empty($_FILES['img2']) !== true) {
-            Messages::uploadImg($_FILES['img2'], $img_dir, $this -> img2);
-        }
-        if (empty($_FILES['img3']) !== true) {
-            Messages::uploadImg($_FILES['img3'], $img_dir, $this -> img3);
-        }
-        if (empty($_FILES['img4']) !== true) {
-            Messages::uploadImg($_FILES['img4'], $img_dir, $this -> img4);
-        }
-        if (empty($_FILES['img5']) !== true) {
-            Messages::uploadImg($_FILES['img5'], $img_dir, $this -> img5);
-        }
-        if (empty($_FILES['img6']) !== true) {
-            Messages::uploadImg($_FILES['img6'], $img_dir, $this -> img6);
-        }
-        if (empty($_FILES['img7']) !== true) {
-            Messages::uploadImg($_FILES['img7'], $img_dir, $this -> img7);
-        }
-        if (empty($_FILES['img8']) !== true) {
-            Messages::uploadImg($_FILES['img8'], $img_dir, $this -> img8);
-        }
-        if (empty($_FILES['img9']) !== true) {
-            Messages::uploadImg($_FILES['img9'], $img_dir, $this -> img9);
-        }
-        if (empty($_FILES['img10']) !== true) {
-            Messages::uploadImg($_FILES['img10'], $img_dir, $this -> img10);
+    }
+    
+    /**
+     * 複数ファイルのプロパティ登録
+     */
+    public function registerImgFiles($img_names) {
+        $file_count = count($img_names); //配列の数をカウント
+
+        for ($i=0; $i<$file_count; $i++) {
+            //プロパティ名が1から始まるためi=1でスタート
+            $no = $i+1;
+            //参照プロパティ
+            $property = 'img' . $no;
+
+            //オブジェクトの反復処理
+            foreach ($this as $key) {
+                if ($key === $property) {
+                    $key = $img_names[$i];
+                }
+            }
         }
     }
 

@@ -21,12 +21,11 @@ class Models {
         return Database::executeBySql($sql, $params);
     }
 
-    
+
     /**
-     * 画像のファイルアップロード
-     * $class_property 作成したファイル名(ユニーク)
-     * 
+     * ファイルのアップロード
      * アップロードできなければロールバック(コミットさせない)
+     * 
      */
     public static function uploadFiles($files = [], $to) {
         $tmp_name = $files['tmp_name'];
@@ -39,6 +38,44 @@ class Models {
         }
     }
 
+    /**
+     * 複数ファイルの再格納（配列の再格納）
+     * ['name']['0'],['name']['1']/['type']['0']['type']['1']...から
+     * ['0']['name']['type'].../['0']['name']['type']...に再編成
+     */
+    public static function reArray($files = []) {
+        $re_files = array();//['0']['1']..を入れる配列
+        $file_count = count($files['name']);//ファイル数のカウント($_FILES['img']['name'])
+        $file_keys = array_keys($files);//keyの抽出['name']['type']etc
+
+        //reArray処理 
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                // file_ary['0']['name'] = $_FILES['img']['name']['0']
+                $re_files[$i][$key] = $files[$key][$i];
+            }
+        }
+        return $re_files;
+        
+    }
+
+    /**
+     * 複数ファイルのファイル名プロパティ登録
+     */
+    public static function registerFiles($img_names) {
+        //配列の数をカウント
+        $file_count = count($img_names);
+
+        //カウント数だけループを行いプロパティに登録を行う
+        for ($i=1; $i<$file_count; $i++) {
+            foreach ($img_names as $name) {
+                //ファイル名を順番にプロパティに登録していく
+                $property = $files[$key][$i];
+            }
+            //拡張子の確認＆ファイル名を生成
+            $new_file_names = Validator::checkFileName($file_ary, $file_dir);
+        }
+    }
     
     /**
      * ページネーション作成

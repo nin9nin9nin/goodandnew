@@ -31,6 +31,9 @@ function execute_action() {
     $event_tag = Request::get('event_tag');
     $event_svg = Request::getFiles('event_svg'); //初期値NULL
     $event_png = Request::getFiles('event_png'); //初期値NULL
+    $img = Request::getFiles('img'); //初期値NULL
+    $imgs = Messages::reArray($img); //再配列
+    var_dump($imgs);
     $status = Request::getStatus('status'); //初期値設定0
     
     //クラス生成（初期化）
@@ -55,6 +58,7 @@ function execute_action() {
         //生成したファイル名の受け取り
         $svg_name = $classEvents -> checkFileName($event_svg);
         $png_name = $classEvents -> checkFileName($event_png);
+        $img_names = $classEvents -> checkImgFileName($imgs);
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -85,13 +89,16 @@ function execute_action() {
         $classEvents -> create_datetime = $now_date;
         $classEvents -> event_svg = $svg_name;
         $classEvents -> event_png = $png_name;
-        
+        //複数ファイルのプロパティ登録
+        $classEvents -> registerImgFiles($img_names);
+
         //eventsテーブルに新規登録　executeBySql()
         $classEvents -> insertEvent();
         
         //画像のファイルアップロード（できなければrollback）
         $classEvents -> uploadFiles($event_svg, $svg_name);
         $classEvents -> uploadFiles($event_png, $png_name);
+        $classEvents -> uploadImgFiles($imgs, $img_names);
 
         Database::commit();
       
