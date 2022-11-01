@@ -13,8 +13,6 @@ function execute_action() {
 
     //ページIDの取得（なければ1が格納される）
     $page_id = Request::getPageId('page_id');
-
-    //GETの値を確認
     if (preg_match('/^\d+$/', $page_id) !== 1) {
         return View::render404();
     }

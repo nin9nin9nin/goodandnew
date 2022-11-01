@@ -120,9 +120,14 @@ class Events {
         
         // is_uploaded_file($_FILES[] === true)であれば
         if (empty($files) !== true) {
-            // 内部で正しくアップロードされたか確認
-            // 拡張子の確認とユニークなファイル名の生成
-            $new_file_name = Validator::checkFileName($files, $file_dir);
+            //
+            $file_ary = array();
+            $file_count = count($files['name']);
+            $file_keys = array_keys($files);
+            
+            foreach ($files as $file) {
+                $new_file_name = Validator::checkFileName($file, $file_dir);
+            }
         }
         //アップロード自体なければNULLを返す
         return $new_file_name;
