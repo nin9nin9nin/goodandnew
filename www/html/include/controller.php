@@ -8,6 +8,8 @@ define('CONTROLLER_DIR', INCLUDE_DIR . '/controller');
 define('VIEW_DIR', INCLUDE_DIR . '/view');
 define('MODEL_DIR', INCLUDE_DIR . '/model');
 define('IMG_DIR', INCLUDE_DIR.'/img');
+// assetsディレクトリを定数定義
+define('ASSETS_DIR',dirname(__FILE__, 2).'/assets');
 
 //ユーザー情報+DSN
 require_once(CONFIG_DIR.'/const.php');

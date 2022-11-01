@@ -3,6 +3,7 @@
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
+    //POSTの確認
     if (!Request::isPost()) {
         return View::render404();
     }
@@ -41,7 +42,6 @@ function execute_action() {
         
         $errors = CommonError::errorWhile();
 
-        Session::start();
         //フラッシュメッセージをセット
         Session::setFlash('登録に失敗しました');
 
@@ -63,7 +63,7 @@ function execute_action() {
     $classAdmin->insertAdmin();
     
     //情報取得------------------------------------------------
-    //この時点ではセッションへの登録はまだしない（クッキーのみ）
+    //この時点ではセッション認証をしない（クッキー登録のみ）
 
     Session::start();
     //フラッシュメッセージをセット

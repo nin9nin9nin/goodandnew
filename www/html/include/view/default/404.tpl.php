@@ -2,12 +2,12 @@
 $title = 'ec site 管理画面';
 $description = '説明（ページエラー）';
 // $is_home = true; //トップページの判定用の変数
-include 'inc/admin/head.php'; // head.php の読み込み
+include './include/view/_inc/admin//head.php'; // head.php の読み込み
 ?>
 </head>
 
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin//header.php'; ?>
 
     <main>
       <div class="container">
@@ -16,18 +16,8 @@ include 'inc/admin/head.php'; // head.php の読み込み
           <p class="h4 text-muted">ページが見つかりませんでした</p>
         </div>
       </div>
-      
-      <div id="home">
-        <div class="container">
-          <div class="home">
-            <div class="form-buttonwrap">
-                <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-            </div>
-          </div>
-        </div>
-      </div>
-      
+      <?php include './include/view/_inc/admin/homebutton.php'; ?>
     </main>
-  <?php include 'inc/admin/footer.php'; ?>
+  <?php include './include/view/_inc/admin//footer.php'; ?>
   </body>
 </html>

@@ -286,45 +286,32 @@ class Validator {
     }
     
     /**
-     */
-    public static function checkStatus($arg) {
-        if (self::checkString($arg) && $arg === '0' || '1') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
      * アップロード画像
      * 拡張子の確認とファイル名(ユニーク)の作成
-     * プロパティに登録
-     * params $_FILES[''], $プロパティ名
+     * @param $file_dir ファイルの保存先ディレクトリ
+     * @param array $file $_FILES[]
      * 
      */
-    public function checkImg($file = [], $img_property) {
-        
-        if (is_uploaded_file($file['tmp_name']) === TRUE) {
-            // 画像の拡張子を取得
-            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            // 小文字に変換
-            $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
-            // 指定の拡張子であるかどうかチェック
-            if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
-                // 保存する新しいファイル名の生成（ユニークな値を設定する）
-                $img_name = sha1(uniqid(mt_rand(), true)). '.' . $extension;
-                // 同名ファイルが存在するかどうかチェック
-                if (is_file(IMG_DIR . $img_name) !== TRUE) {
-                    //プロパティに登録
-                    $img_property = $img_name;
-                } else {
-                    CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
-                }
+    public static function checkFileName($files = [], $file_dir) {
+        $file_name = $files['name']; //$_FILES['']['name']を代入
+
+        // 画像の拡張子を取得
+        $extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        // 小文字に変換
+        $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
+        // 指定の拡張子であるかどうかチェック
+        if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png' || $extension === 'svg') {
+            // 保存する新しいファイル名の生成（ユニークな値を設定する）
+            $new_file_name = sha1(uniqid(mt_rand(), true)). '.' . $extension;
+            // 同名ファイルが存在するかどうかチェック
+            if (is_file($file_dir . $new_file_name) !== TRUE) {
+                //生成したファイル名を返す
+                return $new_file_name;
             } else {
-                CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
+                CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
             }
         } else {
-            CommonError::errorAdd('ファイルを選択してください');
-        }
+            CommonError::errorAdd('ファイル形式が異なります。');
+        } 
     }
 }

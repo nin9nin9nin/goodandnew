@@ -119,9 +119,7 @@ class View {
             }
         }
 
-        //頭のindex.php
-        // $url = 'index.php';
-        
+        //頭のファイル名        
         //dashboardかindexか
         $url = BASE_URL;
 
@@ -154,7 +152,7 @@ class View {
      */
     public static function redirectTo($module_name = null, $action_name = null, $params = []) {
         $filename = self::urlFor($module_name, $action_name, $params);
-
+        
         header('Location: ' . $filename);
     }
 }

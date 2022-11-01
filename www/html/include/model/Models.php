@@ -21,68 +21,82 @@ class Models {
         return Database::executeBySql($sql, $params);
     }
 
-    
-    /**
-     * 画像のファイルアップロード
-     * アップロードできなければロールバック(コミットさせない)
-     */
-    public function uploadImg($file = [], $img_property) {
 
-        if (move_uploaded_file($file['tmp_name'], IMG_DIR . $img_property) !== TRUE) {
+    // ファイルのアップデート機能の追加 -----------------------------------------------
+    /**
+     * ファイルのアップロード
+     * アップロードできなければロールバック(コミットさせない)
+     * 
+     */
+    public static function uploadFiles($files = [], $to) {
+        $tmp_name = $files['tmp_name'];
+
+        if (move_uploaded_file($tmp_name, $to) !== TRUE) {
             $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
             throw $e;
+
+            Database::rollback();
         }
-        Database::rollback();
     }
 
     /**
-     * public $table_name プロパティから
-     * 各テーブルのトータルレコード数を返す
-     * return $count['cnt']
+     * 複数ファイルの再格納（配列の再格納）
+     * ['name']['0'],['name']['1']/['type']['0']['type']['1']...から
+     * ['0']['name']['type'].../['0']['name']['type']...に再編成
      */
-    public static function getTotalRecord() {
-        
-        $sql ='SELECT COUNT(*) as cnt FROM :table_name';
-        
-        $params = [':table_name' => $this->table_name];
+    public static function reArray($files = []) {
+        $re_files = array();//['0']['1']..を入れる配列
+        $file_count = count($files['name']);//ファイル数のカウント($_FILES['img']['name'])
+        $file_keys = array_keys($files);//keyの抽出['name']['type']etc
 
-        return self::findBySql($sql, $params);
+        //reArray処理 
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                // file_ary['0']['name'] = $_FILES['img']['name']['0']
+                $re_files[$i][$key] = $files[$key][$i];
+            }
+        }
+        return $re_files;
+        
     }
-
     
+    // ページネーション機能の追加 -----------------------------------------------
     /**
-     * @params total_record
-     * 
+     * ページネーション作成
      * 配列で格納
-     * total_record トータルアイテム数
-     * page_total トータルページ数
-     * prev_page 戻るページ値
-     * next_page 進むページ値
-     * page_range ページレンジ(リンク表示数)
-     * from_record ◯件目-
-     * to_record -◯件目
+     * ['total_record'] トータルアイテム数
+     * ['page_total'] トータルページ数
+     * ['prev_page'] 戻るページ値
+     * ['next_page'] 進むページ値
+     * ['page_range'] ページレンジ(リンク表示数)
+     * ['from_record'] ◯件目-
+     * ['to_record'] -◯件目
      * 
      * return array
      */
-    public static function setPaginations($total_record) {
+    public static function setPaginations($total_record, $display_record, $page_id) {
         $paginations = [];
 
         //トータルレコード数の取得
         $paginations['total_record'] = $total_record;
+        //１ページに表示する件数の取得
+        $paginations['display_record'] = $display_record;
+        //現在のページ番号の取得
+        $paginations['page_id'] = $page_id;
 
-        //トータルページ数の決定(ceilで端数の切り上げ)
-        $paginations['page_total'] = ceil($total_record / $this->display_record);
+        //トータルページ数の決定(ceilで端数の切り上げ/return float)
+        $paginations['page_total'] = ceil($total_record / $display_record);
 
         //戻る・進む
-        $paginations['prev_page'] = max($this->page_id - 1, 1); // 前のページ番号
-        $paginations['next_page'] = min($this->page_id + 1, $paginations['page_total']); // 次のページ番号
+        $paginations['prev_page'] = max($page_id - 1, 1); // 前のページ番号
+        $paginations['next_page'] = min($page_id + 1, $paginations['page_total']); // 次のページ番号
 
         //表示するページのレンジ決定
-        $paginations['page_range'] = self::setPageRange($paginations['page_total']);
+        $paginations['page_range'] = self::setPageRange($paginations['page_total'], $page_id);
 
         //◯ - ◯件目
-        $paginations['from_record'] = self::fromRecord();
-        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record);
+        $paginations['from_record'] = self::fromRecord($display_record, $page_id);
+        $paginations['to_record'] = self::toRecord($paginations['page_total'], $total_record, $display_record, $page_id);
 
         return $paginations;
     }
@@ -95,19 +109,19 @@ class Models {
      * 途中から前後2ページづつのレンジとなる
      * 
      */
-    public static function setPageRange($page_total) {
+    public static function setPageRange($page_total, $page_id) {
 
         //rangeの決定
-        if($this->page_id === 1 || $this->page_id === $page_total) { // 1ページ目と最後のページ
+        if($page_id === 1 || $page_id === $page_total) { // 1ページ目と最後のページ
             $range = 4;
-        } elseif ($this->page_id === 2 || $this->page_id === $page_total - 1) { // 2ページ目と最後の前のページ
+        } elseif ($page_id === 2 || $page_id === $page_total - 1) { // 2ページ目と最後の前のページ
             $range = 3;
         } else {
             $range = 2;
         }
         
-        $start_page = max($this->page_id - $range, 1); // ページ番号始点
-        $end_page = min($this->page_id + $range, $page_total); // ページ番号終点
+        $start_page = max($page_id - $range, 1); // ページ番号始点
+        $end_page = min($page_id + $range, $page_total); // ページ番号終点
         //1-2=-1,1 =1 //1+4=5,7 =5
         //2-2=0,1 =1 //2+3=5,7 =5
         //3-2=1,1 =1 //3+2=5,7 =5
@@ -132,9 +146,9 @@ class Models {
      * ページ1 =　(1-1)*10+1 = 1~
      * ページ2 = (2-1)*10+1 = 11~
      */
-    public static function fromRecord() {
+    public static function fromRecord($display_record, $page_id) {
 
-        return ($this->page_id - 1) * $this->display_record + 1;
+        return ($page_id - 1) * $display_record + 1;
     }
     
     /**
@@ -144,60 +158,138 @@ class Models {
      * 最大件数48 
      * ページ5 (5-1)*10=40 + 48%10=8　~48
      * ページ2 2*10= ~20
+     * 
+     * floatを使うため厳密に等しいを使用しない
      */
-    public static function toRecord($page_total, $total_record) {
+    public static function toRecord($page_total, $total_record, $display_record, $page_id) {
 
-        if($this->page_id === $page_total && $total_record % $this->display_record !== 0) {
-            return $to_record = ($this->page_id - 1) * 5 + $total_record % $this->display_record;
+        if($page_id == $page_total && $total_record % $display_record !== 0) {
+            return $to_record = ($page_id - 1) * $display_record + $total_record % $display_record;
         } else {
-            return $to_record = $this->page_id * $this->display_record;
+            return $to_record = $page_id * $display_record;
         }
     }
 
-    
+    // 検索機能の追加 -----------------------------------------------
     /**
-     * 検索機能の追加
+     * 追加するSQL文の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
+     * 
      */
     //入力された検索条件からSQl文を生成
-    public static function setSearchValue($params) {
+    public static function setSearchSql($params = [], $keyword, $filter, $sorting = []) {
 
         if (array_key_exists('keyword', $params)) {
-            $searchSql = "name like '%{$params['keyword']}%'"; //キーワード検索
+            $searchSql = self::setKeywordSql($params, $keyword);
+        } else if (array_key_exists('filter', $params)) {
+            $searchSql = self::setFilterSql($params, $filter);
+        } else if (array_key_exists('sorting', $params)) {
+            $searchSql = self::setSortingSql($params, $sorting);
         }
-        $search = array_key($value);
 
-        //keyの値でwhere句の内容を変更
-        if($search === 'keyword'){
-            $searchSql = "name like '%{$value}%'"; //キーワード検索
-        } else if ($search === 'category_id') {
-            $searchSql = 'category_id = ' . $value; //カテゴリー指定
-        } else if ($search === 'sorting') {
-            if ($value === 'new_arrivals') {
-                $searchSql = 'ORDER BY create_datetime DESC'; //新着順
-            } else if ($value === 'expensive') {
-                $searchSql = 'ORDER BY price DESC'; //価格の高い順
-            } else if ($value === 'cheap') {
-                $searchSql = 'ORDER BY price ASC'; //価格の安い順
-            }
-        }
         return $searchSql;
     }
 
     /**
+     * $params getの値（検索キーワード）
+     * $keyword 各テーブル　どのカラムから検索を行うか
      * 
      */
-    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
-        $value = $default;
-
-        if (isset($_REQUEST[$keyword]) === true) {
-            $value = $_REQUEST[$keyword];
-        } else if (isset($_REQUEST[$category_id]) === true){
-            $value = $_REQUEST[$category_id];
-        } else if (isset($_REQUEST[$sorting]) === true){
-            $value = $_REQUEST[$sorting];
-        } 
-
-        return $value;
+    public static function setKeywordSql($params = [], $keyword) {
+        //テキストボックスの空白を半角スペースに置換し半角スペース区切りで配列に格納
+        $textboxs = explode(" ",mb_convert_kana($textbox,'s'));
+        
+        //SQL文に追加する字句の生成
+        foreach($textboxs as $textbox){
+            $textboxCondition[] = "([カラム名] LIKE ?)";
+            $values[] = '%'.preg_replace('/(?=[!_%])/', '', $textbox) . '%';
+        }
+        
+        //各Like条件を「OR」でつなぐ
+        $textboxCondition = implode(' OR ', $textboxCondition);
     }
 
+    /**
+     * $params getの値（絞り込みセレクト）
+     * $keyword 各テーブル　どのカラムから絞り込みを行うか
+     * 
+     */
+    public static function setFilterSql($params = [], $filter) {
+
+    }
+
+    /**
+     * $params getの値（並べ替えセレクト）
+     * $keyword 各テーブル　どのカラムから並べ替えを行うか
+     * 
+     */
+    public static function setSortingSql($params = [], $sorting = []) {
+
+    }
+
+    /**
+     * 追加する$params(bindValue)の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
+     * 
+     */
+    //入力された検索条件からSQl文を生成
+    public static function setSearchParams($params = [], $keyword, $filter, $sorting = []) {
+
+        if (array_key_exists('keyword', $params)) {
+            $searchParams = self::setKeywordParams($params, $keyword);
+        } else if (array_key_exists('filter', $params)) {
+            $searchParams = self::setFilterParams($params, $filter);
+        } else if (array_key_exists('sorting', $params)) {
+            $searchParams = self::setSortingParams($params, $params);
+        }
+
+        return $searchParams;
+    }
+
+    /**
+     * $params getの値（検索キーワード）
+     * $keyword 各テーブル　どのカラムから検索を行うか
+     * 
+     */
+    public static function setKeywordParams($params = [], $keyword) {
+        $params = [];
+
+        return $params;
+    }
+
+    /**
+     * $params getの値（絞り込みセレクト）
+     * $keyword 各テーブル　どのカラムから絞り込みを行うか
+     * 
+     */
+    public static function setFilterParams($params = [], $filter) {
+        $params = [];
+
+        return $params;
+    }
+
+    /**
+     * $params getの値（並べ替えセレクト）
+     * $keyword 各テーブル　どのカラムから並べ替えを行うか
+     * 
+     */
+    public static function setSortingParams($params = [], $sorting = []) {
+        $params = [];
+
+        return $params;
+    }
+
+
+    /**
+     * 全レコード削除
+     */
+    public function deleteAll() {
+        $sql = 'TRUNCATE TABLE :table_name';
+    
+        $params = [':table_name' => $this ->table_name];
+        
+        Database::executeBySql($sql, $params);
+    }   
 }

@@ -3,8 +3,22 @@
 require_once(MODEL_DIR . '/Tables/Admin.php');
 
 function execute_action() {
+    //POSTの確認
     if (!Request::isPost()) {
         return View::render404();
+    }
+
+    Session::start();
+    // postされたトークンの取得
+    $token = Request::get('token');
+
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければindexへ戻る
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_accounts', 'index');
+        exit;
     }
     
     $name = Request::get('admin_name');
@@ -66,7 +80,7 @@ function execute_action() {
         
         //admin_idからデータを取得(全データ)
         $record = $classAdmin -> selectAdminId();
-        
+
         return View::render('edit', ['record' => $record, 'errors' => $errors]);
         exit;
     }
@@ -88,7 +102,6 @@ function execute_action() {
     //更新確認用データ取得(passwordを除く)
     $record = $classAdmin -> selectAdminName();
     
-    Session::start();
     //セッションから値を削除 unset($_SESSION['admin'])
     Session::remove('admin_name');
     //再度登録（念のためデータベースのデータを格納）

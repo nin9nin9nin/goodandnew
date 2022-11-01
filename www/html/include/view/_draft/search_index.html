@@ -1,523 +1,766 @@
 <!DOCTYPE html>
 <html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title></title>
-    <meta name="description" content="">
-    <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./images/favicon/site.webmanifest">
-    <link rel="mask-icon" href="./images/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./images/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./images/favicon/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="./images/favicon/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
-    <link href="../../../assets/css/user/style.css" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
+    />
+    <link href="../../../assets/css/user/style.css" rel="stylesheet" />
+  </head>
+  <body>
     <div id="page-header">
-        <header id="header">
-            <div class="openbtn1"><span></span><span></span><span></span></div>
-            <nav id="g-nav">
-                <div id="g-nav-list"><!--ナビの数が増えた場合縦スクロールするためのdiv※不要なら削除-->
-                    <div class="g-nav-content">
-                        <ul class="g-nav-list-main">
-                            <li>
-                                <div class="close-btn"></div>
-                                <div id="search-wrap">
-                                    <form role="search" method="get" id="searchform" action="">
-                                        <input type="text" value="" name="" id="search-text" placeholder="search">
-                                        <input type="submit" id="searchsubmit" value="">
-                                    </form>
-                                </div>
-                            </li>
-                            <li><a href="#">Top</a></li>  
-                            <li><a href="#">CONCEPT</a></li>
-                            <li><a href="#">GALLERY</a></li>
-                            <li><a href="#">MONTHLY POP UP</a></li>
-                            <li><a href="#">EVENT</a></li>
-                            <li><a href="#">SCHEDULE</a></li>
-                        </ul>
-                        <div class="g-nav-list-link">
-                            <ul class="link-icon-nav">
-                                <li class="icon-instagram"><a href="#" target=”_blank” rel="noopener noreferrer">instagram</a></li>  
-                                <li class="icon-twitter"><a href="#" target=”_blank” rel="noopener noreferrer">twitter</a></li>  
-                                <li class="icon-facebook"><a href="#" target=”_blank” rel="noopener noreferrer">facebook</a></li>  
-                                <li class="icon-youtube"><a href="#" target=”_blank” rel="noopener noreferrer">youtube</a></li>
-                                <li class="icon-line"><a href="#" target=”_blank” rel="noopener noreferrer">line</a></li>
-                            </ul>
-                        </div>
-                        <ul class="g-nav-list-sub">
-                            <li><a href="#">ログイン&middot;新規登録</a></li>  
-                            <li><a href="#">配送に関して</a></li>  
-                            <li><a href="#">ご利用ガイド</a></li>  
-                            <li><a href="#">プライバシーポリシー</a></li>
-                            <li><a href="#">特定商取引に関する表示</a></li>
-                            <li><a href="#">お問い合わせ</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <h1 class="logo">
-                <a href="index.php">
-                    <svg>
-                        <use xlink:href="../images/logo/logo.svg#logo"></use>
-                    </svg>
-                </a>
-            </h1>
-            <div id="header-icon">
-                <ul class="header-icon-btn">
-                    <li class="account">
-                        <a href="<?php echo url_for('accounts', 'index'); ?>">
-                            <svg>
-                                <use xlink:href="../../../assets/images/icon/account.svg#account"></use>
-                            </svg>
-                        </a>
-                        <ul class="child">
-                            <li>
-                                <div class="child-logout">
-                                    <form action="index.php" method="post">
-                                        <input type="submit" value="ログアウト">
-                                        <input type="hidden" name="module" value="users">
-                                        <input type="hidden" name="action" value="logout">
-                                    </form>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="favorite">
-                        <a href="<?php echo url_for('favorites', 'index'); ?>">
-                            <svg>
-                                <use xlink:href="../../../assets/images/icon/favorite.svg#favorite"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="shopping-cart">
-                        <a href="<?php echo url_for('carts', 'index'); ?>">
-                            <span class="cart-count">2</span>
-                            <svg>
-                                <use xlink:href="../../../assets/images/icon/shopping-cart.svg#shopping-cart"></use>
-                            </svg>
-                        </a>
-                    </li>
+      <header id="header">
+        <div class="openbtn1"><span></span><span></span><span></span></div>
+        <nav id="g-nav">
+          <div id="g-nav-list">
+            <!--ナビの数が増えた場合縦スクロールするためのdiv※不要なら削除-->
+            <div class="g-nav-content">
+              <ul class="g-nav-list-main">
+                <li>
+                  <div class="close-btn"></div>
+                  <div id="search-wrap">
+                    <form role="search" method="get" id="searchform" action="">
+                      <input
+                        type="text"
+                        value=""
+                        name=""
+                        id="search-text"
+                        placeholder="search"
+                      />
+                      <input type="submit" id="searchsubmit" value="" />
+                    </form>
+                  </div>
+                </li>
+                <li><a href="#">Top</a></li>
+                <li><a href="#">CONCEPT</a></li>
+                <li><a href="#">GALLERY</a></li>
+                <li><a href="#">MONTHLY POP UP</a></li>
+                <li><a href="#">EVENT</a></li>
+                <li><a href="#">SCHEDULE</a></li>
+              </ul>
+              <div class="g-nav-list-link">
+                <ul class="link-icon-nav">
+                  <li class="icon-instagram">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >instagram</a
+                    >
+                  </li>
+                  <li class="icon-twitter">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >twitter</a
+                    >
+                  </li>
+                  <li class="icon-facebook">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >facebook</a
+                    >
+                  </li>
+                  <li class="icon-youtube">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >youtube</a
+                    >
+                  </li>
+                  <li class="icon-line">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >line</a
+                    >
+                  </li>
                 </ul>
+              </div>
+              <ul class="g-nav-list-sub">
+                <li><a href="#">ログイン&middot;新規登録</a></li>
+                <li><a href="#">配送に関して</a></li>
+                <li><a href="#">ご利用ガイド</a></li>
+                <li><a href="#">プライバシーポリシー</a></li>
+                <li><a href="#">特定商取引に関する表示</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+              </ul>
             </div>
-        </header>
+          </div>
+        </nav>
+        <h1 class="logo">
+          <a href="index.php">
+            <svg>
+              <use xlink:href="../images/logo/logo.svg#logo"></use>
+            </svg>
+          </a>
+        </h1>
+        <div id="header-icon">
+          <ul class="header-icon-btn">
+            <li class="account">
+              <a href="<?php echo url_for('accounts', 'index'); ?>">
+                <svg>
+                  <use
+                    xlink:href="../../../assets/images/icon/account.svg#account"
+                  ></use>
+                </svg>
+              </a>
+              <ul class="child">
+                <li>
+                  <div class="child-logout">
+                    <form action="index.php" method="post">
+                      <input type="submit" value="ログアウト" />
+                      <input type="hidden" name="module" value="users" />
+                      <input type="hidden" name="action" value="logout" />
+                    </form>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="favorite">
+              <a href="<?php echo url_for('favorites', 'index'); ?>">
+                <svg>
+                  <use
+                    xlink:href="../../../assets/images/icon/favorite.svg#favorite"
+                  ></use>
+                </svg>
+              </a>
+            </li>
+            <li class="shopping-cart">
+              <a href="<?php echo url_for('carts', 'index'); ?>">
+                <span class="cart-count">2</span>
+                <svg>
+                  <use
+                    xlink:href="../../../assets/images/icon/shopping-cart.svg#shopping-cart"
+                  ></use>
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </header>
     </div>
     <div id="items" class="big-bg">
-        <nav class="page-nav wrapper">
-          <span>
-            <a href="index.php?module=items&action=monthly_pop_up&schedule_id=<?php print h($records[0]->schedule_id); ?>">MONTHLY&nbsp;POP&nbsp;UP</a>
-          </span>
-          <span>&gt;</span>
-          <span>
-            <a href="index.php?module=items&action=monthly_pop_up&schedule_id=<?php print h($records[0]->schedule_id); ?>">ITEMS</a>
-          </span>
-          <span>&gt;</span>
-        </nav><!-- / .page-nav -->
-        <div class="box fadeUpTrigger">
-            <section class="area" id="props">
-                <div class="props content">
-                    <div class="search-keyword">
-                        <div id="search-wrap-in-page">
-                            <form action="index.php" method="get" role="search" id="searchform">
-                                <input type="text" name="keyword" value="" id="search-text-in-page" placeholder="search">
-                                <input type="submit" id="searchsubmit" value="">
-                                <input type="hidden" name="module" value="admin_items">
-                                <input type="hidden" name="action" value="search">
-                            </form>
+      <nav class="page-nav wrapper">
+        <span>
+          <a
+            href="index.php?module=items&action=monthly_pop_up&schedule_id=<?php print h($records[0]->schedule_id); ?>"
+            >MONTHLY&nbsp;POP&nbsp;UP</a
+          >
+        </span>
+        <span>&gt;</span>
+        <span>
+          <a
+            href="index.php?module=items&action=monthly_pop_up&schedule_id=<?php print h($records[0]->schedule_id); ?>"
+            >ITEMS</a
+          >
+        </span>
+        <span>&gt;</span>
+      </nav>
+      <!-- / .page-nav -->
+      <div class="box fadeUpTrigger">
+        <section class="area" id="props">
+          <div class="props content">
+            <div class="search-keyword">
+              <div id="search-wrap-in-page">
+                <form
+                  action="index.php"
+                  method="get"
+                  role="search"
+                  id="searchform"
+                >
+                  <input
+                    type="text"
+                    name="keyword"
+                    value=""
+                    id="search-text-in-page"
+                    placeholder="search"
+                  />
+                  <input type="submit" id="searchsubmit" value="" />
+                  <input type="hidden" name="module" value="admin_items" />
+                  <input type="hidden" name="action" value="search" />
+                </form>
+              </div>
+            </div>
+            <!-- / .search-keyword -->
+            <div class="search-select">
+              <div class="select-list-filter">
+                <form action="index.php" method="get">
+                  <table>
+                    <tr>
+                      <th class="select-title">
+                        <label for="filter">カテゴリ</label>
+                      </th>
+                      <td class="select-name">
+                        <div class="select-wrap">
+                          <select
+                            id="filter"
+                            name="filter"
+                            ONCHANGE="submit(this.form)"
+                          >
+                            <option value="">選択してください</option>
+                            <option
+                              value="<?php print h($record->category_id); ?>"
+                            >
+                              カテゴリー名
+                            </option>
+                            <option
+                              value="<?php print h($record->category_id); ?>"
+                            >
+                              カテゴリー名
+                            </option>
+                            <option
+                              value="<?php print h($record->category_id); ?>"
+                            >
+                              カテゴリー名
+                            </option>
+                            <!--<optgroup label="東北地方">-->
+                            <!--    <option label="青森" value="aomori">青森</option>-->
+                            <!--    <option label="岩手" value="iwate">岩手</option>-->
+                            <!--    <option label="秋田" value="akita">秋田</option>-->
+                            <!--    <option label="宮城" value="miyagi">宮城</option>-->
+                            <!--    <option label="山形" value="yamagata">山形</option>-->
+                            <!--    <option label="福島" value="hukusima">福島</option>-->
+                            <!--</optgroup>-->
+                          </select>
                         </div>
-                    </div><!-- / .search-keyword -->
-                    <div class="select-list">
-                        <div class="select-list-category">
-                            <form action="index.php" method="get">
-                                <table>
-                                    <tr>
-                                        <th class="select-title">
-                                            <label for="category_id">カテゴリ</label>
-                                        </th>
-                                        <td class="select-name">
-                                            <div class="select-wrap">
-                                                <select id="category_id" name="category_id">
-                                                    <option value="">選択してください</option>
-                                                    <option value="<?php print h($record->category_id); ?>">カテゴリー名</option>
-                                                    <option value="<?php print h($record->category_id); ?>">カテゴリー名</option>
-                                                    <option value="<?php print h($record->category_id); ?>">カテゴリー名</option>
-                                                    <!--<optgroup label="東北地方">-->
-                                                    <!--    <option label="青森" value="aomori">青森</option>-->
-                                                    <!--    <option label="岩手" value="iwate">岩手</option>-->
-                                                    <!--    <option label="秋田" value="akita">秋田</option>-->
-                                                    <!--    <option label="宮城" value="miyagi">宮城</option>-->
-                                                    <!--    <option label="山形" value="yamagata">山形</option>-->
-                                                    <!--    <option label="福島" value="hukusima">福島</option>-->
-                                                    <!--</optgroup>-->
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <input type="hidden" name="module" value="items">
-                                <input type="hidden" name="action" value="search">
-                            </form>
+                      </td>
+                    </tr>
+                  </table>
+                  <input type="hidden" name="module" value="items" />
+                  <input type="hidden" name="action" value="search" />
+                </form>
+              </div>
+              <div class="select-list-sorting">
+                <form action="index.php" method="post">
+                  <table>
+                    <tr>
+                      <th class="select-title">
+                        <label for="sorting">並べ替え</label>
+                      </th>
+                      <td class="select-name">
+                        <div class="select-wrap">
+                          <select
+                            id="sorting"
+                            name="sorting"
+                            ONCHANGE="submit(this.form)"
+                          >
+                            <option value="">選択してください</option>
+                            <option value="id_desc">新着順</option>
+                            <option value="price_asc">価格の安い順</option>
+                            <option value="price_desc">価格の高い順</option>
+                          </select>
                         </div>
-                        <div class="select-list-keyword">
-                            <form action="index.php" method="post">
-                                <table>
-                                    <tr>
-                                        <th class="select-title">
-                                            <label for="keyword">並べ替え</label>
-                                        </th>
-                                        <td class="select-name">
-                                            <div class="select-wrap">
-                                                <select id="keyword" name="sorting">
-                                                    <option value="">選択してください</option>
-                                                    <option value="id_desc">新着順</option>
-                                                    <option value="price_asc">価格の安い順</option>
-                                                    <option value="price_desc">価格の高い順</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <input type="hidden" name="module" value="items">
-                                <input type="hidden" name="action" value="sorting">
-                            </form>
-                        </div>
-                    </div><!-- / .select-list -->
-                </div><!-- / .props .content -->
-            </section>
-        </div><!-- .box .fadeupTrigger #props-->
-        <div class="box fadeUpTrigger">
-            <section class="area" id="keyword-items">
-                <div class="section-title">&ndash;&thinsp;ITEMS&thinsp;&ndash;</div>
-                <div class="grid wrapper">
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="bgUD item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <span class="mask">
-                                    <img src="../../../assets/images/pexels-daria-shevtsova-880459.jpg" alt="商品画像">
-                                    <span class="cap">
-                                        <span class="cap-description">
-                                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-                                        </span>
-                                        <span class="cap-stock">在庫数：50</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="bgUD item-lead">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                <p class="sub-lead">brand_name</p>
-                                <p class="main-lead">item_name</p>
-                                <p class="mid-lead">&yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
-                            </a>
-                        </div>
-                    </div>
-                </div><!-- / .grid .items -->
-            </section>
-        </div><!-- .box .fadeupTrigger #keyword-items-->
-        <div class="box fadeUpTrigger">
-            <section class="area" id="basebutton">
-                <div class="basebutton wrapper">
-                    <a href="<?php echo url_for('items', 'index'); ?>">
-                        <span>アイテム一覧に戻る</span>
-                    </a>
-                </div>
-            </section>
-        </div><!-- /.box fadeUpTrigger #basebutton-->
-        <div class="box fadeUpTrigger">
-            <section class="area" id="f-nav">
-                <div class="f-nav-area">
-                    <div class="f-nav content">
-                        <div class="f-nav-list-link">
-                            <ul class="link-icon-nav">
-                                <li class="icon-instagram"><a href="#" target=”_blank” rel="noopener noreferrer">instagram</a></li>  
-                                <li class="icon-twitter"><a href="#" target=”_blank” rel="noopener noreferrer">twitter</a></li>  
-                                <li class="icon-facebook"><a href="#" target=”_blank” rel="noopener noreferrer">facebook</a></li>  
-                                <li class="icon-youtube"><a href="#" target=”_blank” rel="noopener noreferrer">youtube</a></li>
-                                <li class="icon-line"><a href="#" target=”_blank” rel="noopener noreferrer">line</a></li>
-                            </ul>
-                        </div>
-                        <ul class="f-nav-list-main">
-                            <li><a href="#">Top</a></li>  
-                            <li><a href="#">CONCEPT</a></li>  
-                            <li><a href="#">GALLERY</a></li>  
-                            <li><a href="#">MONTHLY POP UP</a></li>
-                            <li><a href="#">EVENT</a></li>
-                            <li><a href="#">SCHEDULE</a></li>
-                        </ul>
-                        <ul class="f-nav-list-sub">
-                            <li><a href="#">ログイン&middot;新規登録</a></li>  
-                            <li><a href="#">配送に関して</a></li>  
-                            <li><a href="#">ご利用ガイド</a></li>  
-                            <li><a href="#">プライバシーポリシー</a></li>
-                            <li><a href="#">特定商取引に関する表示</a></li>
-                            <li><a href="#">お問い合わせ</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div><!-- /.box fadeUpTrigger #f-nav-->
-    </div><!-- / #items .big-bg -->
+                      </td>
+                    </tr>
+                  </table>
+                  <input type="hidden" name="module" value="items" />
+                  <input type="hidden" name="action" value="sorting" />
+                </form>
+              </div>
+            </div>
+            <!-- / .select-list -->
+          </div>
+          <!-- / .props .content -->
+        </section>
+      </div>
+      <!-- .box .fadeupTrigger #props-->
+      <div class="box fadeUpTrigger">
+        <section class="area" id="keyword-items">
+          <div class="section-title">&ndash;&thinsp;ITEMS&thinsp;&ndash;</div>
+          <div class="grid wrapper">
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">
+                    item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+                  </p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">
+                    item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+                  </p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">
+                    item_nameqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+                  </p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_nameqqqqqqqqqqqqqqqqqqqqqqqq</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="bgUD item-img">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <span class="mask">
+                    <img
+                      src="../../../assets/images/pexels-daria-shevtsova-880459.jpg"
+                      alt="商品画像"
+                    />
+                    <span class="cap">
+                      <span class="cap-description">
+                        商品説明：テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
+                      </span>
+                      <span class="cap-stock">在庫数：50</span>
+                    </span>
+                  </span>
+                </a>
+              </div>
+              <div class="bgUD item-lead">
+                <a
+                  href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"
+                >
+                  <p class="sub-lead">brand_name</p>
+                  <p class="main-lead">item_name</p>
+                  <p class="mid-lead">
+                    &yen;10,000&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- / .grid .items -->
+        </section>
+      </div>
+      <!-- .box .fadeupTrigger #keyword-items-->
+      <div class="box fadeUpTrigger">
+        <section class="area" id="basebutton">
+          <div class="basebutton wrapper">
+            <a href="<?php echo url_for('items', 'index'); ?>">
+              <span>アイテム一覧に戻る</span>
+            </a>
+          </div>
+        </section>
+      </div>
+      <!-- /.box fadeUpTrigger #basebutton-->
+      <div class="box fadeUpTrigger">
+        <section class="area" id="f-nav">
+          <div class="f-nav-area">
+            <div class="f-nav content">
+              <div class="f-nav-list-link">
+                <ul class="link-icon-nav">
+                  <li class="icon-instagram">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >instagram</a
+                    >
+                  </li>
+                  <li class="icon-twitter">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >twitter</a
+                    >
+                  </li>
+                  <li class="icon-facebook">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >facebook</a
+                    >
+                  </li>
+                  <li class="icon-youtube">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >youtube</a
+                    >
+                  </li>
+                  <li class="icon-line">
+                    <a href="#" target="”_blank”" rel="noopener noreferrer"
+                      >line</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <ul class="f-nav-list-main">
+                <li><a href="#">Top</a></li>
+                <li><a href="#">CONCEPT</a></li>
+                <li><a href="#">GALLERY</a></li>
+                <li><a href="#">MONTHLY POP UP</a></li>
+                <li><a href="#">EVENT</a></li>
+                <li><a href="#">SCHEDULE</a></li>
+              </ul>
+              <ul class="f-nav-list-sub">
+                <li><a href="#">ログイン&middot;新規登録</a></li>
+                <li><a href="#">配送に関して</a></li>
+                <li><a href="#">ご利用ガイド</a></li>
+                <li><a href="#">プライバシーポリシー</a></li>
+                <li><a href="#">特定商取引に関する表示</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- /.box fadeUpTrigger #f-nav-->
+    </div>
+    <!-- / #items .big-bg -->
     <footer>
-        <p id="page-top"><a href="#"><span>Page Top</span></a></p>
-        <div class="wrapper">
-            <p><small>&copy;Copyright</small></p>
-        </div>
+      <p id="page-top">
+        <a href="#"><span>Page Top</span></a>
+      </p>
+      <div class="wrapper">
+        <p><small>&copy;Copyright</small></p>
+      </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
     <script src="../../../assets/js/user/common.js"></script>
-</body>
-
+  </body>
 </html>

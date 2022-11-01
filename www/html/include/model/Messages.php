@@ -67,6 +67,21 @@ class Messages extends Models {
     }
 
     /**
+     * イベントタグの取得
+     * echo h($record->getPriceInTax());
+     * return string
+     */
+    public function getEventTag() {
+        $event_tag = $this->event_tag;
+
+        if($event_tag === 0) {
+            return 'MONTHLY POP UP';
+        } else if ($event_tag === 1) {
+            return 'EVENT';
+        }
+    }
+
+    /**
      * descriptionの省略
      * 98文字以上は…
      */
@@ -104,6 +119,4 @@ class Messages extends Models {
         
         return number_format($total_amount);
     }
-    
-    
 }

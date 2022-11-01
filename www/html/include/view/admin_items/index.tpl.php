@@ -286,7 +286,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
   <script>
       let delete_form = document.getElementById('delete_form');
       delete_form.addEventListener('submit', (e) => {
-        if (!confirm('このメッセージデータを削除してもよろしいですか？')) {
+        if (!confirm('データを削除してもよろしいですか？')) {
           e.preventDefault();
           return;
         }
