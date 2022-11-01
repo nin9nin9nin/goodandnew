@@ -213,7 +213,7 @@ class Events {
             ':start_record' => $start_record,
         ];
 
-
+        array_merge($params, $searchParams);
         
         return Messages::findBySql($sql,$params); 
     }

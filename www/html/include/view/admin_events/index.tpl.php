@@ -157,7 +157,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
           <div class="search-input">
             <div class="keyword">
               <form action="dashboard.php" method="get" role="search" id="searchform">
-                  <input type="text" name="keyword" value="" id="search-text-in-page" placeholder="イベント名">
+                  <input type="text" name="keyword['event_id']" value="" id="search-text-in-page" placeholder="イベント名">
                   <input type="submit" id="searchsubmit" value="search">
                   <input type="hidden" name="module" value="admin_events">
                   <input type="hidden" name="action" value="search">
@@ -173,7 +173,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                             <label for="filter">カテゴリ</label>
                           </th>
                           <td class="select-name">
-                            <select id="filter" name="filter" ONCHANGE="submit(this.form)">
+                            <select id="filter" name="filter['event_tag']" ONCHANGE="submit(this.form)">
                                 <option value="">選択してください</option>
                                 <option value="0">ポップアップ</option>
                                 <option value="1">イベント</option>
@@ -193,7 +193,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                             <label for="sorting">並べ替え</label>
                           </th>
                           <td class="select-name">
-                            <select id="sorting" name="sorting" ONCHANGE="submit(this.form)">
+                            <select id="sorting" name="sorting[]" ONCHANGE="submit(this.form)">
                                 <option value="">選択してください</option>
                                 <option value="id_asc">昇順</option>
                                 <option value="name_asc">イベント名順</option>
