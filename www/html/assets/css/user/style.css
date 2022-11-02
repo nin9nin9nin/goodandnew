@@ -2235,22 +2235,22 @@ footer p {
 
 /* セレクト絞り込み
 --------------------------- */
-.select-list {
+.search-select {
   padding-bottom: 20px;
   text-align: center;
 }
 
-.select-list-category,
+.select-list-filter,
 .select-list-sorting {
   padding-top: 20px;
 }
 
-.select-list table {
+.search-select table {
   width: 80%;
   margin: 0 auto;
 }
 
-.select-list table tr {
+.search-select table tr {
   height: 2em;
   vertical-align: middle;
 }

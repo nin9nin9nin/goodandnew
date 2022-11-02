@@ -145,6 +145,38 @@ class Request {
     }
 
     /**
+     * $_FILES[] 複数ファイルの受け取り
+     */
+    public static function getMultipleFiles($name) {
+        //再格納とアップロードの確認を行う
+        return self::reArray($_FILES[$name]);
+    }
+
+    /**
+     * 複数ファイルの再格納（配列の再格納）
+     * ['name']['0'],['name']['1']/['type']['0']['type']['1']...から
+     * ['0']['name']['type'].../['0']['name']['type']...に再編成
+     */
+    public static function reArray($files) {
+        $re_files = [];//['0']['1']..を入れる配列
+        $file_count = count($files['tmp_name']);//ファイル数のカウント
+        $file_keys = array_keys($files);//keyの抽出['name']['type']etc
+        
+        //reArray処理 
+        for ($i=0; $i < $file_count; $i++) {
+            // $_FILES['img']['tmp_name']['0']から順にアップロードの確認
+            if (is_uploaded_file($files['tmp_name'][$i]) === true) {
+                //$re_files['0']に対してキーをループさせながら再格納
+                foreach ($file_keys as $key) {
+                    $re_files[$i][$key] = $files[$key][$i];
+                }
+
+            }
+        }
+        return $re_files;  
+    }
+
+    /**
      * statusの初期値の設定
      * 開発環境で生じた問題
      * MYSQLにカラムの形式の厳密なチェック

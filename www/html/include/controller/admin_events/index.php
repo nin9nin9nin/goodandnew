@@ -34,7 +34,6 @@ function execute_action() {
 
     //ページネーションに必要な値一式
     $paginations = $classEvents -> getPaginations();
-    var_dump($paginations);
 
     //index.tpl.phpにrecords,page_id,paginationsを渡す
     return View::render('index', ['records' => $records, 'paginations' => $paginations]);

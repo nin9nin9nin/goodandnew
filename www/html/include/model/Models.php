@@ -21,12 +21,12 @@ class Models {
         return Database::executeBySql($sql, $params);
     }
 
-    
+
+    // ファイルのアップデート機能の追加 -----------------------------------------------
     /**
-     * 画像のファイルアップロード
-     * $class_property 作成したファイル名(ユニーク)
-     * 
+     * ファイルのアップロード
      * アップロードできなければロールバック(コミットさせない)
+     * 
      */
     public static function uploadFiles($files = [], $to) {
         $tmp_name = $files['tmp_name'];
@@ -38,8 +38,8 @@ class Models {
             Database::rollback();
         }
     }
-
     
+    // ページネーション機能の追加 -----------------------------------------------
     /**
      * ページネーション作成
      * 配列で格納
@@ -149,50 +149,52 @@ class Models {
         }
     }
 
-    
+    // 検索機能の追加 -----------------------------------------------
     /**
-     * 検索機能の追加
+     * 追加するSQL文の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
+     * 
      */
     //入力された検索条件からSQl文を生成
-    public static function setSearchValue($params) {
-
-        if (array_key_exists('keyword', $params)) {
-            $searchSql = "name like '%{$params['keyword']}%'"; //キーワード検索
+    public static function setSearchSql($searchs = []) {
+        // keyの検索
+        if (!empty($searchs['keyword'])) {
+            $searchSql = 'WHERE :search_key LIKE :search_value ';
+        } else if (!empty($searchs['filter'])) {
+            $searchSql = 'WHERE :search_key = :search_value ';
+        } else if (!empty($searchs['sorting'])) {
+            $searchSql = self::setSortingSql($search, $sorting);
         }
-        $search = array_key($value);
 
-        //keyの値でwhere句の内容を変更
-        if($search === 'keyword'){
-            $searchSql = "name like '%{$value}%'"; //キーワード検索
-        } else if ($search === 'category_id') {
-            $searchSql = 'category_id = ' . $value; //カテゴリー指定
-        } else if ($search === 'sorting') {
-            if ($value === 'new_arrivals') {
-                $searchSql = 'ORDER BY create_datetime DESC'; //新着順
-            } else if ($value === 'expensive') {
-                $searchSql = 'ORDER BY price DESC'; //価格の高い順
-            } else if ($value === 'cheap') {
-                $searchSql = 'ORDER BY price ASC'; //価格の安い順
-            }
-        }
         return $searchSql;
     }
 
+
     /**
+     * 追加する$search(bindValue)の作成
+     * $search 入力された値
+     * $keyword,$filter,$sortingは各テーブルの値
      * 
      */
-    public static function getSearchItems($keyword, $category_id, $sorting, $default = '') {
-        $value = $default;
+    //入力された検索条件からSQl文を生成
+    public static function setSearchParams($searchs = []) {
 
-        if (isset($_REQUEST[$keyword]) === true) {
-            $value = $_REQUEST[$keyword];
-        } else if (isset($_REQUEST[$category_id]) === true){
-            $value = $_REQUEST[$category_id];
-        } else if (isset($_REQUEST[$sorting]) === true){
-            $value = $_REQUEST[$sorting];
-        } 
+        if (!empty($searchs['keyword'])) {
+            foreach ($searchs['keyword'] as $key => $value) {
+                $value = "%{$value}%"; //前後0文字以上検索
+                $searchParams = [':search_key' => $key, ':search_value' => $value,];
+            } 
+        } else if (!empty($searchs['filter'])) {
+            foreach ($searchs['filter'] as $key => $value) {
+                $value = (int)$value; //intに変換
+                $searchParams = [':search_key' => $key, ':search_value' => $value,];
+            }
+        } else if (!empty($searchs['sorting'])) {
+            $searchParams = self::setSortingParams($search, $search);
+        }
 
-        return $value;
+        return $searchParams;
     }
 
     /**

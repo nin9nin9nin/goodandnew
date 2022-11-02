@@ -28,7 +28,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
           <div class="message">
-            <p class="fade-massage"><?php echo $flash_message; ?></p>
+            <p class="fade-message"><?php echo $flash_message; ?></p>
           </div>
         <?php } ?>
       </div>
@@ -114,9 +114,10 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_img">画像：</label><span class="ninni">任意</span>
+                  <span class="multiple-files">※10枚まで可能</span>
                 </th>
                 <td>
-                  <input id="event_img" type="file" name="img[]" value="">
+                  <input id="event_img" type="file" multiple name="img[]" value="">
                 </td>
               </tr>
               <!--ステータス-->
@@ -157,7 +158,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
           <div class="search-input">
             <div class="keyword">
               <form action="dashboard.php" method="get" role="search" id="searchform">
-                  <input type="text" name="keyword" value="" id="search-text-in-page" placeholder="イベント名">
+                  <input type="text" name="search[keyword]" value="" id="search-text-in-page" placeholder="イベント名">
                   <input type="submit" id="searchsubmit" value="search">
                   <input type="hidden" name="module" value="admin_events">
                   <input type="hidden" name="action" value="search">
@@ -170,13 +171,13 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <table>
                       <tr>
                           <th class="select-title">
-                            <label for="event-tag">カテゴリ</label>
+                            <label for="filter">カテゴリ</label>
                           </th>
                           <td class="select-name">
-                            <select id="event-tag" name="event_tag" ONCHANGE="submit(this.form)">
+                            <select id="filter" name="search[filter]" ONCHANGE="submit(this.form)">
                                 <option value="">選択してください</option>
-                                <option value="0">ポップアップ</option>
-                                <option value="1">イベント</option>
+                                <option value="0">MONTHLY&nbsp;POP&nbsp;UP</option>
+                                <option value="1">EVENT</option>
                             </select>
                           </td>
                       </tr>
@@ -193,11 +194,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                             <label for="sorting">並べ替え</label>
                           </th>
                           <td class="select-name">
-                            <select id="sorting" name="sorting" ONCHANGE="submit(this.form)">
+                            <select id="sorting" name="search[sorting]" ONCHANGE="submit(this.form)">
                                 <option value="">選択してください</option>
-                                <option value="id_asc">昇順</option>
-                                <option value="name_asc">イベント名順</option>
-                                <option value="date_desc">開催日程順</option>
+                                <option value="">イベント名順</option>
+                                <option value="">昇順</option>
+                                <option value="">降順</option>
                             </select>
                           </td>
                       </tr>
@@ -289,7 +290,35 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    <?php include './include/view/_inc/admin/pagination.php'; ?>
+    <div id="paginations">
+      <div class="container">
+        <div class="paginations-text">
+            <p class="from_to"><?php print h($paginations['total_record']); ?>件中 <?php print h($paginations['from_record']); ?> - <?php print h($paginations['to_record']);?> 件目を表示</p>
+        </div>
+        <div class="paginations">
+            <!-- 戻る -->
+            <?php if ($paginations['page_id'] !== '1') { ?>
+                <a href="dashboard.php?module=admin_events&action=index&page_id=<?php print h($paginations['prev_page']); ?>" class="page_feed">&laquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&laquo;</span>
+            <?php } ?>
+            <!-- ページ番号の表示 -->
+            <?php foreach ($paginations['page_range'] as $num) { ?>
+                <?php if ($num == $paginations['page_id']) { ?>
+                    <span class="now_page_number"><?php print h($num); ?></span>
+                <?php } else { ?>
+                    <a href="dashboard.php?module=admin_events&action=index&page_id=<?php print h($num); ?>" class="page_number"><?php print h($num); ?></a>
+                <?php } ?>
+            <?php } ?>
+            <!-- 進む -->
+            <?php if($paginations['page_id'] < $paginations['page_total']) { ?>
+                <a href="dashboard.php?module=admin_events&action=index&page_id=<?php print h($paginations['next_page']); ?>" class="page_feed">&raquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&raquo;</span>
+            <?php } ?>
+        </div>
+      </div>
+    </div>
     <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   
