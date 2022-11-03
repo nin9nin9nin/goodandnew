@@ -8,8 +8,6 @@ function execute_action() {
     }
     //検索項目の取得(キーで判別する)
     $search = Request::get('search');
-    print '$search::';
-    var_dump($search);
     
     //ページIDの取得（なければ1が格納される）
     $page_id = Request::getPageId('page_id');
@@ -32,5 +30,5 @@ function execute_action() {
     $paginations = $classEvents -> getSearchPaginations($search);
 
     //index.tpl.phpにrecords,page_id,paginationsを渡す
-    return View::render('search', ['search' => $search, 'records' => $records, 'paginations' => $paginations]);
+    return View::render('index', ['records' => $records, 'paginations' => $paginations]);
 }

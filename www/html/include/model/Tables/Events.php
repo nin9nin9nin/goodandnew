@@ -5,9 +5,8 @@ require_once(MODEL_DIR . '/Messages.php');
 //events テーブル
 class Events {
     
-    public $table_name = 'events'; //count(*)するテーブル
-    public $display_record = '10'; //１ページの表示件数
     public $page_id; //ページ番号
+    public $display_record = 10; //１ページの表示件数
     public $event_id;
     public $event_name;
     public $description;
@@ -193,7 +192,7 @@ class Events {
      * SQL文
      * getで受け取った値からSQL文を作成
      * 
-     * WHERE, ORDER BYのカラムはテーブルによって異なる
+     * カラムはテーブルによって異なる(カラム名はbindできない)
      */
     public static function setSearchSql ($search = []) {
         // 指定したキーが配列にあるか調べる
@@ -201,10 +200,7 @@ class Events {
             $searchSql = 'WHERE event_name LIKE :search_value ';
         } else if (array_key_exists('filter', $search)) { //filterの場合
             $searchSql = 'WHERE event_tag = :search_value ';
-        } else if (array_key_exists('sorting', $search)) { //filterの場合
-            $searchSql = self::setSortingSql($search, $sorting);
-        }
-
+        } 
         return $searchSql;
     }
 
@@ -225,10 +221,7 @@ class Events {
                 $value = (int)$value; //intに変換
                 $searchParams = [':search_value' => $value,];
             }
-        } else if (array_key_exists('sorting', $search)) {
-            $searchParams = self::setSortingParams($search, $search);
         }
-
         return $searchParams;
     }
 
@@ -267,7 +260,8 @@ class Events {
     }
 
     /**
-     * 検索index
+     * 検索・絞り込み
+     * 
      */
     public function searchEvents($search = []) {
         // 1ページに表示する件数
@@ -276,34 +270,64 @@ class Events {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //ベースとなるSQL文を準備
-        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
-                   . 'FROM events ';
+        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
 
         //検索項目を確認　SQL文作成し結合代入
         $searchSql .= self::setSearchSql($search);
         
         //さらにページネーション用のSQL文を結合代入
-        $searchSql .= 'ORDER BY event_id DESC' . PHP_EOL 
-                    . 'LIMIT :display_record OFFSET :start_record';
+        $searchSql .= 'ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
         
         //検索項目を確認　bindする配列を作成
         $searchParams = self::setSearchParams($search);
         
         //searchParamsにページネーション用の配列追加
-        $searchParams += [
-            ':display_record' => $display_record,
-            ':start_record' => $start_record,
-        ];
-        print '$searchSql::';
-        var_dump($searchSql);
-        print '$searchParams::';
-        var_dump($searchParams);
-
+        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
 
         //検索・絞り込みに応じたレコードの取得
         return Messages::findBySql($searchSql,$searchParams); 
     }
-    
+
+    // sorting ------------------------------------------------------------------------
+    /**
+     * 0:イベント名順
+     * 1:昇順
+     * 2:降順
+     * 
+     */
+    public static function setSortingSql($sorting = []) {
+            if ($sorting === '0') {
+                $sortingSql = 'ORDER BY event_name ASC';
+            } else if ($sorting === '1') {
+                $sortingSql = 'ORDER BY event_id ASC';
+            } else if ($sorting === '2') {
+                $sortingSql = 'ORDER BY event_id DESC';
+            } 
+        $sortingSql .= ', event_id DESC LIMIT :display_record OFFSET :start_record';
+
+        return $sortingSql;
+    }
+
+    /**
+     * 並べ替え
+     */
+    public function sortingEvents($sorting = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
+        $sortingSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
+
+        //sortingのSQL文を結合代入
+        $sortingSql .= self::setSortingSql($sorting);
+
+        //sortingのbindはしない(直接SQL文に書き込む)
+        $params = [':display_record' => $display_record, ':start_record' => $start_record];
+
+        return Messages::findBySql($sortingSql,$params);
+    }
     // insert ------------------------------------------------------------------------
     /**
      * eventsテーブルに新規登録
@@ -440,8 +464,6 @@ class Events {
              . '    description = :description,' . PHP_EOL
              . '    event_date = :event_date,' . PHP_EOL
              . '    event_tag = :event_tag,' . PHP_EOL
-             . '    event_svg = :event_svg,' . PHP_EOL
-             . '    event_png = :event_png,' . PHP_EOL
              . '    status = :status,' . PHP_EOL
              . '    update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id' . PHP_EOL;
@@ -451,8 +473,6 @@ class Events {
             ':description' => $this->description,
             ':event_date' => $this->event_date,
             ':event_tag' => $this->event_tag,
-            ':event_svg' => $this->event_svg,
-            ':event_png' => $this->event_png,
             ':status' => $this->status,
             ':update_datetime' => $this->update_datetime,
             ':event_id' => $this->event_id,

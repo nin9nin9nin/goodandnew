@@ -142,8 +142,7 @@ a:hover {
 #update .container,
 #login .container,
 #accounts .container,
-#logout .container,
-#search .container {
+#logout .container {
   background-color: #fff;
   margin-bottom: 50px;
 }
@@ -332,7 +331,7 @@ form select {
   bottom: 0;
   left: 0;
   margin: auto;
-  object-fit: cover;
+  object-fit: contain;
 }
 .form-file .img-button {
   margin: 5px 0;
@@ -448,13 +447,13 @@ input[type="reset"]:hover {
 
 /* 検索・絞り込み・並べ替え 
 --------------------------------- */
-.search {
+.search-sorting {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 /* 検索窓 */
-.search-input {
+.input-area {
   width: 40%;
 }
 .keyword form {
@@ -469,19 +468,19 @@ input[type="reset"]:hover {
   padding: 8px;
 }
 /* 絞り込み・並べ替え */
-.search-select {
+.select-area {
   width: 55%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.search-select tr {
+.select-area tr {
   line-height: 3;
 }
-.search-select th {
+.select-area th {
   font-size: 12px;
 }
-.search-select select {
+.select-area select {
   font-size: 12px;
   padding: 5px 0;
   text-align: center;
@@ -547,8 +546,9 @@ input[type="reset"]:hover {
 .list-id {
   width: 50px;
 }
-/* .list-name {
-} */
+.list-group .list-name {
+  padding: 10px 20px;
+}
 .list-info {
   width: 100px;
 }
@@ -574,7 +574,7 @@ input[type="reset"]:hover {
 .list-name ul {
   margin-bottom: 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .list-name li {
   font-size: 0.5rem;

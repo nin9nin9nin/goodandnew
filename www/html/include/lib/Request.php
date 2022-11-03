@@ -69,7 +69,7 @@ class Request {
      * リクエストされたURLの情報を格納
      */
     //urlの制御を行う元の値（ホスト部分以降）
-    public static function getRequestUri() {
+    public static function getRequestUrl() {
         return $_SERVER['REQUEST_URI'];
     }
 
@@ -121,11 +121,12 @@ class Request {
      * なければ1ページ目という判定をする
      * 
      */
-    public static function getPageId($name, $default = '1') {
+    public static function getPageId($name, $default = 1) {
         $value = $default;
 
         if (isset($_REQUEST[$name]) === true) {
             $value = $_REQUEST[$name];
+            $value = (int)$value; //数値型に変換
         }
 
         return $value;
@@ -190,6 +191,23 @@ class Request {
         if (isset($_REQUEST[$name]) === true) {
             $value = $_REQUEST[$name];
         }
+
+        return $value;
+    }
+
+    /**
+     * search後のページリンクに使用
+     * 
+     */
+    public static function getUrl() {
+        //現在アクセスされているパスを取得（HOSTを除く)
+        $value = $_SERVER['REQUEST_URI'];
+        //頭のスラッシュを削除
+        $value = str_replace('/', '', $value);
+        //特定の文字以降を削除
+        if (strpos($value, '&page_id=') !== false) { //文字列が最初に現れた場所を見つける(なければfalse)
+            $value = strstr($value, '&page_id=', true); // 文字列が最初に現れる場所を見つけ終わりまでを切り取る(trueで切り取り)
+        } 
 
         return $value;
     }
