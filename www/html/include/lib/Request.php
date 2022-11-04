@@ -69,7 +69,7 @@ class Request {
      * リクエストされたURLの情報を格納
      */
     //urlの制御を行う元の値（ホスト部分以降）
-    public static function getRequestUri() {
+    public static function getRequestUrl() {
         return $_SERVER['REQUEST_URI'];
     }
 
@@ -121,11 +121,12 @@ class Request {
      * なければ1ページ目という判定をする
      * 
      */
-    public static function getPageId($name, $default = '1') {
+    public static function getPageId($name, $default = 1) {
         $value = $default;
 
         if (isset($_REQUEST[$name]) === true) {
             $value = $_REQUEST[$name];
+            $value = (int)$value; //数値型に変換
         }
 
         return $value;
@@ -145,6 +146,38 @@ class Request {
     }
 
     /**
+     * $_FILES[] 複数ファイルの受け取り
+     */
+    public static function getMultipleFiles($name) {
+        //再格納とアップロードの確認を行う
+        return self::reArray($_FILES[$name]);
+    }
+
+    /**
+     * 複数ファイルの再格納（配列の再格納）
+     * ['name']['0'],['name']['1']/['type']['0']['type']['1']...から
+     * ['0']['name']['type'].../['0']['name']['type']...に再編成
+     */
+    public static function reArray($files) {
+        $re_files = [];//['0']['1']..を入れる配列
+        $file_count = count($files['tmp_name']);//ファイル数のカウント
+        $file_keys = array_keys($files);//keyの抽出['name']['type']etc
+        
+        //reArray処理 
+        for ($i=0; $i < $file_count; $i++) {
+            // $_FILES['img']['tmp_name']['0']から順にアップロードの確認
+            if (is_uploaded_file($files['tmp_name'][$i]) === true) {
+                //$re_files['0']に対してキーをループさせながら再格納
+                foreach ($file_keys as $key) {
+                    $re_files[$i][$key] = $files[$key][$i];
+                }
+
+            }
+        }
+        return $re_files;  
+    }
+
+    /**
      * statusの初期値の設定
      * 開発環境で生じた問題
      * MYSQLにカラムの形式の厳密なチェック
@@ -158,6 +191,23 @@ class Request {
         if (isset($_REQUEST[$name]) === true) {
             $value = $_REQUEST[$name];
         }
+
+        return $value;
+    }
+
+    /**
+     * search後のページリンクに使用
+     * 
+     */
+    public static function getUrl() {
+        //現在アクセスされているパスを取得（HOSTを除く)
+        $value = $_SERVER['REQUEST_URI'];
+        //頭のスラッシュを削除
+        $value = str_replace('/', '', $value);
+        //特定の文字以降を削除
+        if (strpos($value, '&page_id=') !== false) { //文字列が最初に現れた場所を見つける(なければfalse)
+            $value = strstr($value, '&page_id=', true); // 文字列が最初に現れる場所を見つけ終わりまでを切り取る(trueで切り取り)
+        } 
 
         return $value;
     }

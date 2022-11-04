@@ -5,9 +5,8 @@ require_once(MODEL_DIR . '/Messages.php');
 //events テーブル
 class Events {
     
-    public $table_name = 'events'; //count(*)するテーブル
-    public $display_record = '10'; //１ページの表示件数
     public $page_id; //ページ番号
+    public $display_record = 10; //１ページの表示件数
     public $event_id;
     public $event_name;
     public $description;
@@ -114,19 +113,40 @@ class Events {
      * reArrayされたファイルのエラーチェック
      * 
      */
-    public function checkImgFileName($re_files = []) {
-        $img_names = [];//配列にしておく
+    public function checkMultipleFileName($re_files = []) {
+        $new_file_names = [];
         $file_dir = './include/images/events/img/';
         
         // is_uploaded_file($_FILES[] === true)であれば
         if (empty($re_files) !== true) {
             foreach ($re_files as $files) {
-
-                $img_names = Validator::checkFileName($files, $file_dir);
+                //順番にファイルのチェックを行うと同時にファイル名を生成
+                $new_file_names[] = Validator::checkFileName($files, $file_dir);
             }
         }
         //アップロード自体なければ空の配列を返す
-        return $img_names;
+        return $new_file_names;
+    }
+
+    /**
+     * 更新時のチェック
+     * 更新のあったファイルのみファイル名の生成
+     * 更新がなければ既存のファイル名を使用
+     */
+    public function checkUpdateFileName($files = [], $exists_file_names = []) {
+        $new_file_names = [];
+        $file_dir = './include/images/events/img/';
+        $file_count = count($files); //int(10)
+
+        for ($i=0; $i < $file_count; $i++) {
+            if (isset($files[$i]) === true) {
+                $new_file_names[$i] = Validator::checkFileName($files[$i], $file_dir);
+            } else {
+                $new_file_names[$i] = $exists_file_names[$i];
+            }
+        }
+        
+        return $new_file_names;//（ファイルがなければ空文字が代入される）
     }
 
     // index ------------------------------------------------------------------------
@@ -140,13 +160,13 @@ class Events {
         $sql ='SELECT COUNT(*) as cnt FROM events';
         
         // $params = [':table_name' => $this->table_name];
-    
+        
         $record = Messages::retrieveBySql($sql);
-
+        
         // カウントした数を返す
         return $record->cnt;
     }
-
+    
     /**
      * トータルレコードを取得し、ページネーションの値をセットして返す
      * return array
@@ -159,7 +179,7 @@ class Events {
         return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
         
     }
-
+    
     /**
      * テーブル一覧の取得
      * ページ表示分のみ取得(LIMIT/OFFSET)
@@ -169,13 +189,12 @@ class Events {
         $display_record = $this -> display_record;
         // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
         $start_record = ($this->page_id - 1) * $display_record;
-
+        
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
         $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
-             . 'FROM events' . PHP_EOL
-             . 'ORDER BY event_id DESC' . PHP_EOL 
-             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
-
+        . 'FROM events' . PHP_EOL
+        . 'ORDER BY event_id DESC' . PHP_EOL 
+        . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
         
         $params = [
             ':display_record' => $display_record,
@@ -185,39 +204,147 @@ class Events {
         return Messages::findBySql($sql,$params); 
     } 
 
+    // search ------------------------------------------------------------------------
     /**
-     * 検索フォーム
+     * SQL文
+     * getで受け取った値からSQL文を作成
+     * 
+     * カラムはテーブルによって異なる(カラム名はbindできない)
+     */
+    public static function setSearchSql ($search = []) {
+        // 指定したキーが配列にあるか調べる
+        if (array_key_exists('keyword', $search)) { // keywordの場合
+            $searchSql = 'WHERE event_name LIKE :search_value ';
+        } else if (array_key_exists('filter', $search)) { //filterの場合
+            $searchSql = 'WHERE event_tag = :search_value ';
+        } 
+        return $searchSql;
+    }
+
+    /**
+     * bindValue
+     * getで受け取った値からbindする配列を作成
+     * 
+     */
+    public static function setSearchParams ($search = []) {
+        // 指定したキーが配列にあるか調べる
+        if (array_key_exists('keyword', $search)) {
+            foreach ($search as $key => $value) {
+                $value = "%{$value}%"; //前後0文字以上検索
+                $searchParams = [':search_value' => $value,];
+            } 
+        } else if (array_key_exists('filter', $search)) {
+            foreach ($search as $key => $value) {
+                $value = (int)$value; //intに変換
+                $searchParams = [':search_value' => $value,];
+            }
+        }
+        return $searchParams;
+    }
+
+    /**
+     * 検索時のページネーション
+     * トータルレコード数の取得
+     * 
+     */
+    public static function getSearchRecord($search = []) {
+        // テーブルから全レコードの数をカウント
+        $searchSql ='SELECT COUNT(*) as cnt FROM events ';
+        //$sqlに結合代入
+        $searchSql .= self::setSearchSql($search);
+
+        //bindValue
+        $searchParams = self::setSearchParams($search);
+        
+        //トータルレコード数の取得
+        $record = Messages::retrieveBySql($searchSql, $searchParams);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+    
+    /**
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getSearchPaginations($search = []) {
+        //トータルレコードの取得
+        $total_record = self::getSearchRecord($search);
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+
+    /**
+     * 検索・絞り込み
+     * 
      */
     public function searchEvents($search = []) {
-        //検索項目の確認
-        $keyword = 'event_name';
-        $filter = 'event_tag';
-        $sorting = array('event_id', 'event_name');
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
 
-        $searchSql = Messages::setSearchSql($search, $keyword, $filter, $sorting);
-        $searchParams = Messages::setSearchParams($search, $keyword, $filter, $sorting);
+        //ベースとなるSQL文を準備
+        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
 
+        //検索項目を確認　SQL文作成し結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //さらにページネーション用のSQL文を結合代入
+        $searchSql .= 'ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
+        
+        //検索項目を確認　bindする配列を作成
+        $searchParams = self::setSearchParams($search);
+        
+        //searchParamsにページネーション用の配列追加
+        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
+
+        //検索・絞り込みに応じたレコードの取得
+        return Messages::findBySql($searchSql,$searchParams); 
+    }
+
+    // sorting ------------------------------------------------------------------------
+    /**
+     * 0:イベント名順
+     * 1:昇順
+     * 2:降順
+     * 
+     */
+    public static function setSortingSql($sorting = []) {
+            if ($sorting === '0') {
+                $sortingSql = 'ORDER BY event_name ASC';
+            } else if ($sorting === '1') {
+                $sortingSql = 'ORDER BY event_id ASC';
+            } else if ($sorting === '2') {
+                $sortingSql = 'ORDER BY event_id DESC';
+            } 
+        $sortingSql .= ', event_id DESC LIMIT :display_record OFFSET :start_record';
+
+        return $sortingSql;
+    }
+
+    /**
+     * 並べ替え
+     */
+    public function sortingEvents($sorting = []) {
         // 1ページに表示する件数
         $display_record = $this -> display_record;
         // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
         $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
-        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
-             . 'FROM events' . PHP_EOL
-             . 'ORDER BY event_id DESC' . PHP_EOL 
-             . 'LIMIT :display_record OFFSET :start_record'; //OFFSET １件目からの取得は[0]を指定、11件目からの取得は[10]まで除外
+        $sortingSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
 
-        $params = [
-            ':display_record' => $display_record,
-            ':start_record' => $start_record,
-        ];
+        //sortingのSQL文を結合代入
+        $sortingSql .= self::setSortingSql($sorting);
 
-        array_merge($params, $searchParams);
-        
-        return Messages::findBySql($sql,$params); 
+        //sortingのbindはしない(直接SQL文に書き込む)
+        $params = [':display_record' => $display_record, ':start_record' => $start_record];
+
+        return Messages::findBySql($sortingSql,$params);
     }
-    
     // insert ------------------------------------------------------------------------
     /**
      * eventsテーブルに新規登録
@@ -262,51 +389,68 @@ class Events {
     public function uploadFiles($files, $new_file_name) {
         $file_dir = './include/images/events/visual/';
         $to = $file_dir . $new_file_name;
-
+        
         if (empty($files) !== true) {
             Messages::uploadFiles($files, $to);
         }
     }
 
     /**
+     * 複数ファイルのファイル名プロパティ登録
+     */
+    public function registerMultipleFiles($new_file_names = []) {
+        $file_count = count($new_file_names); //配列の数をカウント
+
+        for ($i=0; $i<$file_count; $i++) {
+            //プロパティ名が1から始まるため変更
+            $no = $i+1;
+            //参照プロパティ
+            $property = 'img'.$no;
+            //プロパティに格納
+            $this -> $property = $new_file_names[$i];
+        }
+    }
+
+    /**
      * 複数ファイルのアップロード
      */
-    public function uploadImgFiles($re_files, $img_names) {
+    public function uploadMultipleFiles($re_files = [], $new_file_names = []) {
         $file_dir = './include/images/events/img/';
-        
+
         if (empty($re_files) !== true) {
             $file_count = count($re_files);
 
             for ($i=0; $i<$file_count; $i++) {
                 //
-                $to = $file_dir . $img_names[$i];
+                $to = $file_dir . $new_file_names[$i];
                 $files = $re_files[$i];
                 //エラーがあればロールバックを行う  
                 Messages::uploadFiles($files, $to);
             }
         }
     }
-    
+
     /**
-     * 複数ファイルのプロパティ登録
+     * 複数ファイルの更新(更新のあったファイルのみ)
+     * 
      */
-    public function registerImgFiles($img_names) {
-        $file_count = count($img_names); //配列の数をカウント
+    public function updateMultipleFiles($files = [], $new_file_names = []) {
+        $file_dir = './include/images/events/img/';
 
-        for ($i=0; $i<$file_count; $i++) {
-            //プロパティ名が1から始まるためi=1でスタート
-            $no = $i+1;
-            //参照プロパティ
-            $property = 'img' . $no;
+        if (empty($files) !== true) {
+            $file_count = count($files);
+            for ($i=0; $i<$file_count; $i++) {
+                //アップロードのあったファイルのみ処理を行う
+                if (isset($files[$i]) === true) {
+                    $to = $file_dir . $new_file_names[$i];
 
-            //オブジェクトの反復処理
-            foreach ($this as $key) {
-                if ($key === $property) {
-                    $key = $img_names[$i];
+                    //エラーがあればロールバックを行う  
+                    Messages::uploadFiles($files[$i], $to);
                 }
             }
         }
     }
+    
 
     // edit ------------------------------------------------------------------------
     /**
@@ -316,16 +460,13 @@ class Events {
      */
     public function editEvent() {
         $sql = 'SELECT event_id, event_name, description, event_date, event_tag,' . PHP_EOL
-             . '       COALESCE(event_svg,:null1) AS event_svg, COALESCE(event_png,:null2) AS event_png,' . PHP_EOL
+             . '       event_svg, event_png, img1,' . PHP_EOL
              . '       status, create_datetime, update_datetime' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
-        //NULLを未設定に代替   
         $params = [
             ':event_id' => $this->event_id, 
-            ':null1' => '未設定', 
-            ':null2' => '未設定'
         ];
         //1レコードのみ
         return Messages::retrieveBySql($sql,$params); 
@@ -336,7 +477,7 @@ class Events {
      * 
      */
     public function editEventImg() {
-        $sql = 'SELECT img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
@@ -383,19 +524,19 @@ class Events {
     /**
      * imgの更新
      */
-    public function updateEventImgs() 
+    public function updateEventImg() 
     {
         $sql = 'UPDATE events' . PHP_EOL
              . 'SET img1 = :img1,' . PHP_EOL
-             . '    img2 = :img2' . PHP_EOL
-             . '    img3 = :img3' . PHP_EOL
-             . '    img4 = :img4' . PHP_EOL
-             . '    img5 = :img5' . PHP_EOL
-             . '    img6 = :img6' . PHP_EOL
-             . '    img7 = :img7' . PHP_EOL
-             . '    img8 = :img8' . PHP_EOL
-             . '    img9 = :img9' . PHP_EOL
-             . '    img10 = :img10' . PHP_EOL
+             . '    img2 = :img2,' . PHP_EOL
+             . '    img3 = :img3,' . PHP_EOL
+             . '    img4 = :img4,' . PHP_EOL
+             . '    img5 = :img5,' . PHP_EOL
+             . '    img6 = :img6,' . PHP_EOL
+             . '    img7 = :img7,' . PHP_EOL
+             . '    img8 = :img8,' . PHP_EOL
+             . '    img9 = :img9,' . PHP_EOL
+             . '    img10 = :img10,' . PHP_EOL
              . '    update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id' . PHP_EOL;
         
@@ -420,7 +561,7 @@ class Events {
     /**
      * 指定レコードのステータス更新
      */
-    public function updateStatus() {
+    public function updateEventStatus() {
         $sql = 'UPDATE events' . PHP_EOL
              . 'SET status = :status, update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id';
@@ -449,6 +590,7 @@ class Events {
     
     // select ------------------------------------------------------------------------
     /**
+     * items
      * 商品管理に使用 static
      * 
      * select option用　テーブルの取得
@@ -485,7 +627,7 @@ class Events {
      * 
      */
     public function scheduleIndexPart() {
-        // 1ページに表示する件数
+        // 表示する件数
         $display_record = '5';
         // 配列の何番目から取得するか決定(OFFSET句)
         $start_record = ($this->page_id - 1) * $display_record;

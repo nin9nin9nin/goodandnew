@@ -23,6 +23,9 @@ function execute_action() {
 
     //ページIDの取得（なければ1が格納される）
     $page_id = Request::getPageId('page_id');
+    if (preg_match('/^\d+$/', $page_id) !== 1) {
+        return View::render404();
+    }
 
     // フォームの値を取得
     $name = Request::get('event_name');
@@ -31,9 +34,7 @@ function execute_action() {
     $event_tag = Request::get('event_tag');
     $event_svg = Request::getFiles('event_svg'); //初期値NULL
     $event_png = Request::getFiles('event_png'); //初期値NULL
-    $img = Request::getFiles('img'); //初期値NULL
-    $imgs = Messages::reArray($img); //再配列
-    var_dump($imgs);
+    $imgs = Request::getMultipleFiles('img'); //reArray処理済み
     $status = Request::getStatus('status'); //初期値設定0
     
     //クラス生成（初期化）
@@ -58,7 +59,7 @@ function execute_action() {
         //生成したファイル名の受け取り
         $svg_name = $classEvents -> checkFileName($event_svg);
         $png_name = $classEvents -> checkFileName($event_png);
-        $img_names = $classEvents -> checkImgFileName($imgs);
+        $img_names = $classEvents -> checkMultipleFileName($imgs);
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -89,8 +90,9 @@ function execute_action() {
         $classEvents -> create_datetime = $now_date;
         $classEvents -> event_svg = $svg_name;
         $classEvents -> event_png = $png_name;
+
         //複数ファイルのプロパティ登録
-        $classEvents -> registerImgFiles($img_names);
+        $classEvents -> registerMultipleFiles($img_names);
 
         //eventsテーブルに新規登録　executeBySql()
         $classEvents -> insertEvent();
@@ -98,7 +100,7 @@ function execute_action() {
         //画像のファイルアップロード（できなければrollback）
         $classEvents -> uploadFiles($event_svg, $svg_name);
         $classEvents -> uploadFiles($event_png, $png_name);
-        $classEvents -> uploadImgFiles($imgs, $img_names);
+        $classEvents -> uploadMultipleFiles($imgs, $img_names);
 
         Database::commit();
       
