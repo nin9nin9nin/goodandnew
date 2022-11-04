@@ -119,17 +119,34 @@ class Events {
         
         // is_uploaded_file($_FILES[] === true)であれば
         if (empty($re_files) !== true) {
-            $file_count = count($re_files);//ファイル数のカウント
-
-            for ($i=0; $i < $file_count; $i++) {
-                foreach ($re_files as $files) {
-                    //順番にファイルのチェックを行うと同時にファイル名を生成
-                    $new_file_names[$i] = Validator::checkFileName($files, $file_dir);
-                }
+            foreach ($re_files as $files) {
+                //順番にファイルのチェックを行うと同時にファイル名を生成
+                $new_file_names[] = Validator::checkFileName($files, $file_dir);
             }
         }
         //アップロード自体なければ空の配列を返す
         return $new_file_names;
+    }
+
+    /**
+     * 更新時のチェック
+     * 更新のあったファイルのみファイル名の生成
+     * 更新がなければ既存のファイル名を使用
+     */
+    public function checkUpdateFileName($files = [], $exists_file_names = []) {
+        $new_file_names = [];
+        $file_dir = './include/images/events/img/';
+        $file_count = count($files); //int(10)
+
+        for ($i=0; $i < $file_count; $i++) {
+            if (isset($files[$i]) === true) {
+                $new_file_names[$i] = Validator::checkFileName($files[$i], $file_dir);
+            } else {
+                $new_file_names[$i] = $exists_file_names[$i];
+            }
+        }
+        
+        return $new_file_names;//（ファイルがなければ空文字が代入される）
     }
 
     // index ------------------------------------------------------------------------
@@ -379,9 +396,25 @@ class Events {
     }
 
     /**
+     * 複数ファイルのファイル名プロパティ登録
+     */
+    public function registerMultipleFiles($new_file_names = []) {
+        $file_count = count($new_file_names); //配列の数をカウント
+
+        for ($i=0; $i<$file_count; $i++) {
+            //プロパティ名が1から始まるため変更
+            $no = $i+1;
+            //参照プロパティ
+            $property = 'img'.$no;
+            //プロパティに格納
+            $this -> $property = $new_file_names[$i];
+        }
+    }
+
+    /**
      * 複数ファイルのアップロード
      */
-    public function uploadMultipleFiles($re_files, $new_file_names = []) {
+    public function uploadMultipleFiles($re_files = [], $new_file_names = []) {
         $file_dir = './include/images/events/img/';
 
         if (empty($re_files) !== true) {
@@ -396,22 +429,28 @@ class Events {
             }
         }
     }
-    
-    /**
-     * 複数ファイルのプロパティ登録
-     */
-    public function registerMultipleFiles($new_file_names) {
-        $file_count = count($new_file_names); //配列の数をカウント
 
-        for ($i=0; $i<$file_count; $i++) {
-            //プロパティ名が1から始まるため変更
-            $no = $i+1;
-            //参照プロパティ
-            $property = 'img'.$no;
-            //プロパティに格納
-            $this -> $property = $new_file_names[$i];
+    /**
+     * 複数ファイルの更新(更新のあったファイルのみ)
+     * 
+     */
+    public function updateMultipleFiles($files = [], $new_file_names = []) {
+        $file_dir = './include/images/events/img/';
+
+        if (empty($files) !== true) {
+            $file_count = count($files);
+            for ($i=0; $i<$file_count; $i++) {
+                //アップロードのあったファイルのみ処理を行う
+                if (isset($files[$i]) === true) {
+                    $to = $file_dir . $new_file_names[$i];
+
+                    //エラーがあればロールバックを行う  
+                    Messages::uploadFiles($files[$i], $to);
+                }
+            }
         }
     }
+    
 
     // edit ------------------------------------------------------------------------
     /**
@@ -421,16 +460,13 @@ class Events {
      */
     public function editEvent() {
         $sql = 'SELECT event_id, event_name, description, event_date, event_tag,' . PHP_EOL
-             . '       COALESCE(event_svg,:null1) AS event_svg, COALESCE(event_png,:null2) AS event_png,' . PHP_EOL
+             . '       event_svg, event_png, img1,' . PHP_EOL
              . '       status, create_datetime, update_datetime' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
-        //NULLを未設定に代替   
         $params = [
             ':event_id' => $this->event_id, 
-            ':null1' => '未設定', 
-            ':null2' => '未設定'
         ];
         //1レコードのみ
         return Messages::retrieveBySql($sql,$params); 
@@ -441,7 +477,7 @@ class Events {
      * 
      */
     public function editEventImg() {
-        $sql = 'SELECT img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
@@ -464,6 +500,8 @@ class Events {
              . '    description = :description,' . PHP_EOL
              . '    event_date = :event_date,' . PHP_EOL
              . '    event_tag = :event_tag,' . PHP_EOL
+             . '    event_svg = :event_svg,' . PHP_EOL
+             . '    event_png = :event_png,' . PHP_EOL
              . '    status = :status,' . PHP_EOL
              . '    update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id' . PHP_EOL;
@@ -473,6 +511,8 @@ class Events {
             ':description' => $this->description,
             ':event_date' => $this->event_date,
             ':event_tag' => $this->event_tag,
+            ':event_svg' => $this->event_svg,
+            ':event_png' => $this->event_png,
             ':status' => $this->status,
             ':update_datetime' => $this->update_datetime,
             ':event_id' => $this->event_id,
@@ -484,19 +524,19 @@ class Events {
     /**
      * imgの更新
      */
-    public function updateEventImgs() 
+    public function updateEventImg() 
     {
         $sql = 'UPDATE events' . PHP_EOL
              . 'SET img1 = :img1,' . PHP_EOL
-             . '    img2 = :img2' . PHP_EOL
-             . '    img3 = :img3' . PHP_EOL
-             . '    img4 = :img4' . PHP_EOL
-             . '    img5 = :img5' . PHP_EOL
-             . '    img6 = :img6' . PHP_EOL
-             . '    img7 = :img7' . PHP_EOL
-             . '    img8 = :img8' . PHP_EOL
-             . '    img9 = :img9' . PHP_EOL
-             . '    img10 = :img10' . PHP_EOL
+             . '    img2 = :img2,' . PHP_EOL
+             . '    img3 = :img3,' . PHP_EOL
+             . '    img4 = :img4,' . PHP_EOL
+             . '    img5 = :img5,' . PHP_EOL
+             . '    img6 = :img6,' . PHP_EOL
+             . '    img7 = :img7,' . PHP_EOL
+             . '    img8 = :img8,' . PHP_EOL
+             . '    img9 = :img9,' . PHP_EOL
+             . '    img10 = :img10,' . PHP_EOL
              . '    update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id' . PHP_EOL;
         
@@ -521,7 +561,7 @@ class Events {
     /**
      * 指定レコードのステータス更新
      */
-    public function updateStatus() {
+    public function updateEventStatus() {
         $sql = 'UPDATE events' . PHP_EOL
              . 'SET status = :status, update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id';
@@ -550,6 +590,7 @@ class Events {
     
     // select ------------------------------------------------------------------------
     /**
+     * items
      * 商品管理に使用 static
      * 
      * select option用　テーブルの取得
@@ -586,7 +627,7 @@ class Events {
      * 
      */
     public function scheduleIndexPart() {
-        // 1ページに表示する件数
+        // 表示する件数
         $display_record = '5';
         // 配列の何番目から取得するか決定(OFFSET句)
         $start_record = ($this->page_id - 1) * $display_record;

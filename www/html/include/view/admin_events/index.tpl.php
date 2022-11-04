@@ -89,8 +89,8 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <select id="event_tag" name="event_tag">
-                    <option value="0">ポップアップ</option>
-                    <option value="1">イベント</option>
+                    <option value="0">MONTHLY&nbsp;POP&nbsp;UP</option>
+                    <option value="1">EVENT</option>
                   </select>
                 </td>
               </tr>
@@ -294,6 +294,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                       <input type="hidden" name="module" value="admin_events">
                       <input type="hidden" name="action" value="update_status">
                       <input type="hidden" name="event_id" value="<?php print h($record->event_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -301,10 +302,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <td>
                   <div class="list-delete">
                     <form action="dashboard.php" method="post" id="delete_form">
-                      <input type="submit" value="削除">
+                      <input type="submit" value="削除" onclick="return confirm('データを削除してもよろしいですか？')">
                       <input type="hidden" name="module" value="admin_events">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="event_id" value="<?php print h($record->event_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -359,15 +361,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
   </main>
   
   <?php include './include/view/_inc/admin/footer.php'; ?>
-  <script>
-      let delete_form = document.getElementById('delete_form');
-      delete_form.addEventListener('submit', (e) => {
-        if (!confirm('このメッセージデータを削除してもよろしいですか？')) {
-          e.preventDefault();
-          return;
-        }
-      });
-    </script>
 </body>
 
 </html>

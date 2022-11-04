@@ -98,8 +98,8 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <select id="event_tag" name="event_tag">
                     <option value="<?php print h($record -> event_tag); ?>"><?php print h($record -> getEventTag()); ?></option>
                     <option value="">選択してください</option>
-                    <option value="0">ポップアップ</option>
-                    <option value="1">イベント</option>
+                    <option value="0">MONTHLY&nbsp;POP&nbsp;UP</option>
+                    <option value="1">EVENT</option>
                   </select>
                 </td>
               </tr>
@@ -113,10 +113,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     <img src="<?php print h('./include/images/events/visual/' .$record->event_svg); ?>">
                   </div>
                   <div class="img-button">
-                    <a href="dashboard.php?module=admin_events&action=img_edit&event_id=<?php print h($record->event_id); ?>">
+                    <!-- <a href="dashboard.php?module=admin_events&action=edit_img&event_id=">
                       <input type="button" value="画像を変更する">
-                    </a>
-                    <!--<input id="file" type="file" name="icon_img" value="">-->
+                    </a> -->
+                    <input id="event_svg" type="file" name="event_svg" value="">
+                    <input id="event_svg" type="hidden" name="exists_svg" value="<?php print h($record->event_svg); ?>">
                   </div>
                 </td>
               </tr>
@@ -130,10 +131,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     <img src="<?php print h('./include/images/events/visual/' .$record->event_png); ?>">
                   </div>
                   <div class="img-button">
-                    <a href="dashboard.php?module=admin_events&action=img_edit&event_id=<?php print h($record->event_id); ?>">
+                    <!-- <a href="dashboard.php?module=admin_events&action=edit_img&event_id=">
                       <input type="button" value="画像を変更する">
-                    </a>
-                    <!--<input id="file" type="file" name="icon_img" value="">-->
+                    </a> -->
+                    <input id="event_png" type="file" name="event_png" value="">
+                    <input id="event_png" type="hidden" name="exists_png" value="<?php print h($record->event_png); ?>">
                   </div>
                 </td>
               </tr>
@@ -145,13 +147,13 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <div class="update-img">
-                    <img src="<?php print h('./include/images/events/visual/' .$record->img1); ?>">
+                    <img src="<?php print h('./include/images/events/img/' .$record->img1); ?>">
                   </div>
                   <div class="img-button">
-                    <a href="dashboard.php?module=admin_events&action=img_edit&event_id=<?php print h($record->event_id); ?>">
-                      <input type="button" value="画像を変更する">
+                    <a href="dashboard.php?module=admin_events&action=edit_img&event_id=<?php print h($record->event_id); ?>">
+                      <input type="button" value="全ての画像を確認する">
                     </a>
-                    <!--<input id="file" type="file" name="icon_img" value="">-->
+                    <!-- <input id="event_img" type="file" multiple name="img[]" value=""> -->
                   </div>
                 </td>
               </tr>
@@ -167,6 +169,24 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     </label>
                 </td>
               </tr>
+              <tr class="form-text">
+                <th>
+                  登録日時:
+                </th>
+                <td>
+                  <?php print h($record -> getCreateDateTime()); ?>
+                </td>
+              </tr>
+              <?php if(isset($record->update_datetime)) { ?>
+              <tr class="form-text">
+                <th>
+                  最終更新日時:
+                </th>
+                <td>
+                  <?php print h($record -> getUpdateDateTime()); ?>
+                </td>
+              </tr>
+              <?php } ?>
             </table>
               <!--submit+hidden-->
               <div class="form-buttonwrap">
