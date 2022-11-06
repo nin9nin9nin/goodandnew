@@ -68,15 +68,15 @@ CREATE TABLE  brands (
   primary key(brand_id)
 );
 
--- 商品
+-- アイテム
 CREATE TABLE items (
-  item_id int(11) NOT NULL COMMENT '商品ID' AUTO_INCREMENT,
-  item_name varchar(64) NOT NULL COMMENT '商品名' COLLATE utf8_general_ci,
+  item_id int(11) NOT NULL COMMENT 'アイテムID' AUTO_INCREMENT,
+  item_name varchar(64) NOT NULL COMMENT 'アイテム名' COLLATE utf8_general_ci,
   category_id int(11) NOT NULL default 0 COMMENT 'カテゴリーID',
   brand_id int(11) NOT NULL default 0 COMMENT 'ブランドID',
   event_id int(11) default 0 COMMENT 'イベントID',
   price int(11) NOT NULL COMMENT '値段',
-  description text COMMENT '商品説明' COLLATE utf8_general_ci,
+  description text COMMENT 'アイテム説明' COLLATE utf8_general_ci,
   icon_img varchar(128) NOT NULL COMMENT 'アイコン画像',
   img1 varchar(128) COMMENT '画像1',
   img2 varchar(128) COMMENT '画像2',
@@ -103,7 +103,7 @@ CREATE TABLE items (
 -- 在庫
 CREATE TABLE stocks (
   stock_id int(11) NOT NULL COMMENT '在庫ID' AUTO_INCREMENT,
-  item_id int(11) COMMENT '商品ID',
+  item_id int(11) COMMENT 'アイテムID',
   stock int(11) NOT NULL COMMENT '在庫数',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
@@ -129,7 +129,7 @@ CREATE TABLE users (
 CREATE TABLE favorites (
   favorite_id int(11) NOT NULL COMMENT 'お気に入りID' AUTO_INCREMENT,
   user_id int(11) COMMENT 'ユーザーID',
-  item_id int(11) COMMENT '商品ID',
+  item_id int(11) COMMENT 'アイテムID',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(favorite_id)
@@ -171,14 +171,14 @@ CREATE TABLE orders (
 -- 注文詳細
 CREATE TABLE order_detail (
   order_id int(11) NOT NULL COMMENT '注文ID',
-  item_id int(11) NOT NULL COMMENT '商品ID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
   quantity int(11) NOT NULL COMMENT '注文数',
   price int(11) NOT NULL COMMENT '注文時の値段',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(order_id,item_id)
 );
--- 集約　結果整合性を考慮し値段も含めた商品データを格納(item_idに外部制約キーは使用しない)
+-- 集約　結果整合性を考慮し値段も含めたアイテムデータを格納(item_idに外部制約キーは使用しない)
 
 -- カート
 CREATE TABLE carts (
@@ -194,7 +194,7 @@ CREATE TABLE carts (
 -- カート詳細
 CREATE TABLE cart_detail (
   cart_id int(11) NOT NULL COMMENT 'カートID',
-  item_id int(11) NOT NULL COMMENT '商品ID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
   quantity int(11) NOT NULL COMMENT '数量',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
@@ -210,6 +210,27 @@ CREATE TABLE dashboards (
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(dashboard_id)
+);
+
+-- トップページ（ショップ画面設定）
+CREATE TABLE shops (
+  shop_id int(11) NOT NULL COMMENT 'ID' AUTO_INCREMENT,
+  event_id int(11) NOT NULL COMMENT 'イベントID',
+  recommend_item1 int(11) COMMENT 'おすすめアイテム1（アイテムID)',
+  recommend_item2 int(11) COMMENT 'おすすめアイテム2（アイテムID)',
+  recommend_item3 int(11) COMMENT 'おすすめアイテム3（アイテムID)',
+  recommend_item4 int(11) COMMENT 'おすすめアイテム4（アイテムID)',
+  join_brand1 int(11) COMMENT '参加ブランド1（ブランドID）',
+  join_brand2 int(11) COMMENT '参加ブランド2（ブランドID）',
+  join_brand3 int(11) COMMENT '参加ブランド3（ブランドID）',
+  join_brand4 int(11) COMMENT '参加ブランド4（ブランドID）',
+  join_brand5 int(11) COMMENT '参加ブランド5（ブランドID）',
+  status int(11) NOT NULL default 0 COMMENT 'ステータス（0:非公開、1:公開）',
+  enabled boolean NOT NULL default true COMMENT '有効',
+  create_datetime DATETIME COMMENT 'レコードの作成日',
+  update_datetime DATETIME COMMENT 'レコードの更新日',
+  foreign key(event_id) references events (event_id),
+  primary key(shop_id)
 );
 
 

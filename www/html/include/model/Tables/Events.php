@@ -89,6 +89,23 @@ class Events {
     }
 
     /**
+     * イベントタグ　int(11)
+     * 
+     * Validatorがfalseの場合メッセージを入れて返す
+     * エラーがなければ何も返さない
+     * return CommonError::errorAdd
+     */
+    public function checkEventTag() {
+        Validator::paramClear();
+        
+        if (!Validator::checkInputempty($this->event_tag)) {
+            return CommonError::errorAdd('イベントタグを選択してください');
+        } else if (!Validator::checkNumeric($this->event_tag)) {
+            return CommonError::errorAdd('イベントタグが正しくありません');
+        }
+    }
+
+    /**
      * アップロードファイルのチェック (アップロードがなければNULL)
      * 拡張子の確認とファイル名(ユニーク)の確認     * 
      * file_dir 保存先フォルダ指定

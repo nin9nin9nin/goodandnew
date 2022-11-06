@@ -57,6 +57,7 @@ function execute_action() {
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classEvents -> checkEventName();
         $classEvents -> checkEventDate();
+        $classEvents -> checkEventTag();
         //ファイル名を生成するか既存のファイル名を使用するか判定
         if (isset($event_svg) === true) {
             $svg_name = $classEvents -> checkFileName($event_svg);//拡張子の確認

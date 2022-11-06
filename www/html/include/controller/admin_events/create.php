@@ -56,6 +56,7 @@ function execute_action() {
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classEvents -> checkEventName();
         $classEvents -> checkEventDate();
+        $classEvents -> checkEventTag();
         //生成したファイル名の受け取り
         $svg_name = $classEvents -> checkFileName($event_svg);
         $png_name = $classEvents -> checkFileName($event_png);

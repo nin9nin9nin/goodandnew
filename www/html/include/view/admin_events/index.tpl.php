@@ -1,7 +1,7 @@
 <?php
 $title = 'ec site 管理画面';
 $description = '説明（イベント管理ページ）';
-// $is_home = true; //トップページの判定用の変数
+$is_home = NULL; //トップページの判定(isset)
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $token = Session::getCsrfToken(); // トークンの取得
 $search = Request::get('search'); //検索・絞り込みの値
@@ -41,7 +41,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
       <div class="container">
         <!--create タイトル-->
         <div class="title">
-          <h2>新規イベント追加</h2>
+          <h2>新規イベント登録</h2>
         </div>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
@@ -85,10 +85,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               </tr>
               <tr class="form-select">
                 <th>
-                  <label for="event_tag">タグ：</label><span class="ninni">任意</span>
+                  <label for="event_tag">タグ：</label><span class="hissu">必須</span>
                 </th>
                 <td>
                   <select id="event_tag" name="event_tag">
+                    <option value="">選択してください</option>
                     <option value="0">MONTHLY&nbsp;POP&nbsp;UP</option>
                     <option value="1">EVENT</option>
                   </select>

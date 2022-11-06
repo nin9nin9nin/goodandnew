@@ -112,6 +112,21 @@ class Validator {
             return false;
         }
     }
+
+    /**
+     * 数字チェック
+     *
+     * @param string $arg チェックする値
+     * @return bool 数字のみの場合true、そうでなければfalse
+     */
+    public static function checkNumeric($arg)
+    {
+        if(self::checkString($arg) && preg_match('/^\d+$/', $arg)){
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     //メッセージを分けるため少し細かくする --------------
     /**
