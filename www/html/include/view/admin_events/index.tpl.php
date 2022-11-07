@@ -80,7 +80,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <label for="event_date">開催期間：</label><span class="hissu">必須</span>
                 </th>
                 <td>
-                  <input id="event_date" type="text" name="event_date" value="" placeholder="January 2022">
+                  <input id="event_date" type="text" name="event_date" value="" placeholder="January 2022 / February 1st - March 15th">
                 </td>
               </tr>
               <tr class="form-select">
@@ -107,7 +107,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <!--png画像-->
               <tr class="form-file">
                 <th>
-                  <label for="event_png">ビジュアル：</label><span class="ninni">任意</span>
+                  <label for="event_png">pngイラスト：</label><span class="ninni">任意</span>
                 </th>
                 <td>
                   <input id="event_png" type="file" name="event_png" value="">
@@ -117,7 +117,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_img">画像：</label><span class="ninni">任意</span>
-                  <span class="multiple-files">※10枚まで可能</span>
+                  <span class="multiple-files">※8枚まで可能</span>
                 </th>
                 <td>
                   <input id="event_img" type="file" multiple name="img[]" value="">
@@ -139,7 +139,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <!--submit+hidden-->
               <div class="form-buttonwrap">
                 <input type="reset" value="リセット">
-                <input type="submit" value="イベントを追加">
+                <input type="submit" value="イベント登録">
                 <input type="hidden" name="module" value="admin_events">
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="token" value="<?=h($token)?>">
@@ -148,7 +148,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    <!--在庫------------------------------------------------------------------------------------------------------------>
+    <!--イベント------------------------------------------------------------------------------------------------------------>
     <div id="list">
       <div class="container">
         
@@ -245,11 +245,9 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               </form>
             </div>
           </div>
-        </div>
-        
+        </div> 
         <!--list 一覧テーブル-->
         <div class="list-group">
-          
           <table>
             <caption>イベント一覧</caption>
             <thead>
@@ -360,7 +358,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
     </div>
     <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
-  
   <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 

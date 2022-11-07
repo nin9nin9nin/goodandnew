@@ -7,15 +7,31 @@ function execute_action() {
         return View::render404();
     }
     
-    $id = Request::get('category_id');
-    $name = Request::get('category_name');
-    $parent_id = Request::get('parent_id');
-    $status = Request::get('status');
+    // postされたトークンの取得
+    $token = Request::get('token');
     
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_events', 'index');
+        exit;
+    }
+    
+    //hidden
+    $id = Request::get('category_id');
+
     if (preg_match('/^\d+$/', $id) !== 1) {
         return View::render404();
     }
-    
+
+    //フォームの値を取得
+    $name = Request::get('category_name');
+    $parent_id = Request::get('parent_id');
+    $status = Request::getStatus('status');
+        
     //クラス生成（初期化）
     $classCategorys = new Categorys();
     
@@ -32,6 +48,7 @@ function execute_action() {
             
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classCategorys -> checkCategoryName();
+        $classCategorys -> checkParentCategory();
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -40,13 +57,10 @@ function execute_action() {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
         
-        //指定レコードの取得 retrieveBySql()
         $records[0] = $classCategorys -> editCategory();
+        $records['parents'] = $classCategorys->indexParentCategorys();
         
-        //parent_id select用 findBySql()
-        $records['parents'] = $classCategorys -> selectOption_Parents();
-        
-        //エラー追加
+        //エラーメッセージを表示
         return View::render('edit', ['records' => $records, 'errors' => $errors]);
         exit;
     }
@@ -60,6 +74,8 @@ function execute_action() {
     //データベース接続（update）
     $classCategorys -> updateCategory();
     
+    //フラッシュメッセージ
+    Session::setFlash('変更に成功しました');
     
     return View::redirectTo('admin_categorys', 'index');
     

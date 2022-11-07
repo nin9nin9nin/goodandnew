@@ -22,8 +22,6 @@ class Events {
     public $img6;
     public $img7;
     public $img8;
-    public $img9;
-    public $img10;
     public $status;
     public $create_datetime;
     public $update_datetime;
@@ -46,37 +44,33 @@ class Events {
         $this -> img6 = null;
         $this -> img7 = null;
         $this -> img8 = null;
-        $this -> img9 = null;
-        $this -> img10 = null;
         $this -> status = null;
         $this -> create_datetime = null;
         $this -> update_datetime = null;
     }
 
     /**
-     * イベント名　64文字
+     * イベント名　varchar(64)
+     * 入力確認と文字数確認
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
      */
     public function checkEventName() {
         Validator::paramClear();
         
         if (!Validator::checkInputempty($this->event_name)) {
-            return CommonError::errorAdd('商品名を入力してください');
+            return CommonError::errorAdd('イベント名を入力してください');
         } else if (!Validator::checkLength($this->event_name, 0, 64)) {
-            return CommonError::errorAdd('ブランド名は64文字以内で入力してください');
+            return CommonError::errorAdd('イベント名は64文字以内で入力してください');
         }
     }
 
     /**
-     * 開催期間　64文字
+     * 開催期間　varchar(64)
+     * 入力確認と文字数確認
      * 表示のためだけなので文字列として扱う
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
      */
     public function checkEventDate() {
         Validator::paramClear();
@@ -90,10 +84,9 @@ class Events {
 
     /**
      * イベントタグ　int(11)
+     * 入力確認と数字確認
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
      */
     public function checkEventTag() {
         Validator::paramClear();
@@ -168,14 +161,14 @@ class Events {
 
     // index ------------------------------------------------------------------------
     /**
-     * public $table_name プロパティから
      * 各テーブルのトータルレコード数を返す
-     * return $count['cnt']
+     * return $record['cnt']
      */
     public static function getTotalRecord() {
         // テーブルから全レコードの数をカウント
         $sql ='SELECT COUNT(*) as cnt FROM events';
         
+        //テーブル名はプレースホルダーに使用できない
         // $params = [':table_name' => $this->table_name];
         
         $record = Messages::retrieveBySql($sql);
@@ -231,9 +224,9 @@ class Events {
     public static function setSearchSql ($search = []) {
         // 指定したキーが配列にあるか調べる
         if (array_key_exists('keyword', $search)) { // keywordの場合
-            $searchSql = 'WHERE event_name LIKE :search_value ';
+            $searchSql = ' WHERE event_name LIKE :search_value';
         } else if (array_key_exists('filter', $search)) { //filterの場合
-            $searchSql = 'WHERE event_tag = :search_value ';
+            $searchSql = ' WHERE event_tag = :search_value';
         } 
         return $searchSql;
     }
@@ -266,7 +259,7 @@ class Events {
      */
     public static function getSearchRecord($search = []) {
         // テーブルから全レコードの数をカウント
-        $searchSql ='SELECT COUNT(*) as cnt FROM events ';
+        $searchSql ='SELECT COUNT(*) as cnt FROM events';
         //$sqlに結合代入
         $searchSql .= self::setSearchSql($search);
 
@@ -304,13 +297,13 @@ class Events {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //ベースとなるSQL文を準備
-        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
+        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events';
 
         //検索項目を確認　SQL文作成し結合代入
         $searchSql .= self::setSearchSql($search);
         
         //さらにページネーション用のSQL文を結合代入
-        $searchSql .= 'ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
+        $searchSql .= ' ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
         
         //検索項目を確認　bindする配列を作成
         $searchParams = self::setSearchParams($search);
@@ -330,13 +323,13 @@ class Events {
      * 
      */
     public static function setSortingSql($sorting = []) {
-            if ($sorting === '0') {
-                $sortingSql = 'ORDER BY event_name ASC';
-            } else if ($sorting === '1') {
-                $sortingSql = 'ORDER BY event_id ASC';
-            } else if ($sorting === '2') {
-                $sortingSql = 'ORDER BY event_id DESC';
-            } 
+        if ($sorting === '0') {
+            $sortingSql = ' ORDER BY event_name ASC';
+        } else if ($sorting === '1') {
+            $sortingSql = ' ORDER BY event_id ASC';
+        } else if ($sorting === '2') {
+            $sortingSql = ' ORDER BY event_id DESC';
+        } 
         $sortingSql .= ', event_id DESC LIMIT :display_record OFFSET :start_record';
 
         return $sortingSql;
@@ -352,7 +345,7 @@ class Events {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
-        $sortingSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events ';
+        $sortingSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events';
 
         //sortingのSQL文を結合代入
         $sortingSql .= self::setSortingSql($sorting);
@@ -362,6 +355,7 @@ class Events {
 
         return Messages::findBySql($sortingSql,$params);
     }
+
     // insert ------------------------------------------------------------------------
     /**
      * eventsテーブルに新規登録
@@ -370,10 +364,10 @@ class Events {
 
         $sql = 'INSERT INTO events' .PHP_EOL
              . '    (event_name, description, event_date, event_tag, event_svg, event_png,' .PHP_EOL
-             . '    img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, status, create_datetime)' .PHP_EOL
+             . '    img1, img2, img3, img4, img5, img6, img7, img8, status, create_datetime)' .PHP_EOL
              . 'VALUES' .PHP_EOL
              . '    (:event_name, :description, :event_date, :event_tag, :event_svg, :event_png,' .PHP_EOL
-             . '    :img1, :img2, :img3, :img4, :img5, :img6, :img7, :img8, :img9, :img10, :status, :create_datetime)';
+             . '    :img1, :img2, :img3, :img4, :img5, :img6, :img7, :img8, :status, :create_datetime)';
         
         $params = [
             ':event_name' => $this->event_name,
@@ -390,8 +384,6 @@ class Events {
             ':img6' => $this->img6,
             ':img7' => $this->img7,
             ':img8' => $this->img8,
-            ':img9' => $this->img9,
-            ':img10' => $this->img10,
             ':status' => $this->status,
             ':create_datetime' => $this->create_datetime,
         ];
@@ -472,8 +464,7 @@ class Events {
     // edit ------------------------------------------------------------------------
     /**
      * 指定レコードの取得
-     * 未設定表示あり
-     * img1~10を除く
+     * img2~10を除く
      */
     public function editEvent() {
         $sql = 'SELECT event_id, event_name, description, event_date, event_tag,' . PHP_EOL
@@ -494,7 +485,7 @@ class Events {
      * 
      */
     public function editEventImg() {
-        $sql = 'SELECT event_id, event_name, img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
@@ -552,8 +543,6 @@ class Events {
              . '    img6 = :img6,' . PHP_EOL
              . '    img7 = :img7,' . PHP_EOL
              . '    img8 = :img8,' . PHP_EOL
-             . '    img9 = :img9,' . PHP_EOL
-             . '    img10 = :img10,' . PHP_EOL
              . '    update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE event_id = :event_id' . PHP_EOL;
         
@@ -566,8 +555,6 @@ class Events {
             ':img6' => $this->img6,
             ':img7' => $this->img7,
             ':img8' => $this->img8,
-            ':img9' => $this->img9,
-            ':img10' => $this->img10,
             ':update_datetime' => $this->update_datetime,
             ':event_id' => $this->event_id,
         ];
@@ -627,7 +614,7 @@ class Events {
      */
     public function eventIndex() {
         $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png,' . PHP_EOL
-             . '       img1, img2, img3, img4, img5, img6, img7, img8, img9, img10' . PHP_EOL
+             . '       img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         

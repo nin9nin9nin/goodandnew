@@ -1,14 +1,17 @@
 <?php
 $title = 'ec site 管理画面';
 $description = '説明（カテゴリー管理ページ）';
-// $is_home = true; //トップページの判定用の変数
-$flash_message = Session::getFlash();
-include 'inc/admin/head.php'; // head.php の読み込み
+$is_home = NULL; //トップページの判定
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$token = Session::getCsrfToken(); // トークンの取得
+$search = Request::get('search'); //検索・絞り込みの値
+$sorting = Request::get('sorting'); //並べ替えの値
+$url = Request::getUrl(); //ページネーション用url
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -28,9 +31,18 @@ include 'inc/admin/head.php'; // head.php の読み込み
         <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
           <div class="message">
-            <p class="flash"><?php echo $flash_message; ?></p>
+            <p class="fade-message"><?php echo $flash_message; ?></p>
           </div>
         <?php } ?>
+      </div>
+    </div>
+    <!---登録----------------------------------------------------------------------------------------------------------->
+    <div id="create">
+      <div class="container">
+        <!--create タイトル-->
+        <div class="title">
+          <h2>カテゴリー登録</h2>
+        </div>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
         <div class="message">
@@ -43,18 +55,6 @@ include 'inc/admin/head.php'; // head.php の読み込み
           </ul>
         </div>
         <?php } ?>
-        
-      </div>
-    </div>
-    <!---登録----------------------------------------------------------------------------------------------------------->
-    <div id="create">
-      <div class="container">
-        
-        <!--create タイトル-->
-        <div class="title">
-          <h2>カテゴリー登録</h2>
-        </div>
-        
         <!--入力フォーム-->
         <div class="create-form">
           <form action="dashboard.php" method="post">
@@ -74,11 +74,10 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <td>
                   <select id="parent_id" name="parent_id">
                     <option value="">選択してください</option>
-                    <?php foreach ($records['categorys'] as $record) { ?>
+                    <?php foreach ($records['parents'] as $record) { ?>
                     <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_name)?></option>
                     <?php } ?>
                   </select>
-                  <small>例：書籍&raquo;1_ジャンル, 2021年12月&raquo;2_マンスリー&ensp;&hellip;</small>
                 </td>
               </tr>
               <!--ステータス-->
@@ -100,6 +99,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <input type="submit" value="カテゴリー登録">
               <input type="hidden" name="module" value="admin_categorys">
               <input type="hidden" name="action" value="create">
+              <input type="hidden" name="token" value="<?=h($token)?>">
             </div>
           </form>
         </div>
@@ -113,10 +113,87 @@ include 'inc/admin/head.php'; // head.php の読み込み
         <div class="title">
           <h2>カテゴリー情報</h2>
         </div>
-        
+        <!-- props -->
+        <div class="search-sorting">
+          <div class="input-area">
+            <div class="keyword">
+              <form action="dashboard.php" method="get" role="search" id="searchform">
+                <?php if (isset($search['keyword'])) { ?>
+                  <?php foreach ($search as $key => $value) { ?>
+                  <input type="text" name="search[keyword]" value="<?php print h($value); ?>" id="search-text-in-page" placeholder="カテゴリー名">
+                  <?php } ?>
+                <?php } else { ?>
+                  <input type="text" name="search[keyword]" value="" id="search-text-in-page" placeholder="カテゴリー名">
+                <?php } ?>
+                  <input type="submit" id="searchsubmit" value="search">
+                  <input type="hidden" name="module" value="admin_categorys">
+                  <input type="hidden" name="action" value="search">
+              </form>
+            </div>
+          </div>
+          <div class="select-area">
+            <div class="filter">
+              <form action="dashboard.php" method="get">
+                  <table>
+                      <tr>
+                          <th class="select-title">
+                            <label for="filter">親カテゴリ</label>
+                          </th>
+                          <td class="select-name">
+                            <select id="filter" name="search[filter]" ONCHANGE="submit(this.form)">
+                                <option value="">選択してください</option>
+                                <?php foreach ($records['parents'] as $record) { ?>
+                                <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_id) .':'. h($record->category_name)?></option>
+                                <?php } ?>
+                            </select>
+                          </td>
+                      </tr>
+                  </table>
+                  <input type="hidden" name="module" value="admin_categorys">
+                  <input type="hidden" name="action" value="search">
+              </form>
+            </div>
+            <div class="sorting">
+              <form action="dashboard.php" method="get">
+                  <table>
+                      <tr>
+                          <th class="select-title">
+                            <label for="sorting">並べ替え</label>
+                          </th>
+                          <td class="select-name">
+                            <select id="sorting" name="sorting" ONCHANGE="submit(this.form)">
+                              <?php if ($sorting !== '') { ?>
+                                <?php if ($sorting === '0') { ?>
+                                  <option value="0">カテゴリー名順</option>
+                                  <option value="1">昇順</option>
+                                  <option value="2">降順</option>
+                                <?php } else if ($sorting === '1') { ?>
+                                  <option value="1">昇順</option>
+                                  <option value="2">降順</option>
+                                  <option value="0">カテゴリー名順</option>
+                                <?php } else if ($sorting === '2') { ?>
+                                  <option value="2">降順</option>
+                                  <option value="0">カテゴリー名順</option>
+                                  <option value="1">昇順</option>
+                                <?php } ?>
+                              <?php } else { ?>
+                                <option value="">選択してください</option>
+                                <option value="0">カテゴリー名順</option>
+                                <option value="1">昇順</option>
+                                <option value="2">降順</option>
+                              <?php } ?>
+                            </select>
+                          </td>
+                      </tr>
+                  </table>
+                  <input type="hidden" name="module" value="admin_categorys">
+                  <input type="hidden" name="action" value="sorting">
+              </form>
+            </div>
+          </div>
+        </div>
         <!--list 一覧テーブル-->
         <div class="list-group">
-          
           <table>
             <caption>カテゴリー一覧</caption>
             <thead>
@@ -157,6 +234,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                       <input type="hidden" name="module" value="admin_categorys">
                       <input type="hidden" name="action" value="update_status">
                       <input type="hidden" name="category_id" value="<?php print h($record->category_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -164,10 +242,11 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <td>
                   <div class="list-delete">
                     <form action="dashboard.php" method="post" id="delete_form">
-                      <input type="submit" value="削除">
+                      <input type="submit" value="削除" onclick="return confirm('データを削除してもよろしいですか？')">
                       <input type="hidden" name="module" value="admin_categorys">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="category_id" value="<?php print h($record->category_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -187,45 +266,40 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <?php } ?>
           </table>
         </div>
-        
-        <!--<div class="alldelete">-->
-        <!--  <div class="form-buttonwrap">-->
-        <!--    <form action="dashboard.php" method="post">-->
-        <!--      <input type="submit" value="全てを削除する">-->
-        <!--      <input type="hidden" name="module" value="admin_categorys">-->
-        <!--      <input type="hidden" name="action" value="delete_all">-->
-        <!--      <input type="hidden" name="table" value="categorys">-->
-              <!--今は使用しない-->
-        <!--    </form>-->
-        <!--  </div>-->
-        <!--</div>-->
-        
+      </div>
     </div>
-    </div>
-    
-    <div id="home">
+    <div id="paginations">
       <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
+        <div class="paginations-text">
+            <p class="from_to"><?php print h($paginations['total_record']); ?>件中 <?php print h($paginations['from_record']); ?> - <?php print h($paginations['to_record']);?> 件目を表示</p>
+        </div>
+        <div class="paginations">
+            <!-- 戻る -->
+            <?php if ($paginations['page_id'] !== 1 ) { ?>
+                <a href="<?php print h($url); ?>&page_id=<?php print h($paginations['prev_page']); ?>" class="page_feed">&laquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&laquo;</span>
+            <?php } ?>
+            <!-- ページ番号の表示 -->
+            <?php foreach ($paginations['page_range'] as $num) { ?>
+                <?php if ($num !== $paginations['page_id']) { ?>
+                    <a href="<?php print h($url); ?>&page_id=<?php print h($num); ?>" class="page_number"><?php print h($num); ?></a>
+                <?php } else { ?>
+                    <span class="now_page_number"><?php print h($num); ?></span>
+                <?php } ?>
+            <?php } ?>
+            <!-- 進む -->
+            <?php if($paginations['page_id'] < $paginations['page_total']) { ?>
+                <a href="<?php print h($url); ?>&page_id=<?php print h($paginations['next_page']); ?>" class="page_feed">&raquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&raquo;</span>
+            <?php } ?>
         </div>
       </div>
     </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
-  
- <?php include 'inc/admin/footer.php'; ?>
- 
-  <script>
-    let delete_form = document.getElementById('delete_form');
-    delete_form.addEventListener('submit', (e) => {
-      if (!confirm('このメッセージデータを削除してもよろしいですか？')) {
-        e.preventDefault();
-        return;
-      }
-    });
-  </script>
+  <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 
 </html>

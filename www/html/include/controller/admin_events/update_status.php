@@ -1,4 +1,5 @@
 <?php
+
 require_once(MODEL_DIR . '/Tables/Events.php');
 
 function execute_action() {

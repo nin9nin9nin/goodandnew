@@ -28,8 +28,6 @@ CREATE TABLE  events (
   img6 varchar(128) COMMENT '画像6',
   img7 varchar(128) COMMENT '画像7',
   img8 varchar(128) COMMENT '画像8',
-  img9 varchar(128) COMMENT '画像9',
-  img10 varchar(128) COMMENT '画像10',
   status int(11) NOT NULL default 0 COMMENT 'ステータス（0:非公開、1:公開）',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
@@ -53,6 +51,14 @@ CREATE TABLE  brands (
   brand_name varchar(64) NOT NULL COMMENT 'ブランド名' COLLATE utf8_general_ci,
   description text COMMENT 'ブランド説明' COLLATE utf8_general_ci,
   brand_logo varchar(128) COMMENT 'ブランドロゴ',
+  img1 varchar(128) COMMENT '画像1',
+  img2 varchar(128) COMMENT '画像2',
+  img3 varchar(128) COMMENT '画像3',
+  img4 varchar(128) COMMENT '画像4',
+  img5 varchar(128) COMMENT '画像5',
+  img6 varchar(128) COMMENT '画像6',
+  img7 varchar(128) COMMENT '画像7',
+  img8 varchar(128) COMMENT '画像8',
   brand_hp text COMMENT 'ブランドHP' COLLATE utf8_general_ci,
   brand_instagram text COMMENT 'ブランドinstagram' COLLATE utf8_general_ci,
   brand_twitter text COMMENT 'ブランドtwitter' COLLATE utf8_general_ci,
@@ -86,8 +92,6 @@ CREATE TABLE items (
   img6 varchar(128) COMMENT '画像6',
   img7 varchar(128) COMMENT '画像7',
   img8 varchar(128) COMMENT '画像8',
-  img9 varchar(128) COMMENT '画像9',
-  img10 varchar(128) COMMENT '画像10',
   status int NOT NULL default 0 COMMENT 'ステータス（0:非公開、1:公開）',
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
@@ -167,6 +171,9 @@ CREATE TABLE orders (
   foreign key(customer_id) references customers (customer_id),
   primary key(order_id, customer_id)
 );
+ALTER TABLE orders ADD order_number int(11) NOT NULL unique COMMENT '注文番号';
+ALTER TABLE orders ADD total_quantity int(11) NOT NULL COMMENT '合計数量';
+ALTER TABLE orders ADD total_amount int(11) NOT NULL COMMENT '合計金額';
 
 -- 注文詳細
 CREATE TABLE order_detail (

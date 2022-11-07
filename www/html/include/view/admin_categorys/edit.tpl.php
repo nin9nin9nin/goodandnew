@@ -1,13 +1,15 @@
 <?php
 $title = 'ec site 管理画面';
 $description = '説明（カテゴリー編集ページ）';
-// $is_home = true; //トップページの判定用の変数
-include 'inc/admin/head.php'; // head.php の読み込み
+$is_home = NULL; //トップページの判定用の変数
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$token = Session::getCsrfToken(); // トークンの取得
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -27,18 +29,21 @@ include 'inc/admin/head.php'; // head.php の読み込み
         <div class="title">
           <h1>カテゴリー詳細</h1>
         </div>
-        
+        <!--フラッシュメッセージ-->
+        <?php if ($flash_message !== '') { ?>
+          <div class="message">
+            <p class="fade-message"><?php echo $flash_message; ?></p>
+          </div>
+        <?php } ?>
       </div>
     </div>
     <!---更新----------------------------------------------------------------------------------------------------------->
     <div id="update">
       <div class="container">
-        
         <!--update タイトル-->
         <div class="title">
           <h2>カテゴリー情報変更</h2>
         </div>
-        
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
           <ul class="errors">
@@ -49,7 +54,6 @@ include 'inc/admin/head.php'; // head.php の読み込み
           <?php } ?>
           </ul>
         <?php } ?>
-        
         <!--入力フォーム-->
         <div class="update-form">
           <form action="dashboard.php" method="post">
@@ -60,7 +64,6 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <span class="raw_data"><?php print h($records[0] -> category_id); ?></span>
-                <!--<input id="new_category_id" type="text" name="new_category_id" value="">-->
                 </td>
               </tr>
               <tr class="form-text">
@@ -78,13 +81,11 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <td>
                   <select name="parent_id">
                     <option value="<?php print h($records[0] -> parent_id); ?>"><?php print h($records[0] -> parent_name); ?></option>
-                    <!--<option value="">選択してください</option>-->
-                    <option value="0">未設定</option>
+                    <option value="">選択してください</option>
                     <?php foreach ($records['parents'] as $record) { ?>
                     <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_name)?></option>
                     <?php } ?>
                   </select>
-                  <small>例：書籍&raquo;1_ジャンル, 2021年12月&raquo;2_マンスリー&ensp;&hellip;</small>
                 </td>
               </tr>
               <!--ステータス-->
@@ -95,7 +96,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                     <label for="status" class="checkbox-label">
                       <span class="checkbox-span"></span>
                     </label>
-                    <div class="switch"></div>
+                    <!-- <div class="switch"></div> -->
                 </td>
               </tr>
             </table>
@@ -108,25 +109,16 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <input type="hidden" name="module" value="admin_categorys">
               <input type="hidden" name="action" value="update">
               <input type="hidden" name="category_id" value="<?php print h($records[0]->category_id); ?>">
+              <input type="hidden" name="token" value="<?=h($token)?>">
             </div>
           </form>
         </div>
       </div>
     </div>
-    <div id="home">
-      <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   
- <?php include 'inc/admin/footer.php'; ?>
-  
+ <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 
 </html>

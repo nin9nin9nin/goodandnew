@@ -1,4 +1,5 @@
 <?php
+
 require_once(MODEL_DIR . '/Tables/Events.php');
 
 function execute_action() {
@@ -35,8 +36,6 @@ function execute_action() {
     $imgs[] = Request::getFiles('img6'); 
     $imgs[] = Request::getFiles('img7'); 
     $imgs[] = Request::getFiles('img8'); 
-    $imgs[] = Request::getFiles('img9'); 
-    $imgs[] = Request::getFiles('img10'); 
 
     //アップロード自体がないものの「変更」ボタンを押された際の処理
     if (count(array_filter($imgs)) === 0 ) {
@@ -55,8 +54,6 @@ function execute_action() {
     $exists_img_names[] = Request::get('exists_img6');
     $exists_img_names[] = Request::get('exists_img7');
     $exists_img_names[] = Request::get('exists_img8');
-    $exists_img_names[] = Request::get('exists_img9');
-    $exists_img_names[] = Request::get('exists_img10');
     
     //クラス生成（初期化）
     $classEvents = new Events();
