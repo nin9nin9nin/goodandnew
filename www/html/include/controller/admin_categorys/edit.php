@@ -9,6 +9,10 @@ function execute_action() {
         return View::render404();
     }
     
+    Session::start();
+    //トークンの作成
+    Session::setCsrfToken();
+    
     //クラス生成（初期化）
     $classCategorys = new Categorys();
     
@@ -18,10 +22,8 @@ function execute_action() {
     //指定レコードの取得 retrieveBySql()
     $records[0] = $classCategorys -> editCategory();
     
-    //parent_id select用 findBySql()
-    $records['parents'] = $classCategorys -> selectOption_Parents();
+    //親カテゴリー取得
+    $records['parents'] = $classCategorys->indexParentCategorys();
     
-
     return View::render('edit', ['records' => $records]);
-    
 }

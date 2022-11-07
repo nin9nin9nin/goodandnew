@@ -1,7 +1,7 @@
 <?php
 $title = 'ec site 管理画面';
 $description = '説明（イベント編集ページ）';
-// $is_home = true; //トップページの判定用の変数
+$is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $token = Session::getCsrfToken(); // トークンの取得
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
@@ -40,7 +40,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
     <!---更新----------------------------------------------------------------------------------------------------------->
     <div id="update">
       <div class="container">
-        <!--create タイトル-->
+        <!--update タイトル-->
         <div class="title">
           <h2>イベント情報変更</h2>
         </div>
@@ -68,7 +68,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="event_name">名前：</label>
+                  <label for="event_name">イベント名：</label>
                 </th>
                 <td>
                   <input id="event_name" type="text" name="event_name" value="<?php print h($record -> event_name); ?>">
@@ -87,7 +87,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <label for="event_date">開催期間：</label>
                 </th>
                 <td>
-                  <input id="event_date" type="text" name="event_date" value="<?php print h($record -> event_date); ?>" placeholder="January 2022">
+                  <input id="event_date" type="text" name="event_date" value="<?php print h($record -> event_date); ?>" placeholder="January 2022 / February 1st - March 15th">
                 </td>
               </tr>
               <tr class="form-select">
@@ -124,7 +124,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <!--png画像-->
               <tr class="form-file">
                 <th>
-                  <label for="event_png">ビジュアル：</label>
+                  <label for="event_png">pngイラスト：</label>
                 </th>
                 <td>
                   <div class="update-img">
@@ -143,7 +143,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_img">画像：</label>
-                  <span class="multiple-files">※10枚まで可能</span>
+                  <span class="multiple-files">※8枚まで可能</span>
                 </th>
                 <td>
                   <div class="update-img">

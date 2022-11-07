@@ -7,7 +7,20 @@ function execute_action() {
         return View::render404();
     }
     
-    $status = Request::get('status');
+    // postされたトークンの取得
+    $token = Request::get('token');
+    
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_categorys', 'index');
+        exit;
+    }
+
+    $status = Request::getStatus('status');
     $id = Request::get('category_id');
     
     if (preg_match('/^\d+$/', $id) !== 1) {
@@ -22,16 +35,15 @@ function execute_action() {
     $classCategorys -> status = $status;
     
     //更新処理 -----------------------------------------------------
-    
     $now_date = date('Y-m-d H:i:s');
     
     $classCategorys -> update_datetime = $now_date;
     
-    //データベース接続（update）
-    $classCategorys -> updateStatus();
+    //指定レコードのステータスを更新
+    $classCategorys -> updateCategoryStatus();
     
     //フラッシュメッセージをセット
-    Session::getInstance() -> setFlash('ステータスを更新しました');
+    Session::setFlash('ID' . h($id) .'のステータスを更新しました');    
     
     return View::redirectTo('admin_categorys', 'index');
 }

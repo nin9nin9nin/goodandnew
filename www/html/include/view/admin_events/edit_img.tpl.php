@@ -198,36 +198,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                 </td>
               </tr>
-              <!--画像9-->
-              <tr class="form-file">
-                <th>
-                  <label for="img9">画像9：</label>
-                </th>
-                <td>
-                  <div class="update-img">
-                    <img src="<?php print h('./include/images/events/img/' .$record->img9); ?>">
-                  </div>
-                  <div class="img-button">
-                    <input id="img9" type="file" name="img9" value="">
-                    <input id="img9" type="hidden" name="exists_img9" value="<?php print h($record->img9); ?>">
-                  </div>
-                </td>
-              </tr>
-              <!--画像10-->
-              <tr class="form-file">
-                <th>
-                  <label for="img10">画像10：</label>
-                </th>
-                <td>
-                  <div class="update-img">
-                    <img src="<?php print h('./include/images/events/img/' .$record->img10); ?>">
-                  </div>
-                  <div class="img-button">
-                    <input id="img10" type="file" name="img10" value="">
-                    <input id="img10" type="hidden" name="exists_img10" value="<?php print h($record->img10); ?>">
-                  </div>
-                </td>
-              </tr>
             </table>
               <!--submit+hidden-->
               <div class="form-buttonwrap">
