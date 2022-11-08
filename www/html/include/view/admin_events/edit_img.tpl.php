@@ -1,7 +1,7 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（イベント画像編集ページ）';
-// $is_home = true; //トップページの判定用の変数
+$is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $token = Session::getCsrfToken(); // トークンの取得
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
@@ -89,7 +89,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img1" type="file" name="img1" value="">
-                    <input id="img1" type="hidden" name="exists_img1" value="<?php print h($record->img1); ?>">
+                    <input id="exists_img1" type="hidden" name="exists_img1" value="<?php print h($record->img1); ?>">
                   </div>
                 </td>
               </tr>
@@ -104,7 +104,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img2" type="file" name="img2" value="">
-                    <input id="img2" type="hidden" name="exists_img2" value="<?php print h($record->img2); ?>">
+                    <input id="exists_img2" type="hidden" name="exists_img2" value="<?php print h($record->img2); ?>">
                   </div>
                 </td>
               </tr>
@@ -119,7 +119,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img3" type="file" name="img3" value="">
-                    <input id="img3" type="hidden" name="exists_img3" value="<?php print h($record->img3); ?>">
+                    <input id="exists_img3" type="hidden" name="exists_img3" value="<?php print h($record->img3); ?>">
                   </div>
                 </td>
               </tr>
@@ -134,7 +134,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img4" type="file" name="img4" value="">
-                    <input id="img4" type="hidden" name="exists_img4" value="<?php print h($record->img4); ?>">
+                    <input id="exists_img4" type="hidden" name="exists_img4" value="<?php print h($record->img4); ?>">
                   </div>
                 </td>
               </tr>
@@ -149,7 +149,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img5" type="file" name="img5" value="">
-                    <input id="img5" type="hidden" name="exists_img5" value="<?php print h($record->img5); ?>">
+                    <input id="exists_img5" type="hidden" name="exists_img5" value="<?php print h($record->img5); ?>">
                   </div>
                 </td>
               </tr>
@@ -164,7 +164,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img6" type="file" name="img6" value="">
-                    <input id="img6" type="hidden" name="exists_img6" value="<?php print h($record->img6); ?>">
+                    <input id="exists_img6" type="hidden" name="exists_img6" value="<?php print h($record->img6); ?>">
                   </div>
                 </td>
               </tr>
@@ -179,7 +179,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img7" type="file" name="img7" value="">
-                    <input id="img7" type="hidden" name="exists_img7" value="<?php print h($record->img7); ?>">
+                    <input id="exists_img7" type="hidden" name="exists_img7" value="<?php print h($record->img7); ?>">
                   </div>
                 </td>
               </tr>
@@ -194,7 +194,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   </div>
                   <div class="img-button">
                     <input id="img8" type="file" name="img8" value="">
-                    <input id="img8" type="hidden" name="exists_img8" value="<?php print h($record->img8); ?>">
+                    <input id="exists_img8" type="hidden" name="exists_img8" value="<?php print h($record->img8); ?>">
                   </div>
                 </td>
               </tr>

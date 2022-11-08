@@ -1,14 +1,17 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（ブランド管理ページ）';
-// $is_home = true; //トップページの判定用の変数
-$flash_message = Session::getFlash();
-include 'inc/admin/head.php'; // head.php の読み込み
+$is_home = NULL; //トップページの判定(isset)
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$token = Session::getCsrfToken(); // トークンの取得
+$search = Request::get('search'); //検索・絞り込みの値
+$sorting = Request::get('sorting'); //並べ替えの値
+$url = Request::getUrl(); //ページネーション用url
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -26,11 +29,21 @@ include 'inc/admin/head.php'; // head.php の読み込み
           <h1>ブランド管理</h1>
         </div>
         <!--フラッシュメッセージ-->
+        <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
           <div class="message">
-            <p class="flash"><?php echo $flash_message; ?></p>
+            <p class="fade-message"><?php echo $flash_message; ?></p>
           </div>
         <?php } ?>
+      </div>
+    </div>
+    <!---登録----------------------------------------------------------------------------------------------------------->
+    <div id="create">
+      <div class="container">
+        <!--create タイトル-->
+        <div class="title">
+          <h2>新規ブランド登録</h2>
+        </div>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
         <div class="message">
@@ -43,20 +56,9 @@ include 'inc/admin/head.php'; // head.php の読み込み
           </ul>
         </div>
         <?php } ?>
-      </div>
-    </div>
-    <!---登録----------------------------------------------------------------------------------------------------------->
-    <div id="create">
-      <div class="container">
-        
-        <!--create タイトル-->
-        <div class="title">
-          <h2>ブランド登録</h2>
-        </div>
-        
         <!--入力フォーム-->
         <div class="create-form">
-          <form action="dashboard.php" method="post">
+          <form action="dashboard.php" method="post" enctype="multipart/form-data">
             <table class="create-form table">
               <tr class="form-text">
                 <th>
@@ -64,20 +66,6 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 </th>
                 <td>
                   <input id="brand_name" type="text" name="brand_name" value="">
-                </td>
-              </tr>
-              <tr class="form-select">
-                <th>
-                  <label for="category_id">マンスリー：</label><span class="ninni">任意</span>
-                </th>
-                <td>
-                  <select id="category_id" name="category_id">
-                    <!--<option value="">選択してください</option>-->
-                    <option value="0">未設定</option>
-                    <?php foreach ($records['categorys'] as $record) { ?>
-                    <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_name)?></option>
-                    <?php } ?>
-                  </select>
                 </td>
               </tr>
               <tr class="form-text">
@@ -88,44 +76,72 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <textarea id="description" name="description" value="" rows="10" cols="60" placeholder="テキストを入力"></textarea>
                 </td>
               </tr>
+              <!--ブランドロゴ-->
+              <tr class="form-file">
+                <th>
+                  <label for="brand_logo">ブランドロゴ：</label><span class="ninni">任意</span>
+                  <span class="files-addition">ファイル形式&nbsp;png</span>
+                </th>
+                <td>
+                  <input id="brand_logo" type="file" name="brand_logo" value="">
+                </td>
+              </tr>
+              <!--画像-->
+              <tr class="form-file">
+                <th>
+                  <label for="brand_img">画像：</label><span class="ninni">任意</span>
+                  <span class="files-addition">ファイル形式&nbsp;jpeg&nbsp;※8枚まで可能</span>
+                </th>
+                <td>
+                  <input id="brand_img" type="file" multiple name="img[]" value="">
+                </td>
+              </tr>
               <tr class="form-text">
                 <th>
                   <label for="brand_hp">ブランドHP：</label><span class="ninni">任意</span>
                 </th>
                 <td>
-                  <input id="brand_hp" type="url" name="brand_hp" value="" placeholder="http://www.○○○.com">
+                  <input id="brand_hp" type="url" name="brand_hp" value="" placeholder="https://www.○○○.com">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link1">ブランドLINK：</label>
+                  <label for="brand_instagram">Instagram：</label>
                 </th>
                 <td>
-                  <input id="brand_link1" type="url" name="brand_link1" value="" placeholder="https://www.instagram.com/...">
+                  <input id="brand_instagram" type="url" name="brand_instagram" value="" placeholder="https://www.instagram.com/...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link2">ブランドLINK：</label>
+                  <label for="brand_twitter">Twitter：</label>
                 </th>
                 <td>
-                  <input id="brand_link2" type="url" name="brand_link2" value="" placeholder="https://www.facebook.com/...">
+                  <input id="brand_twitter" type="url" name="brand_twitter" value="" placeholder="https://www.twitter.com/...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link3">ブランドLINK：</label>
+                  <label for="brand_facebook">Facebook：</label>
                 </th>
                 <td>
-                  <input id="brand_link3" type="url" name="brand_link3" value="" placeholder="https://www.twitter.com/ ...">
+                  <input id="brand_facebook" type="url" name="brand_facebook" value="" placeholder="https://www.facebook.com/ ...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link4">ブランドLINK：</label>
+                  <label for="brand_youtube">Youtube：</label>
                 </th>
                 <td>
-                  <input id="brand_link4" type="url" name="brand_link4" value="" placeholder="https://www.youtube.com/ ...">
+                  <input id="brand_youtube" type="url" name="brand_youtube" value="" placeholder="https://www.youtube.com/ ...">
+                </td>
+              </tr>
+              <tr class="form-text">
+                <th>
+                  <label for="brand_line">LINE：</label>
+                </th>
+                <td>
+                  <input id="brand_line" type="url" name="brand_line" value="" placeholder="https://line.me/ ...">
                 </td>
               </tr>
               <tr class="form-text">
@@ -171,6 +187,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <input type="submit" value="ブランド登録">
               <input type="hidden" name="module" value="admin_brands">
               <input type="hidden" name="action" value="create">
+              <input type="hidden" name="token" value="<?=h($token)?>">
             </div>
           </form>
         </div>
@@ -184,18 +201,92 @@ include 'inc/admin/head.php'; // head.php の読み込み
         <div class="title">
           <h2>ブランド情報</h2>
         </div>
-        
+        <!-- props -->
+        <div class="search-sorting">
+          <div class="input-area">
+            <div class="keyword">
+              <form action="dashboard.php" method="get" role="search" id="searchform">
+                <?php if (isset($search['keyword'])) { ?>
+                  <?php foreach ($search as $key => $value) { ?>
+                  <input type="text" name="search[keyword]" value="<?php print h($value); ?>" id="search-text-in-page" placeholder="ブランド名">
+                  <?php } ?>
+                <?php } else { ?>
+                  <input type="text" name="search[keyword]" value="" id="search-text-in-page" placeholder="ブランド名">
+                <?php } ?>
+                  <input type="submit" id="searchsubmit" value="search">
+                  <input type="hidden" name="module" value="admin_brands">
+                  <input type="hidden" name="action" value="search">
+              </form>
+            </div>
+          </div>
+          <div class="select-area">
+            <div class="filter">
+              <form action="dashboard.php" method="get">
+                  <table>
+                      <tr>
+                          <th class="select-title">
+                            <label for="filter">カテゴリ</label>
+                          </th>
+                          <td class="select-name">
+                            <select id="filter" name="search[filter]" ONCHANGE="submit(this.form)">
+                                <option value="">選択してください</option>
+                            </select>
+                          </td>
+                      </tr>
+                  </table>
+                  <input type="hidden" name="module" value="admin_brands">
+                  <input type="hidden" name="action" value="search">
+              </form>
+            </div>
+            <div class="sorting">
+              <form action="dashboard.php" method="get">
+                  <table>
+                      <tr>
+                          <th class="select-title">
+                            <label for="sorting">並べ替え</label>
+                          </th>
+                          <td class="select-name">
+                            <select id="sorting" name="sorting" ONCHANGE="submit(this.form)">
+                              <?php if ($sorting !== '') { ?>
+                                <?php if ($sorting === '0') { ?>
+                                  <option value="0">ブランド名順</option>
+                                  <option value="1">昇順</option>
+                                  <option value="2">降順</option>
+                                <?php } else if ($sorting === '1') { ?>
+                                  <option value="1">昇順</option>
+                                  <option value="2">降順</option>
+                                  <option value="0">ブランド名順</option>
+                                <?php } else if ($sorting === '2') { ?>
+                                  <option value="2">降順</option>
+                                  <option value="0">ブランド名順</option>
+                                  <option value="1">昇順</option>
+                                <?php } ?>
+                              <?php } else { ?>
+                                <option value="">選択してください</option>
+                                <option value="0">ブランド名順</option>
+                                <option value="1">昇順</option>
+                                <option value="2">降順</option>
+                              <?php } ?>
+                            </select>
+                          </td>
+                      </tr>
+                  </table>
+                  <input type="hidden" name="module" value="admin_brands">
+                  <input type="hidden" name="action" value="sorting">
+              </form>
+            </div>
+          </div>
+        </div> 
         <!--list 一覧テーブル-->
         <div class="list-group">
-          
           <table>
             <caption>ブランド一覧</caption>
             <thead>
               <tr>
                 <th class="list-id">ID</th>
+                <th class="list-img">画像</th>
                 <th class="list-name">ブランド名</th>
-                <th class="list-info">マンスリー</th>
-                <th class="list-count">アイテム数</th>
+                <th class="list-count">商品数</th>
                 <th class="list-status">ステータス</th>
                 <th class="list-delete">削除</th>
                 <th class="list-detail"></th>
@@ -208,13 +299,15 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <td class="list_id">
                     <?php print h($record -> brand_id); ?>
                 </td>
+                <td class="list-img">
+                  <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">
+                    <img src="<?php print h('./include/images/brands/img/' . $record->img1); ?>">
+                  </a>
+                </td>
                 <td class="list_name">
                   <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">
                     <p><?php print h($record -> brand_name); ?></p>
                   </a>
-                </td>
-                <td class="list_category">
-                  <?php print h($record -> category_name); ?>
                 </td>
                 <td class="list_count">
                   <?php print h($record -> item_count); ?>
@@ -233,6 +326,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                       <input type="hidden" name="action" value="update_status">
                       <input type="hidden" name="table" value="brands">
                       <input type="hidden" name="brand_id" value="<?php print h($record->brand_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -240,10 +334,11 @@ include 'inc/admin/head.php'; // head.php の読み込み
                 <td>
                   <div class="list-delete">
                     <form action="dashboard.php" method="post" id="delete_form">
-                      <input type="submit" value="削除">
+                      <input type="submit" value="削除"  onclick="return confirm('データを削除してもよろしいですか？')">
                       <input type="hidden" name="module" value="admin_brands">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="brand_id" value="<?php print h($record->brand_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>
                   </div>
                 </td>
@@ -263,43 +358,40 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <?php } ?>
           </table>
         </div>
-        
-        <!--<div class="alldelete">-->
-        <!--  <div class="form-buttonwrap">-->
-        <!--    <form action="dashboard.php" method="post">-->
-        <!--      <input type="submit" value="全てを削除する">-->
-        <!--      <input type="hidden" name="module" value="admin_brands">-->
-        <!--      <input type="hidden" name="action" value="delete_all">-->
-        <!--      <input type="hidden" name="table" value="brands">-->
-        <!--    </form>-->
-        <!--  </div>-->
-        <!--</div>-->
-        
       </div>
     </div>
-    
-    <div id="home">
+    <div id="paginations">
       <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
+        <div class="paginations-text">
+            <p class="from_to"><?php print h($paginations['total_record']); ?>件中 <?php print h($paginations['from_record']); ?> - <?php print h($paginations['to_record']);?> 件目を表示</p>
+        </div>
+        <div class="paginations">
+            <!-- 戻る -->
+            <?php if ($paginations['page_id'] !== 1 ) { ?>
+                <a href="<?php print h($url); ?>&page_id=<?php print h($paginations['prev_page']); ?>" class="page_feed">&laquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&laquo;</span>
+            <?php } ?>
+            <!-- ページ番号の表示 -->
+            <?php foreach ($paginations['page_range'] as $num) { ?>
+                <?php if ($num !== $paginations['page_id']) { ?>
+                    <a href="<?php print h($url); ?>&page_id=<?php print h($num); ?>" class="page_number"><?php print h($num); ?></a>
+                <?php } else { ?>
+                    <span class="now_page_number"><?php print h($num); ?></span>
+                <?php } ?>
+            <?php } ?>
+            <!-- 進む -->
+            <?php if($paginations['page_id'] < $paginations['page_total']) { ?>
+                <a href="<?php print h($url); ?>&page_id=<?php print h($paginations['next_page']); ?>" class="page_feed">&raquo;</a>
+            <?php } else { ?>
+                <span class="first_last_page">&raquo;</span>
+            <?php } ?>
         </div>
       </div>
     </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
-  
- <?php include 'inc/admin/footer.php'; ?>
-  <script>
-    let delete_form = document.getElementById('delete_form');
-    delete_form.addEventListener('submit', (e) => {
-      if (!confirm('このメッセージデータを削除してもよろしいですか？')) {
-        e.preventDefault();
-        return;
-      }
-    });
-  </script>
+  <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 
 </html>

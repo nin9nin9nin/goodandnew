@@ -43,7 +43,7 @@ function execute_action() {
     $classCategorys -> updateCategoryStatus();
     
     //フラッシュメッセージをセット
-    Session::setFlash('ID' . h($id) .'のステータスを更新しました');    
+    Session::setFlash('ID' . h($id) .':ステータスを変更しました');    
     
     return View::redirectTo('admin_categorys', 'index');
 }

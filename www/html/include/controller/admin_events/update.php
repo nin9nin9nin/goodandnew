@@ -118,7 +118,7 @@ function execute_action() {
     }
         
     //フラッシュメッセージ
-    Session::setFlash('変更に成功しました');
+    Session::setFlash('ID' . h($id) .':イベント情報を変更しました');
     
     //indexへリダイレクト
     return View::redirectTo('admin_events', 'index');

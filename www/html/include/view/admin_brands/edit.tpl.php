@@ -1,13 +1,15 @@
 <?php
-$title = 'ec site 管理画面';
-$description = '説明（ブランド編集ページ）';
-// $is_home = true; //トップページの判定用の変数
-include 'inc/admin/head.php'; // head.php の読み込み
+$title = 'goodandnew管理画面';
+$description = '説明（イベント編集ページ）';
+$is_home = NULL; //トップページの判定用の変数
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$token = Session::getCsrfToken(); // トークンの取得
+include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>
 </head>
 
 <body>
-  <?php include 'inc/admin/header.php'; ?>
+  <?php include './include/view/_inc/admin/header.php'; ?>
   
   <main>
     <!--タイトルナビ---------------------------------------------------------------------------------------------------->
@@ -20,14 +22,19 @@ include 'inc/admin/head.php'; // head.php の読み込み
           </span>
           <span>&gt;</span>
           <span>
-            <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($records[0]->brand_id); ?>">ブランド詳細</a>
+            <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">ブランド詳細</a>
           </span>
         </nav>
         
         <div class="title">
           <h1>ブランド詳細</h1>
         </div>
-        
+        <!--フラッシュメッセージ-->
+        <?php if ($flash_message !== '') { ?>
+          <div class="message">
+            <p class="fade-message"><?php echo $flash_message; ?></p>
+          </div>
+        <?php } ?>
       </div>
     </div>
     <!---更新----------------------------------------------------------------------------------------------------------->
@@ -38,7 +45,6 @@ include 'inc/admin/head.php'; // head.php の読み込み
         <div class="title">
           <h2>ブランド情報変更</h2>
         </div>
-        
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>
           <ul class="errors">
@@ -49,18 +55,16 @@ include 'inc/admin/head.php'; // head.php の読み込み
           <?php } ?>
           </ul>
         <?php } ?>
-        
         <!--入力フォーム-->
         <div class="update-form">
-          <form action="dashboard.php" method="post">
+          <form action="dashboard.php" method="post" enctype="multipart/form-data">
             <table class="update-form table">
               <tr class="form-text">
                 <th>
                   <label for="new_brand_id">ブランドID：</label>
                 </th>
                 <td>
-                  <span class="raw_data"><?php print h($records[0] -> brand_id); ?></span>
-                <!--<input id="new_category_id" type="text" name="new_category_id" value="">-->
+                  <span class="raw_data"><?php print h($record -> brand_id); ?></span>
                 </td>
               </tr>
               <tr class="form-text">
@@ -68,22 +72,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="brand_name">ブランド名：</label>
                 </th>
                 <td>
-                  <input id="brand_name" type="text" name="brand_name" value="<?php print h($records[0] -> brand_name); ?>">
-                </td>
-              </tr>
-              <tr class="form-select">
-                <th>
-                  <label for="category_id">マンスリー：</label>
-                </th>
-                <td>
-                  <select id="category_id" name="category_id">
-                    <option value="<?php print h($records[0] -> category_id); ?>"><?php print h($records[0] -> category_name); ?></option>
-                    <!--<option value="">選択してください</option>-->
-                    <option value="0">未設定</option>
-                    <?php foreach ($records['categorys'] as $record) { ?>
-                    <option value="<?php print h($record->category_id); ?>"><?php print h($record->category_name)?></option>
-                    <?php } ?>
-                  </select>
+                  <input id="brand_name" type="text" name="brand_name" value="<?php print h($record -> brand_name); ?>">
                 </td>
               </tr>
               <tr class="form-text">
@@ -91,7 +80,40 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="description">ブランド説明：</label>
                 </th>
                 <td>
-                  <textarea id="description" name="description" value="" placeholder="テキストを入力"><?php print h($records[0] -> description); ?></textarea>
+                  <textarea id="description" name="description" value="" placeholder="テキストを入力"><?php print h($record -> description); ?></textarea>
+                </td>
+              </tr>
+              <!--ブランドロゴ-->
+              <tr class="form-file">
+                <th>
+                  <label for="brand_logo">ブランドロゴ：</label><span class="ninni">任意</span>
+                  <span class="files-addition">ファイル形式&nbsp;png</span>
+                </th>
+                <td>
+                  <div class="update-img">
+                    <img src="<?php print h('./include/images/brands/logo/' .$record->brand_logo); ?>">
+                  </div>
+                  <div class="img-button">
+                    <input id="brand_logo" type="file" name="brand_logo" value="">
+                    <input id="exists_logo" type="hidden" name="exists_logo" value="<?php print h($record->brand_logo); ?>">
+                  </div>
+                </td>
+              </tr>
+              <!--画像-->
+              <tr class="form-file">
+                <th>
+                  <label for="brand_img">画像：</label>
+                  <span class="files-addition">ファイル形式&nbsp;jpeg&nbsp;※8枚まで可能</span>
+                </th>
+                <td>
+                  <div class="update-img">
+                    <img src="<?php print h('./include/images/brands/img/' .$record->img1); ?>">
+                  </div>
+                  <div class="img-button">
+                    <a href="dashboard.php?module=admin_brands&action=edit_img&brand_id=<?php print h($record->brand_id); ?>">
+                      <input type="button" value="全ての画像を確認する">
+                    </a>
+                  </div>
                 </td>
               </tr>
               <tr class="form-text">
@@ -99,39 +121,47 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="brand_hp">ブランドHP：</label>
                 </th>
                 <td>
-                  <input id="brand_hp" type="url" name="brand_hp" value="<?php print h($records[0] -> brand_hp); ?>" placeholder="http://www.○○○.com">
+                  <input id="brand_hp" type="url" name="brand_hp" value="<?php print h($record -> brand_hp); ?>" placeholder="https://www.○○○.com">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link1">ブランドLINK：</label>
+                  <label for="brand_instagram">Instagram：</label>
                 </th>
                 <td>
-                  <input id="brand_link1" type="url" name="brand_link1" value="<?php print h($records[0] -> brand_link1); ?>" placeholder="https://www.instagram.com/...">
+                  <input id="brand_instagram" type="url" name="brand_instagram" value="<?php print h($record -> brand_instagram); ?>" placeholder="https://www.instagram.com/...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link2">ブランドLINK：</label>
+                  <label for="brand_twitter">Twitter：</label>
                 </th>
                 <td>
-                  <input id="brand_link2" type="url" name="brand_link2" value="<?php print h($records[0] -> brand_link2); ?>" placeholder="https://www.facebook.com/...">
+                  <input id="brand_twitter" type="url" name="brand_twitter" value="<?php print h($record -> brand_twitter); ?>" placeholder="https://www.twitter.com/...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link3">ブランドLINK：</label>
+                  <label for="brand_facebook">Facebook：</label>
                 </th>
                 <td>
-                  <input id="brand_link3" type="url" name="brand_link3" value="<?php print h($records[0] -> brand_link3); ?>" placeholder="https://www.twitter.com/ ...">
+                  <input id="brand_facebook" type="url" name="brand_facebook" value="<?php print h($record -> brand_facebook); ?>" placeholder="https://www.facebook.com/ ...">
                 </td>
               </tr>
               <tr class="form-text">
                 <th>
-                  <label for="brand_link4">ブランドLINK：</label>
+                  <label for="brand_youtube">Youtube：</label>
                 </th>
                 <td>
-                  <input id="brand_link4" type="url" name="brand_link4" value="<?php print h($records[0] -> brand_link4); ?>" placeholder="https://www.youtube.com/ ...">
+                  <input id="brand_youtube" type="url" name="brand_youtube" value="<?php print h($record -> brand_youtube); ?>" placeholder="https://www.youtube.com/ ...">
+                </td>
+              </tr>
+              <tr class="form-text">
+                <th>
+                  <label for="brand_line">LINE：</label>
+                </th>
+                <td>
+                  <input id="brand_line" type="url" name="brand_line" value="<?php print h($record -> brand_line); ?>" placeholder="https://line.me/ ...">
                 </td>
               </tr>
               <tr class="form-text">
@@ -139,7 +169,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="phone_number">電話番号：</label>
                 </th>
                 <td>
-                  <input id="phone_number" type="tel" name="phone_number" value="<?php print h($records[0] -> phone_number); ?>" placeholder="※ハイフンなし">
+                  <input id="phone_number" type="tel" name="phone_number" value="<?php print h($record -> phone_number); ?>" placeholder="※ハイフンなし">
                 </td>
               </tr>
               <tr class="form-text">
@@ -147,7 +177,7 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="email">メールアドレス：</label>
                 </th>
                 <td>
-                  <input id="email" type="email" name="email" value="<?php print h($records[0] -> email); ?>" placeholder="">
+                  <input id="email" type="email" name="email" value="<?php print h($record -> email); ?>" placeholder="">
                 </td>
               </tr>
               <tr class="form-text">
@@ -155,7 +185,15 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   <label for="address">住所：</label>
                 </th>
                 <td>
-                  <input id="address" type="text" name="address" value="<?php print h($records[0] -> address); ?>" placeholder="">
+                  <input id="address" type="text" name="address" value="<?php print h($record -> address); ?>" placeholder="">
+                </td>
+              </tr>
+              <tr class="form-text">
+                <th>
+                  商品数:
+                </th>
+                <td>
+                  <?php print h($record -> item_count); ?>
                 </td>
               </tr>
               <!--ステータス-->
@@ -164,12 +202,30 @@ include 'inc/admin/head.php'; // head.php の読み込み
                   ステータス：
                 </th>
                 <td>
-                  <input id="status" type="checkbox" name="status" value="1" class="checkbox-input" <?= $records[0] -> status ? 'checked' : '' ?>>
+                  <input id="status" type="checkbox" name="status" value="1" class="checkbox-input" <?= $record -> status ? 'checked' : '' ?>>
                     <label for="status" class="checkbox-label">
                       <span class="checkbox-span"></span>
                     </label>
                 </td>
               </tr>
+              <tr class="form-text">
+                <th>
+                  登録日時:
+                </th>
+                <td>
+                  <?php print h($record -> getCreateDateTime()); ?>
+                </td>
+              </tr>
+              <?php if(isset($record->update_datetime)) { ?>
+              <tr class="form-text">
+                <th>
+                  最終更新日時:
+                </th>
+                <td>
+                  <?php print h($record -> getUpdateDateTime()); ?>
+                </td>
+              </tr>
+              <?php } ?>
             </table>
             <!--submit+hidden-->
             <div class="form-buttonwrap">
@@ -179,26 +235,17 @@ include 'inc/admin/head.php'; // head.php の読み込み
               <input type="submit" value="変更する">
               <input type="hidden" name="module" value="admin_brands">
               <input type="hidden" name="action" value="update">
-              <input type="hidden" name="brand_id" value="<?php print h($records[0]->brand_id); ?>">
+              <input type="hidden" name="brand_id" value="<?php print h($record->brand_id); ?>">
+              <input type="hidden" name="token" value="<?=h($token)?>">
             </div>
           </form>
         </div>
       </div>
     </div>
-    
-    <div id="home">
-      <div class="container">
-        <div class="home">
-          <div class="form-buttonwrap">
-              <input type="button" value="ホーム画面に戻る" onclick="location.href='dashboard.php'">
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   
- <?php include 'inc/admin/footer.php'; ?>
+ <?php include './include/view/_inc/admin/footer.php'; ?>
 </body>
 
 </html>

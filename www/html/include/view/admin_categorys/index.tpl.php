@@ -1,5 +1,5 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（カテゴリー管理ページ）';
 $is_home = NULL; //トップページの判定
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
@@ -41,7 +41,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
       <div class="container">
         <!--create タイトル-->
         <div class="title">
-          <h2>カテゴリー登録</h2>
+          <h2>新規カテゴリー登録</h2>
         </div>
         <!--エラーメッセージ-->
         <?php if(count($errors) > 0) { ?>

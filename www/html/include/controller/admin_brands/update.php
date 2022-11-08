@@ -1,26 +1,47 @@
 <?php
 
 require_once(MODEL_DIR . '/Tables/Brands.php');
-require_once(MODEL_DIR . '/Tables/Categorys.php');
 
 function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
     
+    // postされたトークンの取得
+    $token = Request::get('token');
+    
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_brands', 'index');
+        exit;
+    }
+    
+    //hidden
     $id = Request::get('brand_id');
+
+    if (preg_match('/^\d+$/', $id) !== 1) {
+        return View::render404();
+    }
+
+    //フォームの値を取得
     $name = Request::get('brand_name');
-    $category_id = Request::get('category_id');
     $description = Request::get('description');
+    $brand_logo = Request::getFiles('brand_logo'); //初期値NULL
+    $exists_logo = Request::get('exists_logo'); // $_POST['exists_logo']既存のファイル名
     $hp = Request::get('brand_hp');
-    $link1 = Request::get('brand_link1');
-    $link2 = Request::get('brand_link2');
-    $link3 = Request::get('brand_link3');
-    $link4 = Request::get('brand_link4');
+    $instagram = Request::get('brand_instagram');
+    $twitter = Request::get('brand_twitter');
+    $facebook = Request::get('brand_facebook');
+    $youtube = Request::get('brand_youtube');
+    $line = Request::get('brand_line');
     $phone_number = Request::get('phone_number');
     $email = Request::get('email');
     $address = Request::get('address');
-    $status = Request::get('status');
+    $status = Request::getStatus('status');
     
     if (preg_match('/^\d+$/', $id) !== 1) {
         return View::render404();
@@ -32,13 +53,13 @@ function execute_action() {
     //プロパティに値をセット
     $classBrands -> brand_id = $id;
     $classBrands -> brand_name = $name;
-    $classBrands -> category_id = $category_id;
     $classBrands -> description = $description;
     $classBrands -> brand_hp = $hp;
-    $classBrands -> brand_link1 = $link1;
-    $classBrands -> brand_link2 = $link2;
-    $classBrands -> brand_link3 = $link3;
-    $classBrands -> brand_link4 = $link4;
+    $classBrands -> brand_instagram = $instagram;
+    $classBrands -> brand_twitter = $twitter;
+    $classBrands -> brand_facebook = $facebook;
+    $classBrands -> brand_youtube = $youtube;
+    $classBrands -> brand_line = $line;
     $classBrands -> phone_number = $phone_number;
     $classBrands -> email = $email;
     $classBrands -> address = $address;
@@ -55,6 +76,12 @@ function execute_action() {
         $classBrands -> checkPhonenumber();
         $classBrands -> checkEmail();
         $classBrands -> checkAddress();
+        //ファイル名を生成するか既存のファイル名を使用するか判定
+        if (isset($brand_logo) === true) {
+            $logo_name = $classBrands -> checkFileName($brand_logo);//拡張子の確認
+        } else {
+            $logo_name = $exists_logo;
+        }
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -64,26 +91,42 @@ function execute_action() {
         $errors = CommonError::errorWhile();
         
         //指定レコードの取得
-        $records[0] = $classBrands -> editBrand();
+        $record = $classBrands -> editBrand();
         
-        //マンスリー選択用にcategorysテーブル取得(parent_id = 2のみ)
-        $records['categorys'] = Categorys::selectOption_Monthly();
-        
-        
-        return View::render('edit', ['records' => $records, 'errors' => $errors]);
+        return View::render('edit', ['record' => $record, 'errors' => $errors]);
         exit;
     }
     
     //更新処理 -----------------------------------------------------
+    //データベース接続
+    Database::beginTransaction();
+    try {
+        $now_date = date('Y-m-d H:i:s');
+        
+        //プロパティ日時登録+生成したファイル名登録
+        $classBrands -> update_datetime = $now_date;
+        $classBrands -> brand_logo = $logo_name;
+
+        //brandsテーブルに新規登録　executeBySql()
+        $classBrands -> updateBrand();
+        
+        //画像のファイルアップロード（できなければrollback）
+        if (isset($brand_logo) === true) {
+            $classBrands -> uploadFiles($brand_logo, $logo_name);
+        }
+        Database::commit();
+      
+    } catch (Exception $e) {
+        $e = new Exception('データベースに接続できませんでした', 0, $e);
+        //トランザクションでのエラーはcontrollerでキャッチしてもらう(error.tpl.phpへ)
+        throw $e;
+        
+        Database::rollback();
+    }
     
-    $now_date = date('Y-m-d H:i:s');
-    
-    $classBrands -> update_datetime = $now_date;
-    
-    //データベース接続（update）
-    $classBrands -> updateBrand();
-    
-    
+    //フラッシュメッセージをセット
+    Session::setFlash('ID' . h($id) .':ブランド情報を変更しました');
+
+    //indexへリダイレクト
     return View::redirectTo('admin_brands', 'index');
-    
 }

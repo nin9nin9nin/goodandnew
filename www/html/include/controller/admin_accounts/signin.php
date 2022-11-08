@@ -12,6 +12,10 @@ function execute_action() {
         exit;
         
     }
+
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    //トークンの作成
+    Session::setCsrfToken();
     
     //ログイン画面へ（初期値はそれぞれ空の状態）
     return View::render('signin');

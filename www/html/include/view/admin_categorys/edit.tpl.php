@@ -1,5 +1,5 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（カテゴリー編集ページ）';
 $is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
@@ -96,9 +96,26 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     <label for="status" class="checkbox-label">
                       <span class="checkbox-span"></span>
                     </label>
-                    <!-- <div class="switch"></div> -->
                 </td>
               </tr>
+              <tr class="form-text">
+                <th>
+                  登録日時:
+                </th>
+                <td>
+                  <?php print h($records[0] -> getCreateDateTime()); ?>
+                </td>
+              </tr>
+              <?php if(isset($records[0]->update_datetime)) { ?>
+              <tr class="form-text">
+                <th>
+                  最終更新日時:
+                </th>
+                <td>
+                  <?php print h($records[0] -> getUpdateDateTime()); ?>
+                </td>
+              </tr>
+              <?php } ?>
             </table>
             <!--submit+hidden-->
             <div class="form-buttonwrap">

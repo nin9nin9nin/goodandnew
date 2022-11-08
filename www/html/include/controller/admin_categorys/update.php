@@ -75,7 +75,7 @@ function execute_action() {
     $classCategorys -> updateCategory();
     
     //フラッシュメッセージ
-    Session::setFlash('変更に成功しました');
+    Session::setFlash('ID' . h($id) .':カテゴリー情報を変更しました');
     
     return View::redirectTo('admin_categorys', 'index');
     

@@ -1,5 +1,5 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（イベント管理ページ）';
 $is_home = NULL; //トップページの判定(isset)
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
@@ -99,6 +99,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_svg">svgタグ：</label><span class="ninni">任意</span>
+                  <span class="files-addition">ファイル形式&nbsp;svg</span>
                 </th>
                 <td>
                   <input id="event_svg" type="file" name="event_svg" value="">
@@ -108,6 +109,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_png">pngイラスト：</label><span class="ninni">任意</span>
+                  <span class="files-addition">ファイル形式&nbsp;png</span>
                 </th>
                 <td>
                   <input id="event_png" type="file" name="event_png" value="">
@@ -117,7 +119,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_img">画像：</label><span class="ninni">任意</span>
-                  <span class="multiple-files">※8枚まで可能</span>
+                  <span class="files-addition">ファイル形式&nbsp;jpeg&nbsp;※8枚まで可能</span>
                 </th>
                 <td>
                   <input id="event_img" type="file" multiple name="img[]" value="">
@@ -275,10 +277,10 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <td class="list-name">
                   <a href="dashboard.php?module=admin_events&action=edit&event_id=<?php print h($record->event_id); ?>">
                     <ul>
-                      <li class="category_name"><?php print h($record->getEventTag()); ?></li>
-                      <li class="brand_name"><?php print h($record->event_date); ?></li>
+                      <li><?php print h($record->getEventTag()); ?></li>
+                      <li><?php print h($record->event_date); ?></li>
                     </ul>
-                    <p class="event-name"><?php print h($record->event_name); ?></p>
+                    <p><?php print h($record->event_name); ?></p>
                   </a>
                 </td>
                 <!--ステータス-->
