@@ -326,7 +326,21 @@ class Validator {
                 CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
             }
         } else {
-            CommonError::errorAdd('ファイル形式が異なります。');
+            CommonError::errorAdd(h($file_name) . 'はファイル形式が異なります。jpeg/jpg/png/svgのみ利用可能です');
         } 
+    }
+
+    /**
+     * ファイル数の確認
+     * 最大8ファイルまで
+     */
+    public static function checkFileCount($files = []) {
+        $file_count = count($files);
+
+        if ($file_count <= 8) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }

@@ -105,10 +105,11 @@ class Events {
      * @param array
      */
     public function checkFileName($files = [], $default = NULL) {
+        Validator::paramClear();
         $new_file_name = $default;
         $file_dir = './include/images/events/visual/';
         
-        // is_uploaded_file($_FILES[] === true)であれば
+        // is_uploaded_file($_FILES[] === true)
         if (empty($files) !== true) {
             // 内部で正しくアップロードされたか確認
             // 拡張子の確認とユニークなファイル名の生成
@@ -124,14 +125,19 @@ class Events {
      * 
      */
     public function checkMultipleFileName($re_files = []) {
+        Validator::paramClear();
         $new_file_names = [];
         $file_dir = './include/images/events/img/';
         
-        // is_uploaded_file($_FILES[] === true)であれば
-        if (empty($re_files) !== true) {
-            foreach ($re_files as $files) {
-                //順番にファイルのチェックを行うと同時にファイル名を生成
-                $new_file_names[] = Validator::checkFileName($files, $file_dir);
+        if (!Validator::checkFileCount($re_files)) {
+            CommonError::errorAdd('画像のアップロードは最大８枚までです');
+        } else {
+            // is_uploaded_file($_FILES[] === true)であれば
+            if (empty($re_files) !== true) {
+                foreach ($re_files as $files) {
+                    //順番にファイルのチェックを行うと同時にファイル名を生成
+                    $new_file_names[] = Validator::checkFileName($files, $file_dir);
+                }
             }
         }
         //アップロード自体なければ空の配列を返す
@@ -144,6 +150,7 @@ class Events {
      * 更新がなければ既存のファイル名を使用
      */
     public function checkUpdateFileName($files = [], $exists_file_names = []) {
+        Validator::paramClear();
         $new_file_names = [];
         $file_dir = './include/images/events/img/';
         $file_count = count($files); //int(10)
@@ -159,7 +166,20 @@ class Events {
         return $new_file_names;//（ファイルがなければ空文字が代入される）
     }
 
-    // index ------------------------------------------------------------------------
+    // paginations ------------------------------------------------------------------------
+    /**
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getPaginations() {
+        //トータルレコードの取得
+        $total_record = self::getTotalRecord();
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+    
     /**
      * 各テーブルのトータルレコード数を返す
      * return $record['cnt']
@@ -176,20 +196,43 @@ class Events {
         // カウントした数を返す
         return $record->cnt;
     }
-    
+
     /**
+     * 検索時のページネーション
      * トータルレコードを取得し、ページネーションの値をセットして返す
      * return array
      */
-    public function getPaginations() {
+    public function getSearchPaginations($search = []) {
         //トータルレコードの取得
-        $total_record = self::getTotalRecord();
+        $total_record = self::getSearchRecord($search);
         
         //page_idを取得してページネーションを取得してくる
         return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
         
     }
     
+    /**
+     * 検索時のページネーション
+     * トータルレコード数の取得
+     * 
+     */
+    public static function getSearchRecord($search = []) {
+        // テーブルから全レコードの数をカウント
+        $searchSql ='SELECT COUNT(*) as cnt FROM events';
+        //$sqlに結合代入
+        $searchSql .= self::setSearchSql($search);
+
+        //bindValue
+        $searchParams = self::setSearchParams($search);
+        
+        //トータルレコード数の取得
+        $record = Messages::retrieveBySql($searchSql, $searchParams);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+
+    // index ------------------------------------------------------------------------
     /**
      * テーブル一覧の取得
      * ページ表示分のみ取得(LIMIT/OFFSET)
@@ -215,6 +258,35 @@ class Events {
     } 
 
     // search ------------------------------------------------------------------------
+    /**
+     * 検索・絞り込み
+     * 
+     */
+    public function searchEvents($search = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //ベースとなるSQL文を準備
+        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events';
+
+        //検索項目を確認　SQL文作成し結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //さらにページネーション用のSQL文を結合代入
+        $searchSql .= ' ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
+        
+        //検索項目を確認　bindする配列を作成
+        $searchParams = self::setSearchParams($search);
+        
+        //searchParamsにページネーション用の配列追加
+        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
+
+        //検索・絞り込みに応じたレコードの取得
+        return Messages::findBySql($searchSql,$searchParams); 
+    }
+    
     /**
      * SQL文
      * getで受け取った値からSQL文を作成
@@ -252,89 +324,7 @@ class Events {
         return $searchParams;
     }
 
-    /**
-     * 検索時のページネーション
-     * トータルレコード数の取得
-     * 
-     */
-    public static function getSearchRecord($search = []) {
-        // テーブルから全レコードの数をカウント
-        $searchSql ='SELECT COUNT(*) as cnt FROM events';
-        //$sqlに結合代入
-        $searchSql .= self::setSearchSql($search);
-
-        //bindValue
-        $searchParams = self::setSearchParams($search);
-        
-        //トータルレコード数の取得
-        $record = Messages::retrieveBySql($searchSql, $searchParams);
-        
-        // カウントした数を返す
-        return $record->cnt;
-    }
-    
-    /**
-     * トータルレコードを取得し、ページネーションの値をセットして返す
-     * return array
-     */
-    public function getSearchPaginations($search = []) {
-        //トータルレコードの取得
-        $total_record = self::getSearchRecord($search);
-        
-        //page_idを取得してページネーションを取得してくる
-        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
-        
-    }
-
-    /**
-     * 検索・絞り込み
-     * 
-     */
-    public function searchEvents($search = []) {
-        // 1ページに表示する件数
-        $display_record = $this -> display_record;
-        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
-        $start_record = ($this->page_id - 1) * $display_record;
-
-        //ベースとなるSQL文を準備
-        $searchSql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status FROM events';
-
-        //検索項目を確認　SQL文作成し結合代入
-        $searchSql .= self::setSearchSql($search);
-        
-        //さらにページネーション用のSQL文を結合代入
-        $searchSql .= ' ORDER BY event_id DESC LIMIT :display_record OFFSET :start_record';
-        
-        //検索項目を確認　bindする配列を作成
-        $searchParams = self::setSearchParams($search);
-        
-        //searchParamsにページネーション用の配列追加
-        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
-
-        //検索・絞り込みに応じたレコードの取得
-        return Messages::findBySql($searchSql,$searchParams); 
-    }
-
     // sorting ------------------------------------------------------------------------
-    /**
-     * 0:イベント名順
-     * 1:昇順
-     * 2:降順
-     * 
-     */
-    public static function setSortingSql($sorting = []) {
-        if ($sorting === '0') {
-            $sortingSql = ' ORDER BY event_name ASC';
-        } else if ($sorting === '1') {
-            $sortingSql = ' ORDER BY event_id ASC';
-        } else if ($sorting === '2') {
-            $sortingSql = ' ORDER BY event_id DESC';
-        } 
-        $sortingSql .= ', event_id DESC LIMIT :display_record OFFSET :start_record';
-
-        return $sortingSql;
-    }
-
     /**
      * 並べ替え
      */
@@ -354,6 +344,25 @@ class Events {
         $params = [':display_record' => $display_record, ':start_record' => $start_record];
 
         return Messages::findBySql($sortingSql,$params);
+    }
+
+    /**
+     * 0:イベント名順
+     * 1:昇順
+     * 2:降順
+     * 
+     */
+    public static function setSortingSql($sorting = []) {
+        if ($sorting === '0') {
+            $sortingSql = ' ORDER BY event_name ASC';
+        } else if ($sorting === '1') {
+            $sortingSql = ' ORDER BY event_id ASC';
+        } else if ($sorting === '2') {
+            $sortingSql = ' ORDER BY event_id DESC';
+        } 
+        $sortingSql .= ', event_id DESC LIMIT :display_record OFFSET :start_record';
+
+        return $sortingSql;
     }
 
     // insert ------------------------------------------------------------------------
@@ -390,7 +399,7 @@ class Events {
         
         Messages::executeBySql($sql, $params);
     }
-
+    
     /**
      * 画像のファイルアップロード
      * アップロードできなければロールバック(コミットさせない)
@@ -401,22 +410,6 @@ class Events {
         
         if (empty($files) !== true) {
             Messages::uploadFiles($files, $to);
-        }
-    }
-
-    /**
-     * 複数ファイルのファイル名プロパティ登録
-     */
-    public function registerMultipleFiles($new_file_names = []) {
-        $file_count = count($new_file_names); //配列の数をカウント
-
-        for ($i=0; $i<$file_count; $i++) {
-            //プロパティ名が1から始まるため変更
-            $no = $i+1;
-            //参照プロパティ
-            $property = 'img'.$no;
-            //プロパティに格納
-            $this -> $property = $new_file_names[$i];
         }
     }
 
@@ -437,29 +430,23 @@ class Events {
                 Messages::uploadFiles($files, $to);
             }
         }
-    }
+    }    
 
     /**
-     * 複数ファイルの更新(更新のあったファイルのみ)
-     * 
+     * 複数ファイルのファイル名プロパティ登録
      */
-    public function updateMultipleFiles($files = [], $new_file_names = []) {
-        $file_dir = './include/images/events/img/';
-
-        if (empty($files) !== true) {
-            $file_count = count($files);
-            for ($i=0; $i<$file_count; $i++) {
-                //アップロードのあったファイルのみ処理を行う
-                if (isset($files[$i]) === true) {
-                    $to = $file_dir . $new_file_names[$i];
-
-                    //エラーがあればロールバックを行う  
-                    Messages::uploadFiles($files[$i], $to);
-                }
-            }
+    public function registerMultipleFiles($new_file_names = []) {
+        $file_count = count($new_file_names); //配列の数をカウント
+        
+        for ($i=0; $i<$file_count; $i++) {
+            //プロパティ名が1から始まるため変更
+            $no = $i+1;
+            //参照プロパティ
+            $property = 'img'.$no;
+            //プロパティに格納
+            $this -> $property = $new_file_names[$i];
         }
     }
-    
 
     // edit ------------------------------------------------------------------------
     /**
@@ -563,6 +550,27 @@ class Events {
     }
 
     /**
+     * 複数ファイルの更新(更新のあったファイルのみ)
+     * 
+     */
+    public function updateMultipleFiles($files = [], $new_file_names = []) {
+        $file_dir = './include/images/events/img/';
+
+        if (empty($files) !== true) {
+            $file_count = count($files);
+            for ($i=0; $i<$file_count; $i++) {
+                //アップロードのあったファイルのみ処理を行う
+                if (isset($files[$i]) === true) {
+                    $to = $file_dir . $new_file_names[$i];
+
+                    //エラーがあればロールバックを行う  
+                    Messages::uploadFiles($files[$i], $to);
+                }
+            }
+        }
+    }
+
+    /**
      * 指定レコードのステータス更新
      */
     public function updateEventStatus() {
@@ -585,7 +593,7 @@ class Events {
      */
     public function deleteEvent() {
         $sql = 'DELETE FROM events' . PHP_EOL
-         . 'WHERE event_id = :event_id';
+             . 'WHERE event_id = :event_id';
         
         $params = [':event_id' => $this->event_id];
         

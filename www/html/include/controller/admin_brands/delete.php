@@ -3,8 +3,25 @@
 require_once(MODEL_DIR . '/Tables/Brands.php');
 
 function execute_action() {
-    $id = Request::get('brand_id');
+    if (!Request::isPost()) {
+        return View::render404();
+    }
+    
+    // postされたトークンの取得
+    $token = Request::get('token');
+    
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
 
+        return View::redirectTo('admin_brands', 'index');
+        exit;
+    }
+
+    $id = Request::get('brand_id');
+    
     if (preg_match('/^\d+$/', $id) !== 1) {
         return View::render404();
     }
@@ -14,10 +31,12 @@ function execute_action() {
     
     //プロパティに値をセット
     $classBrands -> brand_id = $id;
-    
-    //データベース接続（指定レコードのみ削除）
+        
+    //指定レコードの削除
     $classBrands -> deleteBrand();
     
+    //フラッシュメッセージをセット
+    Session::setFlash('イベントを削除しました');    
     
     return View::redirectTo('admin_brands', 'index');
 }

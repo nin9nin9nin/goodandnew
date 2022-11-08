@@ -7,6 +7,20 @@ function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
+
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    // postされたトークンの取得
+    $token = Request::get('token');
+
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_accounts', 'signup');
+        exit;
+    }
     
     $name = Request::get('admin_name');
     $email = Request::get('email');
@@ -65,7 +79,6 @@ function execute_action() {
     //情報取得------------------------------------------------
     //この時点ではセッション認証をしない（クッキー登録のみ）
 
-    Session::start();
     //フラッシュメッセージをセット
     Session::setFlash('登録に成功しました');
         

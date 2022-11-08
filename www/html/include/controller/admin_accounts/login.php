@@ -7,6 +7,20 @@ function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
+
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    // postされたトークンの取得
+    $token = Request::get('token');
+
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_accounts', 'signin');
+        exit;
+    }
         
     $name = Request::get('admin_name');
     $password = Request::get('password');
@@ -43,7 +57,6 @@ function execute_action() {
         exit;
     }
     
-    Session::start();
     //$_SESSION['_authenticated']を認証済みにする(true)
     //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
     Session::setAuthenticated(true);

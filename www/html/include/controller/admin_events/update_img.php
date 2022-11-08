@@ -112,7 +112,7 @@ function execute_action() {
     }
         
     //フラッシュメッセージ
-    Session::setFlash('変更に成功しました');
+    Session::setFlash('ID' . h($id) .':イベント画像を変更しました');
     
     //画像確認のため再度画像ページへ
     return View::redirectTo('admin_events', 'edit_img', ['event_id' => $id]);

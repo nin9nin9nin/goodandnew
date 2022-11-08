@@ -58,22 +58,7 @@ class Categorys {
         }
     }
     
-    // index ------------------------------------------------------------------------
-    /**
-     * 各テーブルのトータルレコード数を返す
-     * return $record['cnt']
-     */
-    public static function getTotalRecord() {
-        // テーブルから全レコードの数をカウント(indexのsql文に合わせる)
-        $sql ='SELECT COUNT(*) as cnt FROM categorys AS A LEFT JOIN categorys AS B ON A.parent_id = B.category_id';
-        
-        // cnt取得
-        $record = Messages::retrieveBySql($sql);
-        
-        // カウントした数を返す
-        return $record->cnt;
-    }
-    
+    // paginations ------------------------------------------------------------------------
     /**
      * トータルレコードを取得し、ページネーションの値をセットして返す
      * return array
@@ -86,7 +71,66 @@ class Categorys {
         return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
         
     }
-    
+
+    /**
+     * 各テーブルのトータルレコード数を返す
+     * return $record['cnt']
+     */
+    public static function getTotalRecord() {
+        // テーブルから全レコードの数をカウント
+        //(indexのsql文に合わせる)
+        $sql ='SELECT COUNT(*) as cnt' . PHP_EOL
+            . 'FROM categorys AS A' . PHP_EOL
+            . 'LEFT JOIN categorys AS B' . PHP_EOL
+            . 'ON A.parent_id = B.category_id';
+        
+        // cnt取得
+        $record = Messages::retrieveBySql($sql);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+
+    /**
+     * 検索時のページネーション
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getSearchPaginations($search = []) {
+        //トータルレコードの取得
+        $total_record = self::getSearchRecord($search);
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+
+    /**
+     * 検索時のページネーション
+     * トータルレコード数の取得
+     * 
+     */
+    public static function getSearchRecord($search = []) {
+        // テーブルから全レコードの数をカウント
+        //(indexのsql文に合わせる)
+        $searchSql ='SELECT COUNT(*) as cnt' . PHP_EOL
+                  . 'FROM categorys AS A' . PHP_EOL
+                  . 'LEFT JOIN categorys AS B' . PHP_EOL
+                  . 'ON A.parent_id = B.category_id';
+        //$sqlに結合代入
+        $searchSql .= self::setSearchSql($search);
+
+        //bindValue
+        $searchParams = self::setSearchParams($search);
+        
+        //トータルレコード数の取得
+        $record = Messages::retrieveBySql($searchSql, $searchParams);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+
+    // index ------------------------------------------------------------------------
     /**
      * テーブル一覧の取得
      * 
@@ -132,6 +176,39 @@ class Categorys {
 
     // search ------------------------------------------------------------------------
     /**
+     * 検索・絞り込み
+     * 
+     */
+    public function searchCategorys($search = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //ベースとなるSQL文を準備
+        $searchSql = 'SELECT A.category_id, A.category_name, A.parent_id, A.status,' . PHP_EOL
+                   . '       B.category_name AS parent_name' . PHP_EOL
+                   . 'FROM categorys AS A' . PHP_EOL
+                   . 'LEFT JOIN categorys AS B' . PHP_EOL
+                   . 'ON A.parent_id = B.category_id';
+
+        //検索項目を確認　SQL文作成し結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //さらにページネーション用のSQL文を結合代入
+        $searchSql .= ' ORDER BY A.category_id DESC LIMIT :display_record OFFSET :start_record';
+        
+        //検索項目を確認　bindする配列を作成
+        $searchParams = self::setSearchParams($search);
+        
+        //searchParamsにページネーション用の配列追加
+        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
+
+        //検索・絞り込みに応じたレコードの取得
+        return Messages::findBySql($searchSql,$searchParams); 
+    }
+
+    /**
      * SQL文
      * getで受け取った値からSQL文を作成
      * 
@@ -168,94 +245,7 @@ class Categorys {
         return $searchParams;
     }
 
-    /**
-     * 検索時のページネーション
-     * トータルレコード数の取得
-     * 
-     */
-    public static function getSearchRecord($search = []) {
-        // テーブルから全レコードの数をカウント
-        $searchSql ='SELECT COUNT(*) as cnt FROM categorys AS A LEFT JOIN categorys AS B ON A.parent_id = B.category_id';
-        //$sqlに結合代入
-        $searchSql .= self::setSearchSql($search);
-
-        //bindValue
-        $searchParams = self::setSearchParams($search);
-        
-        //トータルレコード数の取得
-        $record = Messages::retrieveBySql($searchSql, $searchParams);
-        
-        // カウントした数を返す
-        return $record->cnt;
-    }
-    
-    /**
-     * トータルレコードを取得し、ページネーションの値をセットして返す
-     * return array
-     */
-    public function getSearchPaginations($search = []) {
-        //トータルレコードの取得
-        $total_record = self::getSearchRecord($search);
-        
-        //page_idを取得してページネーションを取得してくる
-        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
-        
-    }
-
-    /**
-     * 検索・絞り込み
-     * 
-     */
-    public function searchCategorys($search = []) {
-        // 1ページに表示する件数
-        $display_record = $this -> display_record;
-        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
-        $start_record = ($this->page_id - 1) * $display_record;
-
-        //ベースとなるSQL文を準備
-        $searchSql = 'SELECT A.category_id, A.category_name, A.parent_id, A.status,' . PHP_EOL
-                   . '       B.category_name AS parent_name' . PHP_EOL
-                   . 'FROM categorys AS A' . PHP_EOL
-                   . 'LEFT JOIN categorys AS B' . PHP_EOL
-                   . 'ON A.parent_id = B.category_id';
-
-        //検索項目を確認　SQL文作成し結合代入
-        $searchSql .= self::setSearchSql($search);
-        
-        //さらにページネーション用のSQL文を結合代入
-        $searchSql .= ' ORDER BY category_id DESC LIMIT :display_record OFFSET :start_record';
-        
-        //検索項目を確認　bindする配列を作成
-        $searchParams = self::setSearchParams($search);
-        
-        //searchParamsにページネーション用の配列追加
-        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
-
-        //検索・絞り込みに応じたレコードの取得
-        return Messages::findBySql($searchSql,$searchParams); 
-    }
-
     // sorting ------------------------------------------------------------------------
-    /**
-     * 0:カテゴリー名順
-     * 1:昇順
-     * 2:降順
-     * 
-     */
-    public static function setSortingSql($sorting = []) {
-        if ($sorting === '0') {
-            $sortingSql = ' ORDER BY A.category_name ASC';
-        } else if ($sorting === '1') {
-            $sortingSql = ' ORDER BY A.category_id ASC';
-        } else if ($sorting === '2') {
-            $sortingSql = ' ORDER BY A.category_id DESC';
-        } 
-
-        $sortingSql .= ', A.category_id DESC LIMIT :display_record OFFSET :start_record';
-
-        return $sortingSql;
-    }
-
     /**
      * 並べ替え
      */
@@ -279,6 +269,26 @@ class Categorys {
         $params = [':display_record' => $display_record, ':start_record' => $start_record];
 
         return Messages::findBySql($sortingSql,$params);
+    }
+    
+    /**
+     * 0:カテゴリー名順
+     * 1:昇順
+     * 2:降順
+     * 
+     */
+    public static function setSortingSql($sorting = []) {
+        if ($sorting === '0') {
+            $sortingSql = ' ORDER BY A.category_name ASC';
+        } else if ($sorting === '1') {
+            $sortingSql = ' ORDER BY A.category_id ASC';
+        } else if ($sorting === '2') {
+            $sortingSql = ' ORDER BY A.category_id DESC';
+        } 
+
+        $sortingSql .= ', A.category_id DESC LIMIT :display_record OFFSET :start_record';
+
+        return $sortingSql;
     }
     
     // insert ------------------------------------------------------------------------
@@ -370,35 +380,26 @@ class Categorys {
      */
     public function deleteCategory() {
         $sql = 'DELETE FROM categorys' . PHP_EOL
-         . 'WHERE category_id = :category_id';
+             . 'WHERE category_id = :category_id';
         
         $params = [':category_id' => $this->category_id];
         
         Messages::executeBySql($sql, $params);
     }
     
-    
-    /**
-     * ブランド管理に使用 static
-     * 
-     * select option用　テーブルの取得
-     * マンスリー選択用のためparent_id=2に絞る
-     */
-    public static function selectOption_Monthly() {
-        $sql = 'SELECT category_id, category_name FROM categorys WHERE parent_id = 2';
-        
-        return Messages::findBySql($sql);
-    }
-    
+    // select ------------------------------------------------------------------------
     /**
      * 商品管理に使用 static
      * 
      * select option用　テーブルの取得
-     * ジャンル選択用のためparent_id=1に絞る
+     * マンスリー選択用のためparent_id=2に絞る
      */
-    public static function selectOption_Genre() {
-        $sql = 'SELECT category_id, category_name FROM categorys  WHERE parent_id NOT IN (2)';
+    public static function selectOption_Categorys() {
+        $sql = 'SELECT category_id, category_name FROM categorys';
         
         return Messages::findBySql($sql);
     }
+    
+    // ユーザー画面 ------------------------------------------------------------------------
+
 }

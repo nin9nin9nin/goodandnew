@@ -1,5 +1,5 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（イベント編集ページ）';
 $is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
@@ -107,17 +107,15 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_svg">svgタグ：</label>
+                  <span class="files-addition">ファイル形式&nbsp;svg</span>
                 </th>
                 <td>
                   <div class="update-img">
                     <img src="<?php print h('./include/images/events/visual/' .$record->event_svg); ?>">
                   </div>
                   <div class="img-button">
-                    <!-- <a href="dashboard.php?module=admin_events&action=edit_img&event_id=">
-                      <input type="button" value="画像を変更する">
-                    </a> -->
                     <input id="event_svg" type="file" name="event_svg" value="">
-                    <input id="event_svg" type="hidden" name="exists_svg" value="<?php print h($record->event_svg); ?>">
+                    <input id="exists_svg" type="hidden" name="exists_svg" value="<?php print h($record->event_svg); ?>">
                   </div>
                 </td>
               </tr>
@@ -125,17 +123,15 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_png">pngイラスト：</label>
+                  <span class="files-addition">ファイル形式&nbsp;png</span>
                 </th>
                 <td>
                   <div class="update-img">
                     <img src="<?php print h('./include/images/events/visual/' .$record->event_png); ?>">
                   </div>
                   <div class="img-button">
-                    <!-- <a href="dashboard.php?module=admin_events&action=edit_img&event_id=">
-                      <input type="button" value="画像を変更する">
-                    </a> -->
                     <input id="event_png" type="file" name="event_png" value="">
-                    <input id="event_png" type="hidden" name="exists_png" value="<?php print h($record->event_png); ?>">
+                    <input id="exists_png" type="hidden" name="exists_png" value="<?php print h($record->event_png); ?>">
                   </div>
                 </td>
               </tr>
@@ -143,7 +139,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
               <tr class="form-file">
                 <th>
                   <label for="event_img">画像：</label>
-                  <span class="multiple-files">※8枚まで可能</span>
+                  <span class="files-addition">ファイル形式&nbsp;jpeg&nbsp;※8枚まで可能</span>
                 </th>
                 <td>
                   <div class="update-img">
@@ -153,7 +149,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     <a href="dashboard.php?module=admin_events&action=edit_img&event_id=<?php print h($record->event_id); ?>">
                       <input type="button" value="全ての画像を確認する">
                     </a>
-                    <!-- <input id="event_img" type="file" multiple name="img[]" value=""> -->
                   </div>
                 </td>
               </tr>

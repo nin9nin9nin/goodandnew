@@ -1,7 +1,7 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（アカウント情報変更ページ）';
-// $is_home = true; //トップページの判定用の変数
+$is_home = NULL; //トップページの判定用の変数
 $token = Session::getCsrfToken(); // トークンの取得
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
 ?>

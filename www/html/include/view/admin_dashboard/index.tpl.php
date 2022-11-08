@@ -1,5 +1,5 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（トップページ）';
 $is_home = true; //トップページの判定用の変数
 $flash_message = Session::getFlash();

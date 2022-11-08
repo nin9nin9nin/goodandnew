@@ -5,13 +5,20 @@ require_once(MODEL_DIR . '/Messages.php');
 //brands テーブル
 class Brands {
     
-    public $table_name = 'brands'; //count(*)するテーブル
-    public $diplay_record = '20'; //1ページの表示件数
     public $page_id; //ページ番号
+    public $display_record = 10; //１ページの表示件数
     public $brand_id;
     public $brand_name;
     public $description;
     public $brand_logo;
+    public $img1;
+    public $img2;
+    public $img3;
+    public $img4;
+    public $img5;
+    public $img6;
+    public $img7;
+    public $img8;
     public $brand_hp;
     public $brand_instagram;
     public $brand_twitter;
@@ -32,6 +39,14 @@ class Brands {
         $this -> brand_name = null;
         $this -> description = null;
         $this -> brand_logo = null;
+        $this -> img1 = null;
+        $this -> img2 = null;
+        $this -> img3 = null;
+        $this -> img4 = null;
+        $this -> img5 = null;
+        $this -> img6 = null;
+        $this -> img7 = null;
+        $this -> img8 = null;
         $this -> brand_hp = null;
         $this -> brand_instagram = null;
         $this -> brand_twitter = null;
@@ -47,11 +62,10 @@ class Brands {
     }
     
     /**
-     * ブランド名　64文字
+     * ブランド名　varchar(64)
+     * 入力確認と文字数確認
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
      */
     public function checkBrandName() {
         Validator::paramClear();
@@ -64,13 +78,9 @@ class Brands {
     }
 
     /**
-     * URL　 任意
+     * URL(hp,instagram,twitter,facebook,youtube,line) 
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * @param hp~
-     * return CommonError::errorAdd()
-     * 
      * /^(https?|ftp)(://[-_.!~*'()a-zA-Z0-9;/?:@&amp;amp;=+$,%#]+)$/
      */
     public function checkUrl() {
@@ -106,16 +116,12 @@ class Brands {
                 return CommonError::errorAdd('リンクlineが正しくありません');
             }
         }
-        
     }
     
     /**
-     * 電話番号 任意
+     * 電話番号
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
-     * 
      * '/\A0[0-9]{9,10}\z/' ハイフン無し
      */
     public function checkPhonenumber() {
@@ -129,12 +135,9 @@ class Brands {
     }
     
     /**
-     * メールアドレス 任意
+     * メールアドレス
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
-     * 
      * '/^[a-zA-Z0-9_.+-]+[@][a-zA-Z0-9.-]+$/' 
      */
     public function checkEmail() {
@@ -148,12 +151,9 @@ class Brands {
     }
     
     /**
-     * 住所 64文字以内　任意
+     * 住所 varchar(64)
      * 
      * Validatorがfalseの場合メッセージを入れて返す
-     * エラーがなければ何も返さない
-     * return CommonError::errorAdd
-     * 
      */
     public function checkAddress() {
         Validator::paramClear();
@@ -164,50 +164,324 @@ class Brands {
             } 
         }
     }
+
+    /**
+     * アップロードファイルのチェック (アップロードがなければNULL)
+     * 拡張子の確認とファイル名(ユニーク)の確認     * 
+     * file_dir 保存先フォルダ指定
+     * @param array
+     */
+    public function checkFileName($files = [], $default = NULL) {
+        Validator::paramClear();
+        $new_file_name = $default;
+        $file_dir = './include/images/brands/logo/';
+        
+        // is_uploaded_file($_FILES[] === true)であれば
+        if (empty($files) !== true) {
+            // 内部で正しくアップロードされたか確認
+            // 拡張子の確認とユニークなファイル名の生成
+            $new_file_name = Validator::checkFileName($files, $file_dir);
+        }
+        //アップロード自体なければNULLを返す
+        return $new_file_name;
+    }
+
+    /**
+     * 複数ファイルのアップロード
+     * reArrayされたファイルのエラーチェック
+     * 
+     */
+    public function checkMultipleFileName($re_files = []) {
+        Validator::paramClear();
+        $new_file_names = [];
+        $file_dir = './include/images/brands/img/';
+        
+        if (!Validator::checkFileCount($re_files)) {
+            CommonError::errorAdd('画像のアップロードは最大８枚までです');
+        } else {
+            // is_uploaded_file($_FILES[] === true)であれば
+            if (empty($re_files) !== true) {
+                foreach ($re_files as $files) {
+                    //順番にファイルのチェックを行うと同時にファイル名を生成
+                    $new_file_names[] = Validator::checkFileName($files, $file_dir);
+                }
+            }
+        }
+        //アップロード自体なければ空の配列を返す
+        return $new_file_names;
+    }
+
+    /**
+     * 更新時のチェック
+     * 更新のあったファイルのみファイル名の生成
+     * 更新がなければ既存のファイル名を使用
+     */
+    public function checkUpdateFileName($files = [], $exists_file_names = []) {
+        Validator::paramClear();
+        $new_file_names = [];
+        $file_dir = './include/images/brands/img/';
+        $file_count = count($files); //int(10)
+
+        for ($i=0; $i < $file_count; $i++) {
+            if (isset($files[$i]) === true) {
+                $new_file_names[$i] = Validator::checkFileName($files[$i], $file_dir);
+            } else {
+                $new_file_names[$i] = $exists_file_names[$i];
+            }
+        }
+        
+        return $new_file_names;//（ファイルがなければ空文字が代入される）
+    }
+    
+    // paginations ------------------------------------------------------------------------
+    /**
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getPaginations() {
+        //トータルレコードの取得
+        $total_record = self::getTotalRecord();
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+
+    /**
+     * 各テーブルのトータルレコード数を返す
+     * return $record['cnt']
+     */
+    public static function getTotalRecord() {
+        // テーブルから全レコードの数をカウント
+        // (indexのsql文に合わせる)
+        $sql = 'SELECT COUNT(*) as cnt' . PHP_EOL
+             . 'FROM brands AS A' . PHP_EOL
+             . 'LEFT JOIN ' .PHP_EOL
+             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+             . 'ON A.brand_id = B.brand_id';
+        
+        $record = Messages::retrieveBySql($sql);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+
+    /**
+     * 検索時のページネーション
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getSearchPaginations($search = []) {
+        //トータルレコードの取得
+        $total_record = self::getSearchRecord($search);
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+
+    /**
+     * 検索時のページネーション
+     * トータルレコード数の取得
+     * 
+     */
+    public static function getSearchRecord($search = []) {
+        // テーブルから全レコードの数をカウント
+        //(indexのsql文に合わせる)
+        $searchSql = 'SELECT COUNT(*) as cnt' . PHP_EOL
+                   . 'FROM brands AS A' . PHP_EOL
+                   . 'LEFT JOIN ' .PHP_EOL
+                   . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+                   . 'ON A.brand_id = B.brand_id';
+        //$sqlに結合代入
+        $searchSql .= self::setSearchSql($search);
+
+        //bindValue
+        $searchParams = self::setSearchParams($search);
+        
+        //トータルレコード数の取得
+        $record = Messages::retrieveBySql($searchSql, $searchParams);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
     
     
+    // index ------------------------------------------------------------------------
     /**
      * テーブル一覧の取得
-     * brands+categorys+items結合
+     * brands
      * itemsテーブルにいくつアイテムがあるかカウント
      */
     public function indexBrands() {
-        $sql = 'SELECT A.brand_id, A.brand_name, A.status,' . PHP_EOL
-             . '       COALESCE(B.category_id,0) AS category_id, COALESCE(B.category_name,:null) AS category_name,' . PHP_EOL
-             . '       COALESCE(C.item_count,0) AS item_count' . PHP_EOL
-             . 'FROM ' .PHP_EOL
-             . '    brands AS A' . PHP_EOL
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        $sql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+             . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL //結合できない(商品がない)場合0を表示
+             . 'FROM brands AS A' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT category_id, category_name FROM categorys) AS B' . PHP_EOL
-             . 'ON A.category_id = B.category_id' . PHP_EOL
-             . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS C' . PHP_EOL
-             . 'ON A.brand_id = C.brand_id';
-            //  . PHP_EOL . 'ORDER BY A.brand_id DESC';
+             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+             . 'ON A.brand_id = B.brand_id' . PHP_EOL
+             . 'ORDER BY A.brand_id DESC' . PHP_EOL 
+             . 'LIMIT :display_record OFFSET :start_record';
         
-        //NULLを未設定に代替
-        $params = [':null' => '未設定'];
+        $params = [
+            ':display_record' => $display_record,
+            ':start_record' => $start_record,
+        ];
         
         return Messages::findBySql($sql,$params); 
     }
     
+    // search ------------------------------------------------------------------------
+    /**
+     * 検索・絞り込み
+     * 
+     */
+    public function searchBrands($search = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //ベースとなるSQL文を準備
+        $searchSql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+                   . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL
+                   . 'FROM brands AS A' . PHP_EOL
+                   . 'LEFT JOIN ' .PHP_EOL
+                   . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+                   . 'ON A.brand_id = B.brand_id';
+
+        //検索項目を確認　SQL文作成し結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //さらにページネーション用のSQL文を結合代入
+        $searchSql .= ' ORDER BY A.brand_id DESC LIMIT :display_record OFFSET :start_record';
+        
+        //検索項目を確認　bindする配列を作成
+        $searchParams = self::setSearchParams($search);
+        
+        //searchParamsにページネーション用の配列追加
+        $searchParams += [':display_record' => $display_record, ':start_record' => $start_record];
+
+        //検索・絞り込みに応じたレコードの取得
+        return Messages::findBySql($searchSql,$searchParams); 
+    }
     
+    /**
+     * SQL文
+     * getで受け取った値からSQL文を作成
+     * 
+     * カラムはテーブルによって異なる(カラム名はbindできない)
+     */
+    public static function setSearchSql ($search = []) {
+        // 指定したキーが配列にあるか調べる
+        if (array_key_exists('keyword', $search)) { // keywordの場合
+            $searchSql = ' WHERE A.brand_name LIKE :search_value';
+        } else if (array_key_exists('filter', $search)) { //filterの場合
+            // $searchSql = ' WHERE  = :search_value';
+        } 
+        return $searchSql;
+    }
+
+    /**
+     * bindValue
+     * getで受け取った値からbindする配列を作成
+     * 
+     */
+    public static function setSearchParams ($search = []) {
+        // 指定したキーが配列にあるか調べる
+        if (array_key_exists('keyword', $search)) {
+            foreach ($search as $key => $value) {
+                $value = "%{$value}%"; //前後0文字以上検索
+                $searchParams = [':search_value' => $value,];
+            } 
+        } else if (array_key_exists('filter', $search)) {
+            foreach ($search as $key => $value) {
+                $value = (int)$value; //intに変換
+                $searchParams = [':search_value' => $value,];
+            }
+        }
+        return $searchParams;
+    }
+
+    // sorting ------------------------------------------------------------------------
+    /**
+     * 並べ替え
+     */
+    public function sortingBrands($sorting = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
+        $sortingSql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+                    . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL
+                    . 'FROM brands AS A' . PHP_EOL
+                    . 'LEFT JOIN ' .PHP_EOL
+                    . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+                    . 'ON A.brand_id = B.brand_id';
+
+        //sortingのSQL文を結合代入
+        $sortingSql .= self::setSortingSql($sorting);
+
+        //sortingのbindはしない(直接SQL文に書き込む)
+        $params = [':display_record' => $display_record, ':start_record' => $start_record];
+
+        return Messages::findBySql($sortingSql,$params);
+    }
+    
+    /**
+     * 0:ブランド名順
+     * 1:昇順
+     * 2:降順
+     * 
+     */
+    public static function setSortingSql($sorting = []) {
+        if ($sorting === '0') {
+            $sortingSql = ' ORDER BY A.brand_name ASC';
+        } else if ($sorting === '1') {
+            $sortingSql = ' ORDER BY A.brand_id ASC';
+        } else if ($sorting === '2') {
+            $sortingSql = ' ORDER BY A.brand_id DESC';
+        } 
+        $sortingSql .= ', A.brand_id DESC LIMIT :display_record OFFSET :start_record';
+
+        return $sortingSql;
+    }
+
+    // insert ------------------------------------------------------------------------
+
     /**
      * 新規ブランド登録
      */
     public function insertBrand() 
         {
         $sql = 'INSERT INTO brands ' . PHP_EOL
-             . '    (brand_name, category_id, description, brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
+             . '    (brand_name, description, brand_logo, img1, img2, img3, img4, img5, img6, img7, img8,' . PHP_EOL
+             . '    brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
              . '    phone_number, email, address, status, create_datetime)' . PHP_EOL
              . 'VALUES ' . PHP_EOL
-             . '    (:brand_name, :category_id, :description, :brand_hp, :brand_instagram, :brand_twitter, :brand_facebook, :brand_youtube, :brand_line,' . PHP_EOL
-             . '    :phone_number, :email, :address, :status, :create_datetime)';
+             . '    (:brand_name, :description, :brand_logo, :img1, :img2, :img3, :img4, :img5, :img6, :img7, :img8,' . PHP_EOL
+             . '     :brand_hp, :brand_instagram, :brand_twitter, :brand_facebook, :brand_youtube, :brand_line,' . PHP_EOL
+             . '     :phone_number, :email, :address, :status, :create_datetime)';
              
         $params = [
             ':brand_name' => $this->brand_name,
-            ':category_id' => $this->category_id,
             ':description' => $this->description,
+            ':brand_logo' => $this->brand_logo,
+            ':img1' => $this->img1,
+            ':img2' => $this->img2,
+            ':img3' => $this->img3,
+            ':img4' => $this->img4,
+            ':img5' => $this->img5,
+            ':img6' => $this->img6,
+            ':img7' => $this->img7,
+            ':img8' => $this->img8,
             ':brand_hp' => $this->brand_hp,
             ':brand_instagram' => $this->brand_instagram,
             ':brand_twitter' => $this->brand_twitter,
@@ -223,31 +497,95 @@ class Brands {
         
         Messages::executeBySql($sql, $params);
     }
+
+    /**
+     * ブランドロゴのアップロード
+     * アップロードできなければロールバック(コミットさせない)
+     */
+    public function uploadFiles($files, $new_file_name) {
+        $file_dir = './include/images/brands/logo/';
+        $to = $file_dir . $new_file_name;
+        
+        if (empty($files) !== true) {
+            Messages::uploadFiles($files, $to);
+        }
+    }
+
+    /**
+     * 複数ファイルのアップロード
+     */
+    public function uploadMultipleFiles($re_files = [], $new_file_names = []) {
+        $file_dir = './include/images/brands/img/';
+
+        if (empty($re_files) !== true) {
+            $file_count = count($re_files);
+
+            for ($i=0; $i<$file_count; $i++) {
+                //
+                $to = $file_dir . $new_file_names[$i];
+                $files = $re_files[$i];
+                //エラーがあればロールバックを行う  
+                Messages::uploadFiles($files, $to);
+            }
+        }
+    }  
     
+    /**
+     * 複数ファイルのファイル名プロパティ登録
+     */
+    public function registerMultipleFiles($new_file_names = []) {
+        $file_count = count($new_file_names); //配列の数をカウント
+
+        for ($i=0; $i<$file_count; $i++) {
+            //プロパティ名が1から始まるため変更
+            $no = $i+1;
+            //参照プロパティ
+            $property = 'img'.$no;
+            //プロパティに格納
+            $this -> $property = $new_file_names[$i];
+        }
+    }
+    
+    // edit ------------------------------------------------------------------------
     /**
      * 指定レコードの取得
      */
     public function editBrand() {
-        //A brands+ B categorys+ C itemsで左辺結合
-        $sql = 'SELECT A.brand_id, A.brand_name, A.status,' . PHP_EOL
-             . '       description, brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
-             . '       phone_number, email, address,' . PHP_EOL
-             . '       COALESCE(B.category_id,0) AS category_id, COALESCE(B.category_name,:null) AS category_name,' . PHP_EOL
-             . '       COALESCE(C.item_count, 0) AS item_count' . PHP_EOL
-             . 'FROM ' .PHP_EOL
+        $sql = 'SELECT A.brand_id, A.brand_name, A.description, A.brand_logo, A.img1,' . PHP_EOL
+             . '       A.brand_hp, A.brand_instagram, A.brand_twitter, A.brand_facebook, A.brand_youtube, A.brand_line,' . PHP_EOL
+             . '       A.phone_number, A.email, A.address, A.status, A.create_datetime, A.update_datetime,' . PHP_EOL
+             . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL //結合できない(商品がない)場合0を表示
+             . 'FROM' . PHP_EOL
              . '    (SELECT * FROM brands WHERE brand_id = :brand_id) AS A' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT category_id, category_name FROM categorys) AS B' . PHP_EOL
-             . 'ON A.category_id = B.category_id' . PHP_EOL
-             . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items GROUP BY brand_id) AS C' . PHP_EOL
-             . 'ON A.brand_id = C.brand_id';
-        
-        $params = [':null' => '未設定', ':brand_id' => $this->brand_id ];
+             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
+             . 'ON A.brand_id = B.brand_id';
+                
+        $params = [
+            ':brand_id' => $this->brand_id,
+        ];
         //return $records[0]のみ
         return Messages::retrieveBySql($sql,$params); 
     }
+
+    /**
+     * 指定レコードの画像取得
+     * 
+     */
+    public function editBrandImg() {
+        $sql = 'SELECT brand_id, brand_name, img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
+             . 'FROM brands' .PHP_EOL
+             . 'WHERE brand_id = :brand_id';
+        
+          
+        $params = [
+            ':brand_id' => $this->brand_id, 
+        ];
+        
+        return Messages::retrieveBySql($sql,$params); 
+    }
     
+    // update ------------------------------------------------------------------------
     /**
      * 指定レコードの更新
      */
@@ -255,8 +593,8 @@ class Brands {
         {
         $sql = 'UPDATE brands' . PHP_EOL
              . 'SET brand_name = :brand_name,'. PHP_EOL
-             . '    category_id = :category_id,'. PHP_EOL
              . '    description = :description,'. PHP_EOL
+             . '    brand_logo = :brand_logo,'. PHP_EOL
              . '    brand_hp = :brand_hp,'. PHP_EOL
              . '    brand_instagram = :brand_instagram,'. PHP_EOL
              . '    brand_twitter = :brand_twitter,'. PHP_EOL
@@ -272,8 +610,8 @@ class Brands {
              
         $params = [
             ':brand_name' => $this->brand_name,
-            ':category_id' => $this->category_id,
             ':description' => $this->description,
+            ':brand_logo' => $this->brand_logo,
             ':brand_hp' => $this->brand_hp,
             ':brand_instagram' => $this->brand_instagram,
             ':brand_twitter' => $this->brand_twitter,
@@ -290,34 +628,65 @@ class Brands {
         
         Messages::executeBySql($sql, $params);
     }
-    
+
     /**
-     * 指定レコードの削除
+     * imgの更新
      */
-    public function deleteBrand() {
-        $sql = 'DELETE FROM brands' . PHP_EOL
-         . 'WHERE brand_id = :brand_id';
+    public function updateBrandImg() 
+    {
+        $sql = 'UPDATE brands' . PHP_EOL
+             . 'SET img1 = :img1,' . PHP_EOL
+             . '    img2 = :img2,' . PHP_EOL
+             . '    img3 = :img3,' . PHP_EOL
+             . '    img4 = :img4,' . PHP_EOL
+             . '    img5 = :img5,' . PHP_EOL
+             . '    img6 = :img6,' . PHP_EOL
+             . '    img7 = :img7,' . PHP_EOL
+             . '    img8 = :img8,' . PHP_EOL
+             . '    update_datetime = :update_datetime' . PHP_EOL
+             . 'WHERE brand_id = :brand_id' . PHP_EOL;
         
-        $params = [':brand_id' => $this->brand_id];
-        
+        $params = [
+            ':img1' => $this->img1,
+            ':img2' => $this->img2,
+            ':img3' => $this->img3,
+            ':img4' => $this->img4,
+            ':img5' => $this->img5,
+            ':img6' => $this->img6,
+            ':img7' => $this->img7,
+            ':img8' => $this->img8,
+            ':update_datetime' => $this->update_datetime,
+            ':brand_id' => $this->brand_id,
+        ];
+    
         Messages::executeBySql($sql, $params);
     }
-    
+
     /**
-     * 全レコード削除
+     * 複数ファイルの更新(更新のあったファイルのみ)
+     * 
      */
-    public function deleteAll($table) {
-        $sql = 'TRUNCATE TABLE :table';
-    
-        $params = [':table' => $table];
-        
-        Messages::executeBySql($sql, $params);
+    public function updateMultipleFiles($files = [], $new_file_names = []) {
+        $file_dir = './include/images/brands/img/';
+
+        if (empty($files) !== true) {
+            $file_count = count($files);
+            for ($i=0; $i<$file_count; $i++) {
+                //アップロードのあったファイルのみ処理を行う
+                if (isset($files[$i]) === true) {
+                    $to = $file_dir . $new_file_names[$i];
+
+                    //エラーがあればロールバックを行う  
+                    Messages::uploadFiles($files[$i], $to);
+                }
+            }
+        }
     }
-    
+
     /**
      * 指定レコードのステータス更新
      */
-    public function updateStatus() {
+    public function updateBrandStatus() {
         $sql = 'UPDATE brands' . PHP_EOL
              . 'SET status = :status, update_datetime = :update_datetime' . PHP_EOL
              . 'WHERE brand_id = :brand_id';
@@ -330,7 +699,21 @@ class Brands {
             
         Messages::executeBySql($sql, $params);
     }
-    
+
+    // delete ------------------------------------------------------------------------
+    /**
+     * 指定レコードの削除
+     */
+    public function deleteBrand() {
+        $sql = 'DELETE FROM brands' . PHP_EOL
+             . 'WHERE brand_id = :brand_id';
+        
+        $params = [':brand_id' => $this->brand_id];
+        
+        Messages::executeBySql($sql, $params);
+    }
+
+    // select ------------------------------------------------------------------------
     /**
      * 商品管理に使用 static
      * 

@@ -1,8 +1,9 @@
 <?php
-$title = 'ec site 管理画面';
+$title = 'goodandnew管理画面';
 $description = '説明（新規登録ページ）';
-$is_home = true; //トップページの判定用の変数
+$is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash();
+$token = Session::getCsrfToken(); // トークンの取得
 $cookie_check = Cookie::getCookieCheck();
 $cookie_name = Cookie::getCookieName();
 include './include/view/_inc/admin/head.php'; // head.php の読み込み
@@ -64,6 +65,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <input type="submit" value="登録する">
                 <input type="hidden" name="module" value="admin_accounts">
                 <input type="hidden" name="action" value="register">
+                <input type="hidden" name="token" value="<?=h($token)?>">
               </div>
             </form>
           </div>
