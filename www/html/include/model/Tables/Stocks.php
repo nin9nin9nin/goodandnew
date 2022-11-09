@@ -31,13 +31,16 @@ class Stocks {
         Validator::paramClear();
         
         if (!Validator::checkInputempty($this->stock)) {
-            return CommonError::errorAdd('在庫を入力してください');
+            return CommonError::errorAdd('在庫数を入力してください');
         } else if (!Validator::checkRange($this->stock, 1, 10)) {
-            return CommonError::errorAdd('在庫は半角数字、10桁以内で入力してください');
+            return CommonError::errorAdd('在庫数は半角数字、10桁以内で入力してください');
         }
     }
 
-    
+    // index ------------------------------------------------------------------------
+    //class Items内で結合して呼び出し
+
+    // insert ------------------------------------------------------------------------
     /**
      * stocksテーブルに新規登録
      * item_id = lastInsertId();
@@ -58,6 +61,10 @@ class Stocks {
         Messages::executeBySql($sql, $params);
     }
     
+    // edit ------------------------------------------------------------------------
+    //class Items内で結合して呼び出し
+
+    // update ------------------------------------------------------------------------
     /**
      * 指定レコードの編集（stockテーブル）
      */

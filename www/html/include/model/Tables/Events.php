@@ -186,7 +186,8 @@ class Events {
      */
     public static function getTotalRecord() {
         // テーブルから全レコードの数をカウント
-        $sql ='SELECT COUNT(*) as cnt FROM events';
+        $sql ='SELECT COUNT(*) as cnt' . PHP_EOL
+            . 'FROM events';
         
         //テーブル名はプレースホルダーに使用できない
         // $params = [':table_name' => $this->table_name];
@@ -218,7 +219,8 @@ class Events {
      */
     public static function getSearchRecord($search = []) {
         // テーブルから全レコードの数をカウント
-        $searchSql ='SELECT COUNT(*) as cnt FROM events';
+        $searchSql ='SELECT COUNT(*) as cnt' . PHP_EOL
+                  . 'FROM events';
         //$sqlに結合代入
         $searchSql .= self::setSearchSql($search);
 

@@ -1,83 +1,119 @@
 <?php
+
 require_once(MODEL_DIR . '/Tables/Items.php');
 
 function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
+
+    // postされたトークンの取得
+    $token = Request::get('token');
     
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_items', 'index');
+        exit;
+    }
+    
+    //hidden
     $id = Request::get('item_id');
-    $icon_img = "";
-        
+
     if (preg_match('/^\d+$/', $id) !== 1) {
         return View::render404();
     }
+
+    //ファイルの取得
+    $imgs[] = Request::getFiles('img1'); //初期値NULL
+    $imgs[] = Request::getFiles('img2'); 
+    $imgs[] = Request::getFiles('img3'); 
+    $imgs[] = Request::getFiles('img4'); 
+    $imgs[] = Request::getFiles('img5'); 
+    $imgs[] = Request::getFiles('img6'); 
+    $imgs[] = Request::getFiles('img7'); 
+    $imgs[] = Request::getFiles('img8'); 
+
+    //アップロード自体がないものの「変更」ボタンを押された際の処理
+    if (count(array_filter($imgs)) === 0 ) {
+        Session::setFlash('変更はありませんでした');
+
+        return View::redirectTo('admin_items', 'edit_img', ['item_id' => $id]);
+        exit;
+    }
+
+    //既存のファイル名の取得
+    $exists_img_names[] = Request::get('exists_img1'); // $_POST['exists_img1']既存のファイル名
+    $exists_img_names[] = Request::get('exists_img2');
+    $exists_img_names[] = Request::get('exists_img3');
+    $exists_img_names[] = Request::get('exists_img4');
+    $exists_img_names[] = Request::get('exists_img5');
+    $exists_img_names[] = Request::get('exists_img6');
+    $exists_img_names[] = Request::get('exists_img7');
+    $exists_img_names[] = Request::get('exists_img8');
     
     //クラス生成（初期化）
     $classItems = new Items();
-    
+
     //プロパティに値をセット
-    $classItems -> item_id = $id;
-    
+    $classItems -> item_id = $id;   
+
     //エラーチェック
     try {
         //エラークラス初期化　$e = null
         CommonError::errorClear();
         
-        //画像の取得とファイル名の作成
-        if (is_uploaded_file($_FILES['icon_img']['tmp_name']) === TRUE) {
-            $extension = pathinfo($_FILES['icon_img']['name'], PATHINFO_EXTENSION);
-            $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
-            if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
-                $icon_img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
-                if (is_file(IMG_DIR . $icon_img) !== TRUE) {
-                    //プロパティに登録
-                    $classItems -> icon_img = $icon_img;
-                } else {
-                    CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
-                }
-            } else {
-                CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
-            }
-        } else {
-            CommonError::errorAdd('ファイルを選択してください');
-        }
-        
+        //アップロードのあったファイルは新規のファイル名を生成（なければ既存のファイル名を使用）
+        $img_names = $classItems -> checkUpdateFileName($imgs, $exists_img_names);
+
         //エラーがあればthrow
         CommonError::errorThrow();
         
     } catch (Exception $e) {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
-        
-        //指定レコードの取得
-        $records[0] = $classItems -> editItem();
-    
-        return View::render('img_edit', ['records' => $records, 'errors' => $errors]);
+
+        $record = $classItems -> editItemImg(); 
+
+        //エラーメッセージを添えて再度render
+        return View::render('edit_img', ['record' => $record, 'errors' => $errors]);
         exit;
-    }    
-    
-    
-    //更新処理------------------------------------------------------------------
-    
-    $now_date = date('Y-m-d H:i:s');
-        
-    //プロパティ登録日時
-    $classItems -> update_datetime = $now_date;
-    
-    //データベース接続（画像のみ更新）
-    $classItems -> updateItemIconImg();
-    
-    //画像のファイルアップロード
-    if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
-        //controllerでキャッチしてもらう(error.tpl.phpへ)
-        $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
-        throw $e;
     }
     
-    //指定レコードの取得
-    $records[0] = $classItems -> editItem();
+    //更新処理------------------------------------------------------------------
+    //データベース接続と画像のアップロード
+    Database::beginTransaction();
+    try {
+        $now_date = date('Y-m-d H:i:s');
+        
+        //更新日時のプロパティ登録
+        $classItems -> update_datetime = $now_date;
+
+        //複数ファイルのファイル名をプロパティ登録
+        $classItems -> registerMultipleFiles($img_names);
+
+        //指定レコードの編集（itemsテーブル）executeBySql()
+        $classItems -> updateItemImg();
+        
+        //アップロードあったファイルのみ処理を行う（できなければrollback）
+        $classItems -> updateMultipleFiles($imgs, $img_names);
+
+        Database::commit();
+      
+    } catch (Exception $e) {
+        $e = new Exception('データベースに接続できませんでした', 0, $e);
+        //トランザクションでのエラーはcontrollerでキャッチしてもらう(error.tpl.phpへ)
+        throw $e;
+        
+        Database::rollback();
+    }
+        
+    //フラッシュメッセージ
+    Session::setFlash('ID' . h($id) .':アイテム画像を変更しました');
     
-    //更新完了ページ
-    return View::render('complete', ['records' => $records]);
+    //画像確認のため再度画像ページへ
+    return View::redirectTo('admin_items', 'edit_img', ['item_id' => $id]);
 }

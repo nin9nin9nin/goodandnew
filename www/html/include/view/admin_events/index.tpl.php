@@ -182,7 +182,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                   <table>
                       <tr>
                           <th class="select-title">
-                            <label for="filter">カテゴリ</label>
+                            <label for="filter">タグ</label>
                           </th>
                           <td class="select-name">
                             <select id="filter" name="search[filter]" ONCHANGE="submit(this.form)">
