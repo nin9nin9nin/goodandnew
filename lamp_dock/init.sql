@@ -219,25 +219,25 @@ CREATE TABLE dashboards (
   primary key(dashboard_id)
 );
 
--- トップページ（ショップ画面設定）
+-- ショップ画面トップページ（イベント）
 CREATE TABLE shops (
   shop_id int(11) NOT NULL COMMENT 'ID' AUTO_INCREMENT,
   event_id int(11) NOT NULL COMMENT 'イベントID',
-  recommend_item1 int(11) COMMENT 'おすすめアイテム1（アイテムID)',
-  recommend_item2 int(11) COMMENT 'おすすめアイテム2（アイテムID)',
-  recommend_item3 int(11) COMMENT 'おすすめアイテム3（アイテムID)',
-  recommend_item4 int(11) COMMENT 'おすすめアイテム4（アイテムID)',
-  join_brand1 int(11) COMMENT '参加ブランド1（ブランドID）',
-  join_brand2 int(11) COMMENT '参加ブランド2（ブランドID）',
-  join_brand3 int(11) COMMENT '参加ブランド3（ブランドID）',
-  join_brand4 int(11) COMMENT '参加ブランド4（ブランドID）',
-  join_brand5 int(11) COMMENT '参加ブランド5（ブランドID）',
   status int(11) NOT NULL default 0 COMMENT 'ステータス（0:非公開、1:公開）',
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   foreign key(event_id) references events (event_id),
   primary key(shop_id)
+);
+
+-- ショップ画面トップページ（レコメンドアイテム）
+CREATE TABLE shop_recommend (
+  shop_id int(11) NOT NULL COMMENT 'ショップID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
+  create_datetime DATETIME COMMENT 'レコードの作成日',
+  update_datetime DATETIME COMMENT 'レコードの更新日',
+  primary key(shop_id, item_id)
 );
 
 
