@@ -1,38 +1,63 @@
 <?php
 require_once(MODEL_DIR . '/Tables/Items.php');
 require_once(MODEL_DIR . '/Tables/Stocks.php');
-require_once(MODEL_DIR . '/Tables/Categorys.php');
-require_once(MODEL_DIR . '/Tables/Brands.php');
-require_once(MODEL_DIR . '/Tables/Shops.php');
+require_once(MODEL_DIR . '/Tables/Categorys.php'); //selectOption呼び出し
+require_once(MODEL_DIR . '/Tables/Brands.php'); //selectOption呼び出し
+require_once(MODEL_DIR . '/Tables/Events.php'); //selectOption呼び出し
 
 function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
 
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    // postされたトークンの取得
+    $token = Request::get('token');
+
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_items', 'index');
+        exit;
+    }
+
+    //ページIDの取得（なければ1が格納される）
+    $page_id = Request::getPageId('page_id');
+    
+    if (preg_match('/^\d+$/', $page_id) !== 1) {
+        return View::render404();
+    }
+
+    //フォームの値を取得
     $name = Request::get('item_name');
     $category_id = Request::get('category_id');
     $brand_id = Request::get('brand_id');
-    $shop_id = Request::get('shop_id');
+    $event_id = Request::get('event_id');
     $price = Request::get('price');
     $stock = Request::get('stock');
     $description = Request::get('description');
-    $status = Request::get('status');
-    $icon_img = '';
+    $icon_img = Request::getFiles('icon_img'); //初期値NULL
+    $imgs = Request::getMultipleFiles('img'); //reArray処理済み
+    $status = Request::getStatus('status'); //初期値設定0
+
     
     //クラス生成（初期化）
     $classItems = new Items();
     $classStocks = new Stocks();
     
     //プロパティに値をセット
+    $classItems -> page_id = $page_id;
     $classItems -> item_name = $name;
     $classItems -> category_id = $category_id;
     $classItems -> brand_id = $brand_id;
-    $classItems -> shop_id = $shop_id;
+    $classItems -> event_id = $event_id;
     $classItems -> price = $price;
+    $classStocks -> stock = $stock;
     $classItems -> description = $description;
     $classItems -> status = $status;
-    $classStocks -> stock = $stock;
     
     //エラーチェック
     try {
@@ -41,29 +66,14 @@ function execute_action() {
         
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classItems -> checkItemName();
+        $classItems -> checkCategoryId();
+        $classItems -> checkBrandId();
+        $classItems -> checkEventId();
         $classItems -> checkPrice();
         $classStocks -> checkStock();
-        $classItems -> checkIconImg();
-        $classItems -> checkImg();
-        
-        // //画像の取得とファイル名の作成
-        // if (is_uploaded_file($_FILES['icon_img']['tmp_name']) === TRUE) {
-        //     $extension = pathinfo($_FILES['icon_img']['name'], PATHINFO_EXTENSION);
-        //     $extension = strtolower($extension); // あいうえお.JPG => JPG => jpg
-        //     if ($extension === 'jpeg' || $extension === 'jpg' || $extension === 'png') {
-        //         $icon_img = sha1(uniqid(mt_rand(), true)). '.' . $extension;
-        //         if (is_file(IMG_DIR . $icon_img) !== TRUE) {
-        //             //プロパティに登録
-        //             $classItems -> icon_img = $icon_img;
-        //         } else {
-        //             CommonError::errorAdd('ファイルアップロードに失敗しました。再度お試しください');
-        //         }
-        //     } else {
-        //         CommonError::errorAdd('ファイル形式が異なります。画像ファイルはJPEGとPNGが利用可能です');
-        //     }
-        // } else {
-        //     CommonError::errorAdd('ファイルを選択してください');
-        // }
+        //生成したファイル名の受け取り
+        $icon_name = $classItems -> checkFileName($icon_img);
+        $img_names = $classItems -> checkMultipleFileName($imgs);
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -72,17 +82,14 @@ function execute_action() {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
             
-        //items,stocks 結合テーブルの取得
         $records['items'] = $classItems -> indexItems();
-        //categorysテーブルの取得　select/option用
-        $records['categorys'] = Categorys::selectOption_Genre();
-        //brandsテーブルの取得　select/option用
+        $records['categorys'] = Categorys::selectOption_Categorys();
         $records['brands'] = Brands::selectOption_Brands();
-        //shopsテーブルの取得　select/option用
-        $records['shops'] = Shops::selectOption_Shops();
+        $records['events'] = Events::selectOption_Events();
+        $paginations = $classItems -> getPaginations();
         
-        
-        return View::render('index', ['records' => $records, 'errors' => $errors]);
+        //renderでエラーメッセージを表示
+        return View::render('index', ['records' => $records, 'paginations' => $paginations, 'errors' => $errors]);
         exit;
     }
     
@@ -96,11 +103,14 @@ function execute_action() {
         //プロパティ登録日時
         $classItems -> create_datetime = $now_date;
         $classStocks -> create_datetime = $now_date;
-        
+        //ファイルのプロパティ登録
+        $classItems -> icon_img = $icon_name;
+        $classItems -> registerMultipleFiles($img_names);
+
         //itemsテーブルに新規登録　executeBySql()
         $classItems -> insertItem();
         
-        //item_idの取得
+        //stock登録　item_idの取得
         $item_id = Database::lastInsertId();
         
         //プロパティ　stocksテーブルにitem_idをセット
@@ -108,19 +118,11 @@ function execute_action() {
         
         //stocksテーブルに新規登録　executeBySql()
         $classStocks -> insertStock();
-        
-        //画像のファイルアップロード（できなければrollback）
-        $classItems -> uploadIconImg();
-        $classItems -> uploadImg();
 
-        // if (move_uploaded_file($_FILES['icon_img']['tmp_name'], IMG_DIR . $icon_img) !== TRUE) {
-        //     $e = new Exception('ファイルアップロードに失敗しました', 0, $e);
-        //     throw $e;
-            
-        //     Database::rollback();
-        // } else {
-        //     Database::commit();
-        // }
+        //画像のファイルアップロード（できなければrollback）
+        $classItems -> uploadFiles($icon_img, $icon_name);
+        $classItems -> uploadMultipleFiles($imgs, $img_names);
+        
         Database::commit();
       
     } catch (Exception $e) {
@@ -131,9 +133,8 @@ function execute_action() {
         Database::rollback();
     }
     
-    Session::start();
     //フラッシュメッセージをセット
-    Session::setFlash('商品を登録しました');
+    Session::setFlash('アイテムを登録しました');
     
     return View::redirectTo('admin_items', 'index');
 }

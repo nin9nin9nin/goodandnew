@@ -78,11 +78,8 @@ class Categorys {
      */
     public static function getTotalRecord() {
         // テーブルから全レコードの数をカウント
-        //(indexのsql文に合わせる)
         $sql ='SELECT COUNT(*) as cnt' . PHP_EOL
-            . 'FROM categorys AS A' . PHP_EOL
-            . 'LEFT JOIN categorys AS B' . PHP_EOL
-            . 'ON A.parent_id = B.category_id';
+            . 'FROM categorys';
         
         // cnt取得
         $record = Messages::retrieveBySql($sql);
@@ -114,9 +111,8 @@ class Categorys {
         // テーブルから全レコードの数をカウント
         //(indexのsql文に合わせる)
         $searchSql ='SELECT COUNT(*) as cnt' . PHP_EOL
-                  . 'FROM categorys AS A' . PHP_EOL
-                  . 'LEFT JOIN categorys AS B' . PHP_EOL
-                  . 'ON A.parent_id = B.category_id';
+                  . 'FROM categorys AS A';
+
         //$sqlに結合代入
         $searchSql .= self::setSearchSql($search);
 

@@ -253,12 +253,8 @@ class Brands {
      */
     public static function getTotalRecord() {
         // テーブルから全レコードの数をカウント
-        // (indexのsql文に合わせる)
         $sql = 'SELECT COUNT(*) as cnt' . PHP_EOL
-             . 'FROM brands AS A' . PHP_EOL
-             . 'LEFT JOIN ' .PHP_EOL
-             . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
-             . 'ON A.brand_id = B.brand_id';
+             . 'FROM brands';
         
         $record = Messages::retrieveBySql($sql);
         
@@ -289,10 +285,8 @@ class Brands {
         // テーブルから全レコードの数をカウント
         //(indexのsql文に合わせる)
         $searchSql = 'SELECT COUNT(*) as cnt' . PHP_EOL
-                   . 'FROM brands AS A' . PHP_EOL
-                   . 'LEFT JOIN ' .PHP_EOL
-                   . '    (SELECT brand_id, COUNT(*) AS item_count FROM items WHERE enabled = true GROUP BY brand_id) AS B' . PHP_EOL
-                   . 'ON A.brand_id = B.brand_id';
+                   . 'FROM brands AS A';
+
         //$sqlに結合代入
         $searchSql .= self::setSearchSql($search);
 

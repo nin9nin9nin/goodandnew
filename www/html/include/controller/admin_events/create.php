@@ -115,7 +115,7 @@ function execute_action() {
     }
     
     //フラッシュメッセージをセット
-    Session::setFlash('商品を登録しました');
+    Session::setFlash('イベントを登録しました');
     
     return View::redirectTo('admin_events', 'index');
 }

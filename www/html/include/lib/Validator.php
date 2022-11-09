@@ -229,7 +229,7 @@ class Validator {
     //フォームからの受け取りのため最初を変更
     public static function checkRange($arg, $min_value, $max_value = null)
     {
-        if (preg_match('/^[1-9]+$/', $arg) && self::checkDigit($min_value) && mb_strlen($arg) >= $min_value
+        if (preg_match('/^([1-9][0-9]*)$/', $arg) && self::checkDigit($min_value) && mb_strlen($arg) >= $min_value
         && (is_null($max_value) || (self::checkDigit($max_value) && mb_strlen($arg) <= $max_value))){
             return true;
         } else {

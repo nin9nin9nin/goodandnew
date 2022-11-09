@@ -1,4 +1,5 @@
 <?php
+
 require_once(MODEL_DIR . '/Tables/Items.php');
 
 function execute_action() {
@@ -6,10 +7,22 @@ function execute_action() {
         return View::render404();
     }
     
-    $status = Request::get('status');
+    // postされたトークンの取得
+    $token = Request::get('token');
+    
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('admin_items', 'index');
+        exit;
+    }
+
+    $status = Request::getStatus('status');
     $id = Request::get('item_id');
     
-    var_dump($id);
     if (preg_match('/^\d+$/', $id) !== 1) {
         return View::render404();
     }
@@ -26,12 +39,11 @@ function execute_action() {
     
     $classItems -> update_datetime = $now_date;
     
-    //データベース接続（update）
-    $classItems -> updateStatus();
+    //指定レコードのステータスを更新
+    $classItems -> updateItemStatus();
     
     //フラッシュメッセージをセット
-    Session::getInstance() -> setFlash('ステータスを更新しました');
-    
+    Session::setFlash('ID' . h($id) .':ステータスを変更しました');    
     
     return View::redirectTo('admin_items', 'index');
 }
