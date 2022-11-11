@@ -616,15 +616,41 @@ class Events {
         return Messages::findBySql($sql);
     }
 
+    // ショップ画面設定 ------------------------------------------------------------------------
+    /**
+     * 公開中イベントの取得
+     */
+    public function releaseEvent() {
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
+             . 'FROM events' . PHP_EOL
+             . 'WHERE status = 1'; //公開中
+
+        return Messages::findBySql($sql);
+    }
+
     // ユーザー画面 ------------------------------------------------------------------------
     /**
      * トップ画面
-     * イベント情報
-     * 
+     * 公開中イベントの取得
      */
-    public function eventIndex() {
+    public function getEventRelease() {
         $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png,' . PHP_EOL
              . '       img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
+             . 'FROM events' . PHP_EOL
+             . 'WHERE status = 1'; //公開中
+
+        return Messages::findBySql($sql);
+    }
+
+    /**
+     * items画面/gallery画面
+     * イベント詳細
+     * 
+     * status=0の場合[在庫数][カート]ボタンを非表示にする
+     */
+    public function getEventDetail() {
+        $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png,' . PHP_EOL
+             . '       img1, img2, img3, img4, img5, img6, img7, img8, status' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
@@ -640,7 +666,7 @@ class Events {
      * スケジュール一覧(一部)
      * 
      */
-    public function scheduleIndexPart() {
+    public function getEventSchedulePart() {
         // 表示する件数
         $display_record = '5';
         // 配列の何番目から取得するか決定(OFFSET句)
@@ -663,7 +689,7 @@ class Events {
      * スケジュール一覧
      * 
      */
-    public function scheduleIndex() {
+    public function getEventSchedule() {
         // 1ページに表示する件数
         $display_record = $this -> display_record;
         // 配列の何番目から取得するか決定(OFFSET句)

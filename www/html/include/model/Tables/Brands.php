@@ -313,7 +313,7 @@ class Brands {
         // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
         $start_record = ($this->page_id - 1) * $display_record;
 
-        $sql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+        $sql = 'SELECT A.brand_id, A.brand_name, A.brand_logo, A.status,' . PHP_EOL
              . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL //結合できない(商品がない)場合0を表示
              . 'FROM brands AS A' . PHP_EOL
              . 'LEFT JOIN ' .PHP_EOL
@@ -342,7 +342,7 @@ class Brands {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //ベースとなるSQL文を準備
-        $searchSql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+        $searchSql = 'SELECT A.brand_id, A.brand_name, A.brand_logo, A.status,' . PHP_EOL
                    . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL
                    . 'FROM brands AS A' . PHP_EOL
                    . 'LEFT JOIN ' .PHP_EOL
@@ -413,7 +413,7 @@ class Brands {
         $start_record = ($this->page_id - 1) * $display_record;
 
         //PHP_EOL 実行環境のOSに対応する改行コードを出力する定数
-        $sortingSql = 'SELECT A.brand_id, A.brand_name, A.img1, A.status,' . PHP_EOL
+        $sortingSql = 'SELECT A.brand_id, A.brand_name, A.brand_logo, A.status,' . PHP_EOL
                     . '       COALESCE(B.item_count,0) AS item_count' . PHP_EOL
                     . 'FROM brands AS A' . PHP_EOL
                     . 'LEFT JOIN ' .PHP_EOL

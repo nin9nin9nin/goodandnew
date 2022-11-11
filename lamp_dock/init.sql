@@ -80,7 +80,6 @@ CREATE TABLE items (
   item_name varchar(64) NOT NULL COMMENT 'アイテム名' COLLATE utf8_general_ci,
   category_id int(11) NOT NULL default 0 COMMENT 'カテゴリーID',
   brand_id int(11) NOT NULL default 0 COMMENT 'ブランドID',
-  event_id int(11) default 0 COMMENT 'イベントID',
   price int(11) NOT NULL COMMENT '値段',
   description text COMMENT 'アイテム説明' COLLATE utf8_general_ci,
   icon_img varchar(128) NOT NULL COMMENT 'アイコン画像',
@@ -210,36 +209,44 @@ CREATE TABLE cart_detail (
 
 -- ダッシュボード
 CREATE TABLE dashboards (
-  dashboard_id int(11) NOT NULL COMMENT 'ID',
+  dashboard_id int(11) NOT NULL COMMENT 'ID' AUTO_INCREMENT,
   news text NOT NULL COMMENT 'ニュース',
   topics text NOT NULL COMMENT 'トピックス',
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(dashboard_id)
-);
+); 
 
--- ショップ画面トップページ（イベント）
-CREATE TABLE shops (
-  shop_id int(11) NOT NULL COMMENT 'ID' AUTO_INCREMENT,
+-- イベント属性ブランド（中間テーブル）
+CREATE TABLE exclusive_brands (
   event_id int(11) NOT NULL COMMENT 'イベントID',
-  status int(11) NOT NULL default 0 COMMENT 'ステータス（0:非公開、1:公開）',
-  enabled boolean NOT NULL default true COMMENT '有効',
+  brand_id int(11) NOT NULL COMMENT 'ブランドID',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  foreign key(event_id) references events (event_id),
-  primary key(shop_id)
+  primary key(event_id, brand_id)
 );
 
--- ショップ画面トップページ（レコメンドアイテム）
-CREATE TABLE shop_recommend (
-  shop_id int(11) NOT NULL COMMENT 'ショップID',
+-- イベント属性アイテム（中間テーブル）
+CREATE TABLE exclusive_items (
+  event_id int(11) NOT NULL COMMENT 'イベントID',
   item_id int(11) NOT NULL COMMENT 'アイテムID',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  primary key(shop_id, item_id)
+  primary key(event_id, item_id)
 );
 
+-- ショップ画面トップページ、レコメンドアイテム（中間テーブル）
+CREATE TABLE recommend_items (
+  recommend_id int(11) NOT NULL COMMENT 'レコメンドID' AUTO_INCREMENT,
+  event_id int(11) NOT NULL COMMENT 'イベントID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
+  create_datetime DATETIME COMMENT 'レコードの作成日',
+  update_datetime DATETIME COMMENT 'レコードの更新日',
+  foreign key(event_id) references events (event_id),
+  foreign key(item_id) references items (item_id),
+  primary key(recommend_id)
+);
 
 -- memo
 -- AUTO_INCREMENT 初期化

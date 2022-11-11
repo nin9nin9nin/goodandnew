@@ -540,7 +540,7 @@ input[type="reset"]:hover {
   bottom: 0;
   left: 0;
   margin: auto;
-  object-fit: cover;
+  object-fit: contain;
 }
 .list-id {
   width: 50px;
@@ -564,6 +564,9 @@ input[type="reset"]:hover {
 }
 .list-detail {
   width: 50px;
+}
+.list-exclusive {
+  width: 200px;
 }
 
 /*商品名----------*/
@@ -674,6 +677,17 @@ input[type="reset"]:hover {
 }
 .list-detail {
   font-size: 0.9rem;
+}
+
+/* exclusive 
+--------------------- */
+.exclusive-link {
+  text-align: right;
+  text-decoration: underline;
+}
+
+.exclusive-link span {
+  display: block;
 }
 
 /*404 ページエラー-----------------------------------------------------------------------*/
