@@ -1,7 +1,6 @@
 <?php
 
 require_once(MODEL_DIR . '/Tables/Events.php');
-require_once(MODEL_DIR . '/Tables/Shops.php');
 
 function execute_action() {
     Session::start();
@@ -30,10 +29,11 @@ function execute_action() {
     //プロパティに値をセット(ページネーション)
     $classEvents -> page_id = $page_id;
     
-    //recordの取得　（公開中のイベント）
+    //公開中のイベント情報取得（１レコードのみ）
     $records['release'] = $classEvents -> releaseEvent();
+    // $records['release'] = $classEvents -> getReleaseEvent(); //ユーザー画面
 
-    //recordの取得　（page_idから指定した分だけ/10アイテムのみ）
+    //イベント一覧の取得　（page_idから指定した分だけ/10アイテムのみ）
     $records['events'] = $classEvents -> indexEvents();
 
     //ページネーションに必要な値一式

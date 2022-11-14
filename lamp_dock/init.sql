@@ -218,7 +218,7 @@ CREATE TABLE dashboards (
   primary key(dashboard_id)
 ); 
 
--- イベント属性ブランド（中間テーブル）
+-- イベント専用ブランド（中間テーブル）
 CREATE TABLE exclusive_brands (
   event_id int(11) NOT NULL COMMENT 'イベントID',
   brand_id int(11) NOT NULL COMMENT 'ブランドID',
@@ -227,7 +227,7 @@ CREATE TABLE exclusive_brands (
   primary key(event_id, brand_id)
 );
 
--- イベント属性アイテム（中間テーブル）
+-- イベント専用アイテム（中間テーブル）
 CREATE TABLE exclusive_items (
   event_id int(11) NOT NULL COMMENT 'イベントID',
   item_id int(11) NOT NULL COMMENT 'アイテムID',
@@ -236,7 +236,7 @@ CREATE TABLE exclusive_items (
   primary key(event_id, item_id)
 );
 
--- ショップ画面トップページ、レコメンドアイテム（中間テーブル）
+-- レコメンドアイテム（中間テーブル）
 CREATE TABLE recommend_items (
   recommend_id int(11) NOT NULL COMMENT 'レコメンドID' AUTO_INCREMENT,
   event_id int(11) NOT NULL COMMENT 'イベントID',

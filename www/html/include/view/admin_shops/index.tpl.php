@@ -93,11 +93,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     </form>
                   </div>
                 </td>
-                <!--属性リンク-->
+                <!--専用リンク-->
                 <td>
                   <div class="list-exclusive">
                     <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
-                      <span>イベント属性</span>
+                      <span>トップページ設定</span>
                     </a>
                   </div>
                 </td>
@@ -111,7 +111,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    <!--イベント------------------------------------------------------------------------------------------------------------>
+    <!--イベントリスト------------------------------------------------------------------------------------------------------------>
     <div id="list">
       <div class="container">
         
@@ -133,7 +133,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <?php } ?>
                   <input type="submit" id="searchsubmit" value="search">
                   <input type="hidden" name="module" value="admin_shops">
-                  <input type="hidden" name="action" value="search">
+                  <input type="hidden" name="action" value="search_event">
               </form>
             </div>
           </div>
@@ -167,7 +167,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                       </tr>
                   </table>
                   <input type="hidden" name="module" value="admin_shops">
-                  <input type="hidden" name="action" value="search">
+                  <input type="hidden" name="action" value="search_event">
               </form>
             </div>
             <div class="sorting">
@@ -204,7 +204,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                       </tr>
                   </table>
                   <input type="hidden" name="module" value="admin_shops">
-                  <input type="hidden" name="action" value="sorting">
+                  <input type="hidden" name="action" value="sorting_event">
               </form>
             </div>
           </div>
@@ -259,11 +259,11 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                     </form>
                   </div>
                 </td>
-                <!--属性リンク-->
+                <!--専用リンク-->
                 <td>
                   <div class="list-exclusive">
                     <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
-                      <span>イベント属性</span>
+                      <span>トップページ設定</span>
                     </a>
                   </div>
                 </td>
@@ -277,6 +277,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
+    <!--ページネーション------------------------------------------------------------------------------------------------------------>
     <div id="paginations">
       <div class="container">
         <div class="paginations-text">

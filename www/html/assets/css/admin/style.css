@@ -434,14 +434,12 @@ input[type="reset"]:hover {
   background: #aaa;
   border: none;
 }
-/* .alldelete .form-buttonwrap input[type="button"] {
-  background:#5caee6;
-} */
-.alldelete .form-buttonwrap input[type="submit"] {
-  background: #384359;
-}
 .home .form-buttonwrap input[type="button"] {
   background: #384359;
+}
+.form-buttonwrap input[type="button"].add-button {
+  background: #e65c5c;
+  border: none;
 }
 
 /* 検索・絞り込み・並べ替え 
@@ -542,6 +540,7 @@ input[type="reset"]:hover {
   margin: auto;
   object-fit: contain;
 }
+.list-check,
 .list-id {
   width: 50px;
 }

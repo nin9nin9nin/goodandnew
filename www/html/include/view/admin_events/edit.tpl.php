@@ -37,76 +37,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         <?php } ?>
       </div>
     </div>
-    <!--イベント------------------------------------------------------------------------------------------------------------>
-    <div id="list">
-      <div class="container">
-        
-        <!--list タイトル-->
-        <div class="title">
-          <h2>ショップ画面情報</h2>
-        </div>
-        <!--list -->
-        <div class="list-group">
-          <table>
-            <!-- <caption>イベント一覧</caption> -->
-            <thead>
-              <tr>
-                <th class="list-id">ID</th>
-                <th class="list-img">画像</th>
-                <th class="list-name">イベント名</th>
-                <th class="list-status">ステータス</th>
-                <th class="list-exclusive"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="<?= $record->status ? 'true' : 'false' ?>">
-                <td class="list_id">
-                    <?php print h($record->event_id); ?>
-                </td>
-                <td class="list-img">
-                  <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
-                    <img src="<?php print h('./include/images/events/visual/' . $record->event_png); ?>">
-                  </a>
-                </td>
-                <td class="list-name">
-                  <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
-                    <ul>
-                      <li><?php print h($record->getEventTag()); ?></li>
-                      <li><?php print h($record->event_date); ?></li>
-                    </ul>
-                    <p><?php print h($record->event_name); ?></p>
-                  </a>
-                </td>
-                <!--ステータス-->
-                <td class="list-status">
-                  <div class="status-checkbox">
-                    <form action="dashboard.php" method="post">
-                      <input id="status_<?php print h($record->event_id); ?>" type="checkbox" name="status" value="1" ONCHANGE="submit(this.form)" <?= $record->status ? 'checked' : '' ?> >
-                      <label for="status_<?php print h($record->event_id); ?>">
-                        <span></span>
-                      </label>
-                      <div class="list-switch"></div>
-                      <input type="hidden" name="module" value="admin_events">
-                      <input type="hidden" name="action" value="update_status">
-                      <input type="hidden" name="event_id" value="<?php print h($record->event_id); ?>">
-                      <input type="hidden" name="token" value="<?=h($token)?>">
-                    </form>
-                  </div>
-                </td>
-                <!--属性リンク-->
-                <td>
-                  <div class="list-exclusive">
-                    <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
-                      <span>イベント属性</span>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
     <!---更新----------------------------------------------------------------------------------------------------------->
     <div id="update">
       <div class="container">
@@ -265,6 +195,76 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 <input type="hidden" name="token" value="<?=h($token)?>">
               </div>
           </form>
+        </div>
+      </div>
+    </div>
+    <!--イベント------------------------------------------------------------------------------------------------------------>
+    <div id="list">
+      <div class="container">
+        
+        <!--list タイトル-->
+        <div class="title">
+          <h2>ショップ画面情報</h2>
+        </div>
+        <!--list -->
+        <div class="list-group">
+          <table>
+            <!-- <caption>イベント一覧</caption> -->
+            <thead>
+              <tr>
+                <th class="list-id">ID</th>
+                <th class="list-img">画像</th>
+                <th class="list-name">イベント名</th>
+                <th class="list-status">ステータス</th>
+                <th class="list-exclusive"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="<?= $record->status ? 'true' : 'false' ?>">
+                <td class="list_id">
+                    <?php print h($record->event_id); ?>
+                </td>
+                <td class="list-img">
+                  <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
+                    <img src="<?php print h('./include/images/events/visual/' . $record->event_png); ?>">
+                  </a>
+                </td>
+                <td class="list-name">
+                  <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
+                    <ul>
+                      <li><?php print h($record->getEventTag()); ?></li>
+                      <li><?php print h($record->event_date); ?></li>
+                    </ul>
+                    <p><?php print h($record->event_name); ?></p>
+                  </a>
+                </td>
+                <!--ステータス-->
+                <td class="list-status">
+                  <div class="status-checkbox">
+                    <form action="dashboard.php" method="post">
+                      <input id="status_<?php print h($record->event_id); ?>" type="checkbox" name="status" value="1" ONCHANGE="submit(this.form)" <?= $record->status ? 'checked' : '' ?> >
+                      <label for="status_<?php print h($record->event_id); ?>">
+                        <span></span>
+                      </label>
+                      <div class="list-switch"></div>
+                      <input type="hidden" name="module" value="admin_events">
+                      <input type="hidden" name="action" value="update_status">
+                      <input type="hidden" name="event_id" value="<?php print h($record->event_id); ?>">
+                      <input type="hidden" name="token" value="<?=h($token)?>">
+                    </form>
+                  </div>
+                </td>
+                <!--専用リンク-->
+                <td>
+                  <div class="list-exclusive">
+                    <a href="dashboard.php?module=admin_shops&action=exclusive&event_id=<?php print h($record->event_id); ?>">
+                      <span>トップページ設定</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

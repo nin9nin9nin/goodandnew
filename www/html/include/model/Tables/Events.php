@@ -618,7 +618,7 @@ class Events {
 
     // ショップ画面設定 ------------------------------------------------------------------------
     /**
-     * 公開中イベントの取得
+     * 公開中イベントの取得(description,event_svg,img1-8は除く)
      */
     public function releaseEvent() {
         $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, status' . PHP_EOL
@@ -631,10 +631,10 @@ class Events {
     // ユーザー画面 ------------------------------------------------------------------------
     /**
      * トップ画面
-     * 公開中イベントの取得
+     * 公開中イベントの取得(全データ)
      */
-    public function getEventRelease() {
-        $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png,' . PHP_EOL
+    public function getReleaseEvent() {
+        $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png, status,' . PHP_EOL
              . '       img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'WHERE status = 1'; //公開中
@@ -649,8 +649,8 @@ class Events {
      * status=0の場合[在庫数][カート]ボタンを非表示にする
      */
     public function getEventDetail() {
-        $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png,' . PHP_EOL
-             . '       img1, img2, img3, img4, img5, img6, img7, img8, status' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, description, event_date, event_tag, event_svg, event_png, status,' . PHP_EOL
+             . '       img1, img2, img3, img4, img5, img6, img7, img8' . PHP_EOL
              . 'FROM events' .PHP_EOL
              . 'WHERE event_id = :event_id';
         
@@ -686,8 +686,8 @@ class Events {
     }
 
     /**
+     * schedule画面
      * スケジュール一覧
-     * 
      */
     public function getEventSchedule() {
         // 1ページに表示する件数

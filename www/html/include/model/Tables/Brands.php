@@ -720,7 +720,26 @@ class Brands {
     }
     
     // ユーザー側　-------------------------------------------
-    
+    /**
+     * 指定IDのブランド情報取得
+     * get ユーザー用(status = 1のみ取得) 
+     */
+    public function getBrandDetail() {
+        $sql = 'SELECT brand_id, brand_name, description, brand_logo,' . PHP_EOL
+             . '       img1, img2, img3, img4, img5, img6, img7, img8,' . PHP_EOL
+             . '       brand_hp, brand_instagram, brand_twitter, brand_facebook, brand_youtube, brand_line,' . PHP_EOL
+             . '       phone_number, email, address' . PHP_EOL
+             . 'FROM brands' . PHP_EOL
+             . 'WHERE brand_id = :brand_id' . PHP_EOL
+             . 'AND status = 1';
+                
+        $params = [
+            ':brand_id' => $this->brand_id,
+        ];
+        
+        return Messages::retrieveBySql($sql,$params); 
+    }
+
     /**
      * 指定してブランド情報取得 static
      * 
