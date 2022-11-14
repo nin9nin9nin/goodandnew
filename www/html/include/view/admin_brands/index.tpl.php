@@ -301,7 +301,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </td>
                 <td class="list-img">
                   <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">
-                    <img src="<?php print h('./include/images/brands/img/' . $record->img1); ?>">
+                    <img src="<?php print h('./include/images/brands/logo/' . $record->brand_logo); ?>">
                   </a>
                 </td>
                 <td class="list_name">
@@ -324,7 +324,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                       <div class="list-switch"></div>
                       <input type="hidden" name="module" value="admin_brands">
                       <input type="hidden" name="action" value="update_status">
-                      <input type="hidden" name="table" value="brands">
                       <input type="hidden" name="brand_id" value="<?php print h($record->brand_id); ?>">
                       <input type="hidden" name="token" value="<?=h($token)?>">
                     </form>

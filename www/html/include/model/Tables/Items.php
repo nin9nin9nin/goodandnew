@@ -6,7 +6,7 @@ require_once(MODEL_DIR . '/Messages.php');
 class Items {
     
     public $page_id; //ページ番号
-    public $display_record = 10; //１ページの表示件数
+    public $display_record = 20; //１ページの表示件数
     public $item_id;
     public $item_name;
     public $category_id;
@@ -744,10 +744,291 @@ class Items {
         
         Messages::executeBySql($sql, $params);
     }
+
+    // ショップ画面設定 exclusive ------------------------------------------------------------------------
+    /**
+     * 指定イベントIDのアイテムを取得
+     */
+    public function indexExclusiveItems() {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        $sql = 'SELECT A.item_id, A.item_name, A.price, A.icon_img, A.status, A.create_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL 
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id' . PHP_EOL
+             . 'ORDER BY A.item_id DESC' ; //itemu_idで降順
+        
+        $params = [
+            ':event_id' => $this->event_id
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
+
+    /**
+     * 指定イベントIDのブランドを取得
+     */
+    public function indexExclusiveBrands() {
+        $sql = 'SELECT COUNT(*) AS item_count,' . PHP_EOL //アイテム数のカウント
+             . '    B.brand_id, B.brand_name, B.brand_logo, B.status' . PHP_EOL
+             . 'FROM' . PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN brands AS B' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = B.brand_id' . PHP_EOL
+             . 'GROUP BY A.brand_id' . PHP_EOL //brand_idでグルーピング
+             . 'ORDER BY A.brand_id DESC';
+            
+        
+        $params = [
+            ':event_id' => $this->event_id
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
     
+
+    //ユーザー画面 ---------------------------------------------------------------------------
+    //get exclusive (event_id指定 + status = 1) 
+
+    /**
+     * 指定イベントIDのアイテムを取得
+     * get ユーザー用(status = 1のみ取得) 
+     */
+    public function getExclusiveItems() {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        $sql = 'SELECT A.item_id, A.item_name, A.price, A.description, A.icon_img, A.create_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL 
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id' . PHP_EOL
+             . 'ORDER BY A.item_id DESC' . PHP_EOL //itemu_idで降順
+             . 'LIMIT :display_record OFFSET :start_record'; //LIMIT OFFSET 
+        
+        $params = [
+            ':event_id' => $this->event_id,
+            ':display_record' => $this->display_record,
+            ':start_record' => $start_record,
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
+
+    /**
+     * 指定イベントIDのブランドを取得
+     * get ユーザー用(status = 1のみ取得) 
+     */
+    public function getExclusiveBrands() {
+        $sql = 'SELECT COUNT(*) AS item_count,' . PHP_EOL
+             . '    B.brand_id, B.brand_name, B.brand_logo, B.description' . PHP_EOL
+             . 'FROM' . PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN brands AS B' .PHP_EOL //brandssテーブル
+             . 'ON A.brand_id = B.brand_id' . PHP_EOL
+             . 'GROUP BY A.brand_id' . PHP_EOL
+             . 'ORDER BY A.brand_id DESC'; 
+        
+        $params = [
+            ':event_id' => $this->event_id
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
+
+    // Paginations ------------------------------------------------------------------------
+    /**
+     * exclusive用　ページネーション
+     * トータルレコードを取得し、ページネーションの値をセットして返す
+     * return array
+     */
+    public function getExclusivePaginations() {
+        //トータルレコードの取得
+        $total_record = self::getExclusiveTotalRecord();
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
     
+    /**
+     * 各テーブルのトータルレコード数を返す
+     * return $record['cnt']
+     */
+    public static function getExclusiveTotalRecord() {
+        // テーブルから全レコードの数をカウント
+        $sql ='SELECT COUNT(*) as cnt' . PHP_EOL
+            . 'FROM items' . PHP_EOL
+            . 'WHERE event_id = :event_id AND status = 1 AND enabled = true';
+
+        $params = [':event_id' => $this -> event_id];
+        
+        $record = Messages::retrieveBySql($sql, $params);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
     
-    //ユーザー側に使用 (status = 1 )---------------------------------------------------------------------------
+    /**
+     * 検索時のページネーション
+     * return array
+     */
+    public function getSearchExclusivePaginations($search = []) {
+        //トータルレコードの取得
+        $total_record = self::getSearchExclusiveRecord($search);
+        
+        //page_idを取得してページネーションを取得してくる
+        return Messages::setPaginations($total_record, $this->display_record, $this->page_id);
+        
+    }
+    
+    /**
+     * 検索時のページネーション
+     * トータルレコード数の取得
+     * (event_id指定 + status = 1)
+     */
+    public static function getSearchExclusiveRecord($search = []) {
+        // テーブルから全レコードの数をカウント
+        //(indexのSQL文に合わせる)
+        $searchSql = 'SELECT COUNT(*) as cnt' . PHP_EOL 
+                    . 'FROM (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+                    . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+                    . 'ON A.item_id = B.item_id' . PHP_EOL
+                    . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+                    . 'ON A.category_id = C.category_id' . PHP_EOL
+                    . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+                    . 'ON A.brand_id = D.brand_id' . PHP_EOL
+                    . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+                    . 'ON A.event_id = E.event_id';
+        
+        //$sqlに結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //bindValue
+        $searchParams = self::setSearchParams($search);
+        
+        $searchParams += [':event_id' => $this -> event_id];
+        
+        //トータルレコード数の取得
+        $record = Messages::retrieveBySql($searchSql, $searchParams);
+        
+        // カウントした数を返す
+        return $record->cnt;
+    }
+    
+    // search ------------------------------------------------------------------------
+    /**
+     * 検索時のアイテム取得
+     * (event_id指定 + status = 1)
+     */
+    public function searchExclusiveItems($search = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        //ベースとなるSQL文を準備
+        $searchSql = 'SELECT A.item_id, A.item_name, A.price, A.description, A.icon_img, A.create_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL 
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id';
+
+        //検索項目を確認　SQL文作成し結合代入
+        $searchSql .= self::setSearchSql($search);
+        
+        //さらにページネーション用のSQL文を結合代入
+        $searchSql .= ' ORDER BY A.item_id DESC LIMIT :display_record OFFSET :start_record';
+        
+        //検索項目を確認　bindする配列を作成
+        $searchParams = self::setSearchParams($search);
+        
+        //searchParamsにページネーション用の配列追加
+        $searchParams += [
+            ':event_id' => $this -> event_id,
+            ':display_record' => $display_record, 
+            ':start_record' => $start_record
+        ];
+
+        //検索・絞り込みに応じたレコードの取得
+        return Messages::findBySql($searchSql,$searchParams); 
+    }
+    
+    // sorting ------------------------------------------------------------------------
+    /**
+     * 並べ替え
+     */
+    public function sortingExclusiveItems($sorting = []) {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        $sortingSql = 'SELECT A.item_id, A.item_name, A.price, A.icon_img, A.status, A.create_datetime, A.update_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id';
+
+        //sortingのSQL文を結合代入
+        $sortingSql .= self::setSortingSql($sorting);
+
+        //sortingのbindはしない(直接SQL文に書き込む)
+        $params = [
+            ':event_id' => $this -> event_id,
+            ':display_record' => $display_record, 
+            ':start_record' => $start_record
+        ];
+
+        return Messages::findBySql($sortingSql,$params);
+    }
+
     
     private static $monthly;
     private static $genre;
