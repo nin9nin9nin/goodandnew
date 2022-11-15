@@ -330,7 +330,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
                 </td>
                 <td class="list-img">
                   <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">
-                    <img src="<?php print h('./include/images/brands/img/' . $record->img1); ?>">
+                    <img src="<?php print h('./include/images/brands/logo/' . $record->brand_logo); ?>">
                   </a>
                 </td>
                 <td class="list_name">
@@ -381,12 +381,6 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
         </div>
       </div>
     </div>
-    <div class="form-buttonwrap">
-      <a href="<?php echo url_for('admin_shops', 'index'); ?>">  
-        <input type="button" value="戻る">
-      </a>
-    </div>
-
     <?php include './include/view/_inc/admin/homebutton.php'; ?>
   </main>
   <?php include './include/view/_inc/admin/footer.php'; ?>

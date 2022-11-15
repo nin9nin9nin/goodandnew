@@ -44,8 +44,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
           <div class="login-form">
             <form action="dashboard.php" method="post">
               <div class="admin_name">
-                <input type="text" name="admin_name" placeholder="管理者ネーム"
-                       value="<?php print h($cookie_name); ?>" >
+                <input type="text" name="admin_name" placeholder="管理者ネーム" value="<?php print h($cookie_name); ?>" >
                 <!-- <small class="sub">半角英数字、６文字以上で入力してください</small> -->
               </div>
               <div class="password">

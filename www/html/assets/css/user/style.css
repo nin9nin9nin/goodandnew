@@ -1086,6 +1086,13 @@ imgタグを使用して対策+filterで色変更*/
   display: block;
 }
 
+.event-date {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.02em;
+}
+
 .event-text {
   font-size: 0.9rem;
   font-weight: 400;
@@ -3299,7 +3306,7 @@ cart order------------------------*/
 .errors {
   color: red;
   background: #ffdacc;
-  margin: 10px 0;
+  /* margin: 10px 0; */
   padding: 15px 0;
   text-align: center;
   border-radius: 5px;

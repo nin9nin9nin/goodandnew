@@ -229,5 +229,40 @@ class Shops {
 
         Messages::executeBySql($sql, $params);
     }
+
+    // ユーザー画面 ------------------------------------------------------------------------
+    /**
+     * 公開中イベントのレコメンドアイテムを取得
+     * 
+     * get ユーザー用(item/status = 1のみ取得)
+     */
+    public function getRecommendItems() {
+        $sql = 'SELECT A.recommend_id,' . PHP_EOL
+             . '       B.item_id, B.item_name, B.price, B.description, B.icon_img, B.status, B.create_datetime,' . PHP_EOL
+             . '       C.stock,' . PHP_EOL
+             . '       D.category_id, D.category_name, D.parent_id,' . PHP_EOL
+             . '       E.brand_id, E.brand_name,' . PHP_EOL
+             . '       F.event_id, F.event_name' . PHP_EOL 
+             . 'FROM' . PHP_EOL
+             . '    (SELECT * FROM recommend_items WHERE event_id = :event_id) AS A' .PHP_EOL
+             . 'LEFT JOIN'
+             . '    (SELECT * FROM items WHERE status= 1 AND enabled = true) AS B' . PHP_EOL //有効なアイテムの取得
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN stocks AS C' .PHP_EOL //stocksテーブル
+             . 'ON B.item_id = C.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS D' .PHP_EOL //categoryテーブル
+             . 'ON B.category_id = D.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS E' .PHP_EOL //brandsテーブル
+             . 'ON B.brand_id = E.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS F' .PHP_EOL //eventsテーブル
+             . 'ON B.event_id = F.event_id' . PHP_EOL
+             . 'ORDER BY B.item_id DESC';
+        
+        $params = [
+            ':event_id' => $this->event_id
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
     
 }

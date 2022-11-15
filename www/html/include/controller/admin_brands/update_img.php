@@ -115,5 +115,5 @@ function execute_action() {
     Session::setFlash('ID' . h($id) .':ブランド画像を変更しました');
     
     //画像確認のため再度画像ページへ
-    return View::redirectTo('admin_brands', 'edit_img', ['brand_id' => $id]);
+    return View::redirectTo('admin_brands', 'index');
 }

@@ -32,14 +32,14 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
     <div id="accounts">
       <div class="container">
         
-        <!--create タイトル-->
+        <!--タイトル-->
         <div class="title">
           <h2>アカウント情報</h2>
         </div>
         <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
           <div class="message">
-            <p class="flash"><?php echo $flash_message; ?></p>
+            <p class="fade-message"><?php echo $flash_message; ?></p>
           </div>
         <?php } ?>
         <!--入力フォーム-->

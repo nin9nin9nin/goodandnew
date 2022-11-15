@@ -800,7 +800,6 @@ class Items {
         return Messages::findBySql($sql, $params);
     }
     
-
     //ユーザー画面 ---------------------------------------------------------------------------
     //get exclusive (event_id指定 + status = 1) 
 
@@ -857,6 +856,69 @@ class Items {
         
         $params = [
             ':event_id' => $this->event_id
+        ];
+
+        return Messages::findBySql($sql, $params);
+    }
+
+    /**
+     * トップ画面下部
+     * オリジナルアイテム一覧(一部) category_id = 8
+     * get ユーザー用(status = 1のみ取得) 
+     */
+    public function getOriginalItemsPart() {
+        $sql = 'SELECT A.item_id, A.item_name, A.price, A.description, A.icon_img, A.create_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL 
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE category_id = 8 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id' . PHP_EOL
+             . 'LIMIT 4'; //LIMIT 取得レコード数 
+        
+        return Messages::findBySql($sql);
+    }
+
+    /**
+     * トップ画面下部
+     * オリジナルアイテム一覧 category_id = 8
+     * get ユーザー用(status = 1のみ取得) 
+     */
+    public function getOriginalItems() {
+        // 1ページに表示する件数
+        $display_record = $this -> display_record;
+        // 配列の何番目から取得するか決定(OFFSET句:除外する行数)
+        $start_record = ($this->page_id - 1) * $display_record;
+
+        $sql = 'SELECT A.item_id, A.item_name, A.price, A.description, A.icon_img, A.create_datetime,' . PHP_EOL
+             . '       B.stock,' . PHP_EOL
+             . '       C.category_id, C.category_name, C.parent_id,' . PHP_EOL
+             . '       D.brand_id, D.brand_name,' . PHP_EOL
+             . '       E.event_id, E.event_name' . PHP_EOL 
+             . 'FROM ' .PHP_EOL
+             . '    (SELECT * FROM items WHERE category_id = 8 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
+             . 'ON A.item_id = B.item_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
+             . 'ON A.category_id = C.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS D' .PHP_EOL //brandsテーブル
+             . 'ON A.brand_id = D.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
+             . 'ON A.event_id = E.event_id' . PHP_EOL
+             . 'ORDER BY A.item_id DESC' . PHP_EOL //itemu_idで降順
+             . 'LIMIT :display_record OFFSET :start_record'; //LIMIT OFFSET 
+        
+        $params = [
+            ':display_record' => $this->display_record,
+            ':start_record' => $start_record,
         ];
 
         return Messages::findBySql($sql, $params);
