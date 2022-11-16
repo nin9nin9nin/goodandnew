@@ -770,7 +770,7 @@ class Items {
              . 'ON A.brand_id = D.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
              . 'ON A.event_id = E.event_id' . PHP_EOL
-             . 'ORDER BY A.item_id DESC' ; //itemu_idで降順
+             . 'ORDER BY A.item_id ASC' ; //itemu_idで降順
         
         $params = [
             ':event_id' => $this->event_id
@@ -790,7 +790,7 @@ class Items {
              . 'LEFT JOIN brands AS B' .PHP_EOL //brandsテーブル
              . 'ON A.brand_id = B.brand_id' . PHP_EOL
              . 'GROUP BY A.brand_id' . PHP_EOL //brand_idでグルーピング
-             . 'ORDER BY A.brand_id DESC';
+             . 'ORDER BY A.brand_id ASC';
             
         
         $params = [
@@ -828,7 +828,7 @@ class Items {
              . 'ON A.brand_id = D.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
              . 'ON A.event_id = E.event_id' . PHP_EOL
-             . 'ORDER BY A.item_id DESC' . PHP_EOL //itemu_idで降順
+             . 'ORDER BY A.item_id ASC' . PHP_EOL //itemu_idで降順
              . 'LIMIT :display_record OFFSET :start_record'; //LIMIT OFFSET 
         
         $params = [
@@ -846,13 +846,13 @@ class Items {
      */
     public function getExclusiveBrands() {
         $sql = 'SELECT COUNT(*) AS item_count,' . PHP_EOL
-             . '    B.brand_id, B.brand_name, B.brand_logo, B.description' . PHP_EOL
+             . '    B.brand_id, B.brand_name, B.brand_logo, B.img1, B.description' . PHP_EOL
              . 'FROM' . PHP_EOL
              . '    (SELECT * FROM items WHERE event_id = :event_id AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
              . 'LEFT JOIN brands AS B' .PHP_EOL //brandssテーブル
              . 'ON A.brand_id = B.brand_id' . PHP_EOL
              . 'GROUP BY A.brand_id' . PHP_EOL
-             . 'ORDER BY A.brand_id DESC'; 
+             . 'ORDER BY A.brand_id ASC'; 
         
         $params = [
             ':event_id' => $this->event_id
@@ -873,7 +873,7 @@ class Items {
              . '       D.brand_id, D.brand_name,' . PHP_EOL
              . '       E.event_id, E.event_name' . PHP_EOL 
              . 'FROM ' .PHP_EOL
-             . '    (SELECT * FROM items WHERE category_id = 8 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . '    (SELECT * FROM items WHERE event_id = 1 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
              . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
              . 'ON A.item_id = B.item_id' . PHP_EOL
              . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
@@ -882,6 +882,7 @@ class Items {
              . 'ON A.brand_id = D.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
              . 'ON A.event_id = E.event_id' . PHP_EOL
+             . 'ORDER BY A.item_id ASC' . PHP_EOL //itemu_idで降順
              . 'LIMIT 4'; //LIMIT 取得レコード数 
         
         return Messages::findBySql($sql);
@@ -904,7 +905,7 @@ class Items {
              . '       D.brand_id, D.brand_name,' . PHP_EOL
              . '       E.event_id, E.event_name' . PHP_EOL 
              . 'FROM ' .PHP_EOL
-             . '    (SELECT * FROM items WHERE category_id = 8 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+             . '    (SELECT * FROM items WHERE event_id = 1 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
              . 'LEFT JOIN stocks AS B' .PHP_EOL //stocksテーブル
              . 'ON A.item_id = B.item_id' . PHP_EOL
              . 'LEFT JOIN categorys AS C' .PHP_EOL //categoryテーブル
@@ -913,7 +914,7 @@ class Items {
              . 'ON A.brand_id = D.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS E' .PHP_EOL //eventsテーブル
              . 'ON A.event_id = E.event_id' . PHP_EOL
-             . 'ORDER BY A.item_id DESC' . PHP_EOL //itemu_idで降順
+             . 'ORDER BY A.item_id ASC' . PHP_EOL //itemu_idで降順
              . 'LIMIT :display_record OFFSET :start_record'; //LIMIT OFFSET 
         
         $params = [

@@ -667,7 +667,7 @@ class Events {
      * 
      */
     public function getEventSchedulePart() {
-        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, img1' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'ORDER BY event_id DESC' . PHP_EOL 
              . 'LIMIT 5'; //LIMIT 取得レコード数
@@ -685,7 +685,7 @@ class Events {
         // 配列の何番目から取得するか決定(OFFSET句)
         $start_record = ($this->page_id - 1) * $display_record;
 
-        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png' . PHP_EOL
+        $sql = 'SELECT event_id, event_name, event_date, event_tag, event_png, img1' . PHP_EOL
              . 'FROM events' . PHP_EOL
              . 'ORDER BY event_id DESC' . PHP_EOL // 新しいイベント順
              . 'LIMIT :display_record OFFSET :start_record'; 

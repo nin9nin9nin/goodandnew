@@ -127,7 +127,7 @@ class Shops {
              . 'ON B.brand_id = E.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS F' .PHP_EOL //eventsテーブル
              . 'ON B.event_id = F.event_id' . PHP_EOL
-             . 'ORDER BY B.item_id DESC';
+             . 'ORDER BY B.item_id ASC';
         
         $params = [
             ':event_id' => $this->event_id
@@ -256,7 +256,7 @@ class Shops {
              . 'ON B.brand_id = E.brand_id' . PHP_EOL
              . 'LEFT JOIN events AS F' .PHP_EOL //eventsテーブル
              . 'ON B.event_id = F.event_id' . PHP_EOL
-             . 'ORDER BY B.item_id DESC';
+             . 'ORDER BY B.item_id ASC';
         
         $params = [
             ':event_id' => $this->event_id

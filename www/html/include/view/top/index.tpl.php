@@ -80,7 +80,7 @@ include './include/view/_inc/user/head.php'; // head.php の読み込み
                     <div class="event-area-layout">
                         <div class="event-month">
                             <svg>
-                                <use xlink:href="<?php print h('./include/images/events/visual/' . $records['event']->event_svg); ?>"></use>
+                                <use xlink:href="<?php print h('./include/images/events/visual/' . $records['event']->event_svg) . '#event-tag'; ?>"></use>
                             </svg>
                         </div>
                         <div class="event-image">
@@ -122,6 +122,9 @@ include './include/view/_inc/user/head.php'; // head.php の読み込み
                         <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img3); ?>" alt=""></li>
                         <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img4); ?>" alt=""></li>
                         <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img5); ?>" alt=""></li>
+                        <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img6); ?>" alt=""></li>
+                        <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img7); ?>" alt=""></li>
+                        <li class="slider-item"><img src="<?php print h('./include/images/events/img/' . $records['event']->img8); ?>" alt=""></li>
                     </ul>
                 </div>
                 <?php } else { ?>
@@ -195,6 +198,13 @@ include './include/view/_inc/user/head.php'; // head.php の読み込み
                                 </span>
                             </a>
                         </div>
+                        <div class="brand-lead">
+                            <p class="main-lead">
+                                <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>">
+                                    <?php print h($record->brand_name); ?>
+                                </a>
+                            </p>
+                        </div>
                     </div>
                     <?php } ?>
                 </div><!-- / .grid -->
@@ -214,7 +224,7 @@ include './include/view/_inc/user/head.php'; // head.php の読み込み
                             <div class="schedule-list-img-area">
                                 <figure class="schedule-list-fig">
                                     <span class="clip">
-                                        <img src="<?php print h('./include/images/events/visual/' . $record -> event_png); ?>" alt="イベント画像">
+                                        <img src="<?php print h('./include/images/events/img/' . $record -> img1); ?>" alt="イベント画像">
                                     </span>
                                 </figure>
                             </div>
@@ -257,7 +267,7 @@ include './include/view/_inc/user/head.php'; // head.php の読み込み
                         </div>
                         <div class="item-lead">
                             <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">オリジナルアイテム</a>
+                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"><?php print h($record->item_name); ?></a>
                             </p>
                             <p class="mid-lead">&yen;<?php print h($record->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                         </div>

@@ -201,7 +201,7 @@ include './include/view/_inc/admin/head.php'; // head.php の読み込み
             </table>
               <!--submit+hidden-->
               <div class="form-buttonwrap">
-                <a href="dashboard.php?module=admin_brands&action=edit&brand_id=<?php print h($record->brand_id); ?>">  
+                <a href="<?php echo url_for('admin_brands', 'index'); ?>">  
                   <input type="button" value="戻る">
                 </a>
                 <input type="submit" value="変更する">

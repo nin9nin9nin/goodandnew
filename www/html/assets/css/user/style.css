@@ -1488,14 +1488,20 @@ imgタグを使用して対策+filterで色変更*/
 
 /*グリッド下部アイテム名など
 --------------------------------- */
-.item-lead {
+.item-lead,
+.brand-lead {
   width: 100%;
   margin: 10px 0;
   overflow-wrap: break-word;
 }
 
-.item-lead a {
+.item-lead a,
+.brand-lead a {
   display: block;
+}
+
+.brand-lead {
+  text-align: center;
 }
 
 /* ブランド名 */
