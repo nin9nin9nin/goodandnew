@@ -1054,11 +1054,17 @@ imgタグを使用して対策+filterで色変更*/
 }
 
 .event-image,
+.event-index-image,
 .event-lead {
   width: calc(50% - 25px);
 }
 
-.event-lead {
+.event-index-image {
+  margin: 0 auto;
+}
+
+.event-lead,
+.event-index-lead {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1183,14 +1189,14 @@ imgタグを使用して対策+filterで色変更*/
 .slick-prev,
 .slick-next {
   position: absolute; /*絶対配置にする*/
-  /* z-index: 3; */
+  z-index: 3;
   top: 42%;
   cursor: pointer; /*マウスカーソルを指マークに*/
   outline: none; /*クリックをしたら出てくる枠線を消す*/
   border-top: 2px solid #ccc; /*矢印の色*/
   border-right: 2px solid #ccc; /*矢印の色*/
-  height: 15px;
-  width: 15px;
+  height: 20px;
+  width: 20px;
 }
 
 .slick-prev {
@@ -1740,8 +1746,8 @@ imgタグを使用して対策+filterで色変更*/
 /* f-nav
 ------------------------------------------------------------------------------------- */
 #f-nav {
-  background: #f7f6f4;
   border-top: solid 1px #222222;
+  background: #f7f5f4;
 }
 
 .f-nav-area {
@@ -1916,7 +1922,7 @@ footer p {
   text-decoration: none;
   font-size: 0.6rem;
   /*背景画像の指定*/
-  background: url(../../images/baby/page-top.png) no-repeat center;
+  background: url(./assets/images/baby/page-top.png) no-repeat center;
   background-size: contain;
 }
 #page-top a:hover {
@@ -1928,7 +1934,7 @@ footer p {
   width: 100px;
   height: 90px;
   /*背景画像の指定*/
-  background: url(../../images/baby/page-top.png) no-repeat center;
+  background: url(./assets/images/baby/page-top.png) no-repeat center;
   background-size: contain;
   /*アニメーションの指定*/
   animation: floatAnime 2s linear infinite;
@@ -1983,8 +1989,8 @@ footer p {
 
 /* GALLERYページ
 ---------------------------------------------------------------------------------- */
-#gallery {
-  margin-top: 100px;
+#gallery .box {
+  margin-bottom: 50px;
 }
 
 .gallery-content {
@@ -2074,21 +2080,27 @@ footer p {
   /*選択されているものは透過しない*/
 }
 
+.choice-btn .slick-track {
+  transform: unset !important; /*画面幅サイズ変更に伴うサムネイル固定*/
+}
+
 /* aside側
 ----------------------------------------------- */
 .gallery-info {
   width: 100%;
   overflow-wrap: break-word;
-}
-
-.gallery-title {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1ch;
 }
 
 /*アコーディオンエリア
 ------------------------------- */
 .accordion-area {
-  margin-top: 30px;
+  margin: 30px 0;
+  width: 100%;
 }
 
 .accordion-group {
@@ -2113,7 +2125,7 @@ footer p {
   content: "";
   width: 15px;
   height: 2px;
-  background-color: #384359;
+  background-color: #222222;
 }
 
 .title::before {
@@ -2150,13 +2162,13 @@ footer p {
 }
 
 .list li {
-  border-top: 1px solid #eee;
+  /* border-top: 1px solid #eee; */
   line-height: 2.4;
   letter-spacing: 0.04em;
   font-size: 0.9rem;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -2165,41 +2177,73 @@ footer p {
   text-decoration: underline;
 }
 
-/* SCHEDULEページ
+/* pagination
 ---------------------------------------------------------------------------------- */
-/* #schedule {} */
-
-.toolbar {
-  margin-top: 75px;
+#paginations {
+  padding-top: 0;
 }
 
-.pagination {
+/* レコード件数テキスト */
+.paginations-text {
+  padding: 5px 0;
+  margin: 0 auto;
+}
+.from-to {
+  font-size: 1rem;
+  /*font-size: 1.6vw;*/
+  font-weight: 400;
+  text-align: center;
+  line-height: 2.4;
+  letter-spacing: 0.3em;
+}
+/* 戻る・進む */
+a:link {
+  text-decoration: none;
+}
+a.page_number:visited {
+  text-decoration: none;
+}
+.paginations {
   display: flex;
   justify-content: center;
-  max-width: 100%;
-  height: 34px;
-  font-size: 14px;
-  border-radius: 4px;
+  margin: 15px;
+}
+.page_feed {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  text-align: center;
+  background: #fff;
+}
+.first_last_page {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  text-align: center;
+  background: #b8b8b8;
 }
 
-.pagination li a {
-  padding: 7px 12px;
-  position: relative;
-  float: left;
-  color: #384359;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  line-height: 1.4;
+/* ページ番号 */
+a:link {
+  text-decoration: none;
 }
-
-.pagination .now a {
-  background: #384359;
-  border: 1px solid #384359;
-  color: #fff;
+a.page_number:visited {
+  text-decoration: none;
 }
-
-.pagination li a:hover {
-  text-decoration: underline;
+.page_number {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+  background: #fff;
+}
+.now_page_number {
+  width: 30px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+  background: #b8b8b8;
+  font-weight: bold;
 }
 
 /* DETAILSページ
@@ -2230,7 +2274,9 @@ footer p {
 
 /* 特殊コンテンツ
 --------------------------- */
-/* .props {} */
+#props {
+  background: #fff;
+}
 
 /*検索窓
 -------------------------- */
@@ -2597,7 +2643,7 @@ cart order------------------------*/
 }
 
 .favorite-black-button {
-  color: #384359;
+  color: #222222;
   position: relative;
 }
 
@@ -2749,7 +2795,7 @@ cart order------------------------*/
 ----------------------- */
 .cart-slip tr {
   font-size: 1rem;
-  border-bottom: 1px solid #384359;
+  border-bottom: 1px solid #222222;
 }
 
 /*項目*/
@@ -2970,7 +3016,7 @@ cart order------------------------*/
 ----------------------- */
 .account-list tr {
   font-size: 0.75rem;
-  border-bottom: 1px solid #384359;
+  border-bottom: 1px solid #222222;
 }
 
 /*項目*/
@@ -3071,7 +3117,7 @@ cart order------------------------*/
   padding: 50px 0;
 }
 .member {
-  background-image: url(../../images/baby/login.png);
+  background-image: url(./assets/images/baby/login.png);
   background-position: 50% 60%;
   background-size: 300px;
 }
@@ -3386,6 +3432,7 @@ cart order------------------------*/
   }
 
   .event-image,
+  .event-index-image,
   .event-lead {
     width: calc(100% - 15px);
   }

@@ -805,14 +805,14 @@ a.page_number:visited {
   margin: 0 10px;
   padding: 5px 10px;
   text-align: center;
-  background: #b8b8b8;
+  background: #f0f0f0;
 }
 .first_last_page {
   width: 30px;
   margin: 0 10px;
   padding: 5px 10px;
   text-align: center;
-  background: #f0f0f0;
+  background: #b8b8b8;
 }
 
 /* ページ番号 */
@@ -827,13 +827,13 @@ a.page_number:visited {
   margin: 0 10px;
   padding: 5px;
   text-align: center;
-  background: #b8b8b8;
+  background: #f0f0f0;
 }
 .now_page_number {
   width: 30px;
   margin: 0 10px;
   padding: 5px;
   text-align: center;
-  background: #f0f0f0;
+  background: #b8b8b8;
   font-weight: bold;
 }
