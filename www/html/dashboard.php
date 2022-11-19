@@ -7,7 +7,7 @@ ini_set('display_errors', "On");
 
 
 //dispatch関数の入ったコントローラー及び基本クラスの読み込み
-require_once('./include/controller.php');
+require_once('./controller/controller.php');
 
 //$urlの定数定義（Viewクラス内render()時に使用）
 define('BASE_URL',basename(__FILE__));
