@@ -77,7 +77,7 @@ function execute_action() {
     $classCategorys -> insertCategory();
 
     //フラッシュメッセージをセット
-    Session::setFlash('商品を登録しました');
+    Session::setFlash('カテゴリーを登録しました');
     
     return View::redirectTo('admin_categorys', 'index');
 }

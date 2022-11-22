@@ -5,6 +5,20 @@ function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
+
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    // postされたトークンの取得
+    $token = Request::get('token');
+
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('users', 'signin');
+        exit;
+    }
         
     $name = Request::get('user_name');
     $password = Request::get('password');
@@ -33,51 +47,29 @@ function execute_action() {
         //エラーメッセージ格納
         $errors = CommonError::errorWhile();
         
-        //クッキーの取得（空）
-        $cookie_check = Cookie::getUserCookieCheck();
-        $cookie_name = Cookie::getUserCookieName();
-        
         //ログイン画面へ（初期値はそれぞれ空の状態）
-        return View::render('login', ['cookie_check' => $cookie_check, 'cookie_name' => $cookie_name,'errors' => $errors]);
+        return View::render('login', ['errors' => $errors]);
         exit;
     }
                 
     //$_SESSION['_authenticated']を認証済みにする
     //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
-    Session::getInstance() -> setAuthenticated(true);
+    Session::setAuthenticated(true);
     
     //情報取得------------------------------------------------
     //user_nameからuser情報取得(passwprd除く)
     $record = $classUsers -> selectUserName();
     
-    //管理者画面へリダイレクト
-    if ($record->user_name === 'admin') {
-        //$_SESSION['']を作成・値を入れる
-        Session::set('admin_name', $record->user_name);
-        Session::set('admin_id', $record->user_id);
-        
-        //['cookie_check']によってクッキーを保存or削除
-        Cookie::setCookie($cookie_check, $name);
-        
-        //フラッシュメッセージをセット
-        Session::setFlash('管理者としてログインしました');
-        
-        //ログインした状態でダッシュボードにリダイレクト
-        return View::redirectTo('dashboard', 'index');
-        
-    //ユーザー画面へリダイレクト
-    } else {
-        //$_SESSION['']を作成・値を入れる
-        Session::set('user', $record);
-        
-        //['cookie_check']によってクッキーを保存or削除
-        Cookie::setUserCookie($cookie_check, $name);
-        
-        //フラッシュメッセージをセット
-        Session::setFlash('ユーザーログインに成功しました');
-        
-        //ログインした状態でitems/index.phpにリダイレクト
-        return View::redirectTo('items', 'index');
-    }
+    //情報登録------------------------------------------------
+    //$_SESSION['user']を作成・値を入れる
+    Session::set('user', $record); 
     
+    //['cookie_check']によってクッキーを保存or削除
+    Cookie::setUserCookie($cookie_check, $name);
+    
+    //フラッシュメッセージをセット
+    Session::setFlash('ログインに成功しました');
+    
+    //ログインした状態でevents/index.phpにリダイレクト
+    return View::redirectTo('events', 'index');    
 }

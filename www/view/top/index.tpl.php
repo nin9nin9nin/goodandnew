@@ -1,6 +1,7 @@
 <?php
 $title = 'GOOD&NEW オンラインショップ';
 $is_top = true; //トップページの判定(isset)
+Session::start();
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
 include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
@@ -50,15 +51,15 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     </ul>
                     <div class="g-nav-list-link">
                         <ul class="link-icon-nav">
-                            <li class="icon-instagram"><a href="#" target=”_blank” rel="noopener noreferrer">instagram</a></li>
-                            <li class="icon-twitter"><a href="#" target=”_blank” rel="noopener noreferrer">twitter</a></li>
-                            <li class="icon-facebook"><a href="#" target=”_blank” rel="noopener noreferrer">facebook</a></li>
-                            <li class="icon-youtube"><a href="#" target=”_blank” rel="noopener noreferrer">youtube</a></li>
-                            <li class="icon-line"><a href="#" target=”_blank” rel="noopener noreferrer">line</a></li>
+                            <li class="icon-instagram"><a href="#" target="_blank" rel="noopener noreferrer">instagram</a></li>
+                            <li class="icon-twitter"><a href="#" target="_blank" rel="noopener noreferrer">twitter</a></li>
+                            <li class="icon-facebook"><a href="#" target="_blank" rel="noopener noreferrer">facebook</a></li>
+                            <li class="icon-youtube"><a href="#" target="_blank" rel="noopener noreferrer">youtube</a></li>
+                            <li class="icon-line"><a href="#" target="_blank" rel="noopener noreferrer">line</a></li>
                         </ul>
                     </div>
                     <ul class="g-nav-list-sub">
-                        <li><a href="<?php echo url_for('user', 'signin'); ?>">ログイン&middot;新規登録</a></li>
+                        <li><a href="<?php echo url_for('users', 'signin'); ?>">ログイン&middot;新規登録</a></li>
                         <li><a href="#">配送に関して</a></li>
                         <li><a href="#">ご利用ガイド</a></li>
                         <li><a href="#">プライバシーポリシー</a></li>
@@ -78,7 +79,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
         <div id="header-icon">
             <ul class="header-icon-btn">
                 <li class="account">
-                    <a href="<?php echo url_for('user', 'account'); ?>">
+                    <a href="<?php echo url_for('users', 'account'); ?>">
                         <svg>
                             <use xlink:href="./assets/images/icon/account.svg#account"></use>
                         </svg>
@@ -157,8 +158,8 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
             </div>
         </section>
         <section class="area" id="event">
-            <?php if(!empty($records['release_event'])) { ?>
             <div class="box fadeUpTrigger wrapper">
+                <?php if(!empty($records['release_event'])) { ?>
                 <div class="event-area">
                     <div class="event-area-layout">
                         <div class="event-month">
@@ -196,8 +197,12 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div>
                     </div><!-- /.event-area-layout-->
                 </div><!-- /.event-area-->
+                <?php } else { ?>
+                    <p class="message errors">公開中イベントがありません。</p>
+                <?php } ?>
             </div><!-- /.box-->
             <div class="box fadeUpTrigger">
+                <?php if(!empty($records['release_event'])) { ?>
                 <div class="event-slider">
                     <ul class="e-slider">
                         <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img1); ?>" alt="イベントイメージ"></li>
@@ -210,10 +215,8 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img8); ?>" alt="イベントイメージ"></li>
                     </ul>
                 </div>
+                <?php } ?>
             </div><!-- /.box-->
-            <?php } else { ?>
-                <p class="errors">公開中イベントがありません。</p>
-            <?php } ?>
         </section>
         <section class="area" id="items">
             <div class="box fadeUpTrigger wrapper">
@@ -237,7 +240,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div>
                         <div class="item-lead">
                             <p class="sub-lead">
-                                <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>">
+                                <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>&event_id=<?php print h($records['release_event']->event_id); ?>">
                                     <?php print h($record->brand_name); ?>
                                 </a>
                             </p>
@@ -255,11 +258,11 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <a href="<?php echo url_for('events', 'index', ['event_id' => $records['release_event']->event_id]); ?>" class="btnarrow4">VIEW&nbsp;MORE</a>
                 </div><!-- /.btn-arrow -->
                 <?php } else { ?>
-                    <p class="errors">アイテム情報がありません。</p>
+                    <p class="message errors">アイテム情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>
-        <section class="area" id="brands">
+        <section class="area sticky-top" id="brands">
             <div class="box fadeUpTrigger wrapper">
                 <h3 class="section-title">BRANDS</h3>
                 <?php if(count($records['brands']) > 0) { ?>
@@ -267,11 +270,11 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php foreach ($records['brands'] as $record) { ?>
                     <div class="brand">
                         <div class="bgUD zoomIn">
-                            <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>">
+                            <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>&event_id=<?php print h($records['release_event']->event_id); ?>">
                                 <span class="mask white">
                                     <!--<span class="brand-logo-name">brand_name</span>-->
                                     <span class="brand-logo">
-                                        <img src="<?php print h(BRANDS_LOGO_DIR . $record -> brand_logo); ?>" alt="<?php print h($record->brand_name); ?>">
+                                        <img src="<?php print h(BRANDS_LOGO_DIR . $record -> brand_logo); ?>" alt="brand_logo">
                                     </span>
                                     <span class="cap">
                                         <span class="cap-description">
@@ -283,7 +286,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div>
                         <div class="brand-lead">
                             <p class="main-lead">
-                                <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>">
+                                <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>&event_id=<?php print h($records['release_event']->event_id); ?>">
                                     <?php print h($record->brand_name); ?>
                                 </a>
                             </p>
@@ -292,7 +295,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php } ?>
                 </div><!-- / .grid -->
                 <?php } else { ?>
-                    <p class="errors">ブランド情報がありません。</p>
+                    <p class="message errors">ブランド情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>
@@ -324,13 +327,13 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <a href="<?php echo url_for('schedule', 'index'); ?>" class="btnarrow4">VIEW&nbsp;MORE</a>
                 </div><!-- / .btn-arrow -->
                 <?php } else { ?>
-                    <p class="errors">スケジュール情報がありません。</p>
+                    <p class="message errors">スケジュール情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>
         <section class="area" id="originals">
             <div class="box fadeUpTrigger wrapper">
-                <h3 class="section-title">ORIGINAL&nbsp;ITEMS</h3>
+                <h3 class="section-title">ORIGINALS</h3>
                 <?php if(count($records['originals']) > 0) { ?>
                 <div class="grid">
                     <?php foreach ($records['originals'] as $record) { ?>
@@ -361,7 +364,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <a href="<?php echo url_for('originals', 'index'); ?>" class="btnarrow4">VIEW&nbsp;MORE</a>
                 </div><!-- / .btn-arrow -->
                 <?php } else { ?>
-                    <p class="errors">アイテム情報がありません。</p>
+                    <p class="message errors">アイテム情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>

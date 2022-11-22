@@ -1019,7 +1019,7 @@ imgタグを使用して対策+filterで色変更*/
 }
 
 .caption-text {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 400;
   line-height: 2.4;
   letter-spacing: 0.3em;
@@ -1030,8 +1030,8 @@ imgタグを使用して対策+filterで色変更*/
 ------------------------------------------------------------------------------------- */
 #event {
   background: #ffffff;
-  padding-bottom: 0px;
 }
+
 .event-month {
   display: flex;
   flex-direction: column;
@@ -1190,7 +1190,7 @@ imgタグを使用して対策+filterで色変更*/
 .slick-next {
   position: absolute; /*絶対配置にする*/
   z-index: 3;
-  top: 42%;
+  top: 50%;
   cursor: pointer; /*マウスカーソルを指マークに*/
   outline: none; /*クリックをしたら出てくる枠線を消す*/
   border-top: 2px solid #ccc; /*矢印の色*/
@@ -1551,7 +1551,7 @@ imgタグを使用して対策+filterで色変更*/
   background: #fff;
 }
 
-#brands {
+.sticky-top {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -1567,12 +1567,12 @@ imgタグを使用して対策+filterで色変更*/
 #brands .mask {
   height: 21vw;
   max-height: 220px;
-  box-shadow: 0px 2px 2px rgb(0 0 0 / 20%);
+  /* box-shadow: 0px 2px 2px rgb(0 0 0 / 20%); */
 }
 
-.white {
+/* .white {
   background: #fff;
-}
+} */
 
 /*ブランド名*/
 .mask .brand-logo img {
@@ -1700,6 +1700,16 @@ imgタグを使用して対策+filterで色変更*/
 ------------------------------------------------------------------------------------- */
 #originals {
   background: #f7f5f4;
+}
+
+#originals-logo {
+  padding-bottom: 0;
+}
+
+.originals-logo {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 50px;
 }
 
 /* information
@@ -1922,7 +1932,7 @@ footer p {
   text-decoration: none;
   font-size: 0.6rem;
   /*背景画像の指定*/
-  background: url(./assets/images/baby/page-top.png) no-repeat center;
+  background: url(../../images/baby/page-top.png) no-repeat center;
   background-size: contain;
 }
 #page-top a:hover {
@@ -1930,11 +1940,38 @@ footer p {
   opacity: 1;
 }
 
+@keyframes shake {
+  0% {
+    transform: rotate(0);
+  }
+  16% {
+    transform: rotate(12deg);
+  }
+  32% {
+    transform: rotate(-10deg);
+  }
+  48% {
+    transform: rotate(8deg);
+  }
+  64% {
+    transform: rotate(-6deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
+  96% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
 #page-top.floatAnime a {
   width: 100px;
   height: 90px;
   /*背景画像の指定*/
-  background: url(./assets/images/baby/page-top.png) no-repeat center;
+  background: url(../../images/baby/page-top.png) no-repeat center;
   background-size: contain;
   /*アニメーションの指定*/
   animation: floatAnime 2s linear infinite;
@@ -1979,20 +2016,42 @@ footer p {
 
 /* CONCEPTページ
 ---------------------------------------------------------------------------------- */
-#concept-area {
-  padding: 30px;
+#concept {
+  background: #fff;
 }
 
-.logo-area {
-  padding: 40px 0;
+.concept-caption {
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 2.4;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.concept-text-box {
+  margin: 10px auto;
+}
+
+.concept-text {
+  padding: 10px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.concept-image {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.concept-image:hover img {
+  animation: shake 0.8s ease-out;
 }
 
 /* GALLERYページ
 ---------------------------------------------------------------------------------- */
-#gallery .box {
-  margin-bottom: 50px;
-}
-
 .gallery-content {
   display: flex;
   justify-content: space-between;
@@ -2033,9 +2092,11 @@ footer p {
 
 /*横*/
 .gallery .slick-slide img {
-  height: 25vw;
+  /* height: 25vw; */
   max-height: 350px;
   min-height: 230px;
+  width: 100%;
+  object-fit: contain;
 }
 /*縦*/
 .item-photo .slick-slide img {
@@ -2043,6 +2104,7 @@ footer p {
   height: 50.625vw;
   max-height: 750px;
   min-height: 230px;
+  width: 100%;
 }
 
 /*矢印の設定 (sliderと一緒)
@@ -2249,7 +2311,7 @@ a.page_number:visited {
 /* DETAILSページ
 --------------------------------------------------------------------------------- */
 #details {
-  margin-top: 100px;
+  background: #fff;
 }
 
 /* .shrot-sliderの設定 
@@ -2276,6 +2338,7 @@ a.page_number:visited {
 --------------------------- */
 #props {
   background: #fff;
+  padding: 0;
 }
 
 /*検索窓
@@ -2394,11 +2457,20 @@ a.page_number:visited {
 
 /* ボタン各種
 ------------------------------- */
+.button-area {
+  padding-top: 50px;
+}
+
+.button-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5ch;
+}
+
 /*下部ボタン*/
 .basebutton {
   text-align: center;
-  font-size: 0.85rem;
-  /*margin-top: 50px;*/
 }
 
 .basebutton a {
@@ -2415,6 +2487,7 @@ a.page_number:visited {
     )
     100% 0 / 200% 100%;
   transition: background-position 0.3s;
+  /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
 }
 
 .basebutton a:hover {
@@ -2436,6 +2509,7 @@ a.page_number:visited {
   flex-wrap: wrap;
   /*ボックスの折り返し可*/
   justify-content: space-between;
+  margin-top: 50px;
 }
 
 /*左エリア*/
@@ -2444,12 +2518,12 @@ a.page_number:visited {
   position: -webkit-sticky;
   /*Safari用*/
   position: sticky;
-  top: 70px;
+  top: 100px;
   /*横半分50%　縦を100vhにする*/
   width: 50%;
   height: 100%;
   /* 100vh */
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 
 /*右エリア*/
@@ -2467,7 +2541,7 @@ a.page_number:visited {
   position: relative;
   /*.brand-name は真ん中に位置*/
   /*.white　背景白*/
-  box-shadow: 0px 1px 1px rgb(0 0 0 / 20%);
+  /* box-shadow: 0px 1px 1px rgb(0 0 0 / 20%); */
 }
 
 .brand-image-slider .slider-item {
@@ -2485,7 +2559,7 @@ a.page_number:visited {
 .brand-image .slick-slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /*ドットを画像下部に移動*/
@@ -2503,7 +2577,6 @@ a.page_number:visited {
 /*右各セクション 装飾のためのCSS*/
 .right-section {
   min-height: 100vh;
-  padding-top: 100px;
 }
 
 .right-section::nth-of-type(2n) {
@@ -2511,21 +2584,56 @@ a.page_number:visited {
   background: #eee;
 }
 
-/*brand-detail
-------------------*/
-.group {
-  padding-bottom: 20px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #ddd;
+.item-detail {
+  margin-bottom: 50px;
 }
 
-.group p {
-  margin-top: 10px;
+/*detail-lead
+------------------*/
+.detail-lead {
+  width: 100%;
+  overflow-wrap: break-word;
+  font-weight: 400;
+  line-height: 2em;
+  letter-spacing: 0.02em;
+}
+
+.detail-brand {
   font-size: 0.85rem;
 }
 
-.group-title {
-  font-size: 1rem;
+.detail-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.detail-price {
+  font-size: 0.9rem;
+}
+
+.detail-stock {
+  font-size: 0.85rem;
+}
+
+/* 非表示 */
+.detail-stock.false {
+  display: none;
+}
+
+/* 売り切れ */
+.detail-stock .false {
+  text-decoration: line-through;
+}
+
+/*group
+------------------*/
+.group {
+  padding: 20px 0;
+}
+
+.group p {
+  margin-bottom: 10px;
+  font-size: 0.85rem;
 }
 
 .group-description {
@@ -2537,6 +2645,7 @@ a.page_number:visited {
   text-decoration: underline;
 }
 
+/* リンクアイコン */
 .group-link {
   width: 50%;
   margin: 20px 0;
@@ -2547,33 +2656,8 @@ a.page_number:visited {
   height: 20px;
 }
 
-.shop-name {
-  margin-top: 10px;
-  /*font-size:1.1rem;*/
-  /*font-weight:bold;*/
-}
-
-/*original-items
----------------------*/
-
-/* detail
--------------------------------------------------------------------------------- */
-/*item-detail
----------------------*/
-.item-detail a:hover {
-  opacity: 0.6;
-}
-
-.detail-stock {
-  margin-top: 10px;
-  font-size: 0.85rem;
-}
-
-/* 売り切れ */
-.detail-stock .false {
-  text-decoration: line-through;
-}
-
+/* buttonwrap
+--------------------- */
 /*カートボタン横並び*/
 .buttonwrap {
   display: flex;
@@ -2582,13 +2666,18 @@ a.page_number:visited {
   margin: 20px 0;
 }
 
-/* サブミットボタン
-cart order------------------------*/
+/* 非表示 */
+.buttonwrap.false {
+  display: none;
+}
+
+/* submit */
 .cart-button,
 .order-button {
   width: 200px;
   background: #000000;
 }
+
 .cart-button input[type="submit"],
 .order-button input[type="submit"] {
   width: 100%;
@@ -2605,7 +2694,7 @@ cart order------------------------*/
     )
     100% 0 / 200% 100%;
   transition: background-position 0.3s;
-  /*box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);*/
+  /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
 }
 
 .cart-button input[type="submit"]:hover,
@@ -3036,10 +3125,9 @@ cart order------------------------*/
 
 /* ACCOUNTページ
 ------------------------------------------------------------------------------------- */
-#account {
-  margin-top: 100px;
+.account-info {
+  margin-bottom: 30px;
 }
-
 /*テーブル部分*/
 .account-info table {
   width: 100%;
@@ -3084,7 +3172,6 @@ cart order------------------------*/
 .logout {
   width: 200px;
   background: #999999;
-  margin: 0 auto 50px;
 }
 
 .logout input[type="submit"] {
@@ -3102,7 +3189,7 @@ cart order------------------------*/
     )
     100% 0 / 200% 100%;
   transition: background-position 0.3s;
-  /*box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);*/
+  /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
 }
 
 .logout input[type="submit"]:hover {
@@ -3114,16 +3201,12 @@ cart order------------------------*/
 ------------------------------------------------------------------------------------- */
 #member {
   min-height: 100vh;
-  padding: 50px 0;
-}
-.member {
-  background-image: url(./assets/images/baby/login.png);
-  background-position: 50% 60%;
-  background-size: 300px;
 }
 
-#member .page-title {
-  text-align: center;
+.member-bg {
+  background-image: url(../../images/baby/login.png);
+  background-position: 50% 50%;
+  background-size: 300px;
 }
 
 /*インプットフィールド */
@@ -3259,6 +3342,7 @@ cart order------------------------*/
   background: #999999;
   border-radius: 5px;
 }
+
 .form input[type="submit"] {
   width: 100%;
   line-height: 3em;
@@ -3276,6 +3360,7 @@ cart order------------------------*/
     )
     100% 0 / 200% 100%;
   transition: background-position 0.3s;
+  /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
 }
 
 .form input[type="submit"]:hover {
@@ -3283,21 +3368,34 @@ cart order------------------------*/
   border: 1px solid #222222;
 }
 
+/*logout
+-------------------*/
+.logout-image {
+  margin: 0 auto;
+  width: 350px;
+}
+
+.logout-message {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 3;
+  letter-spacing: 0.3em;
+}
+
 /*メッセージ
 ------------------------------------------------------------------------------------- */
 .message {
-  max-width: 450px;
-  margin: 0 auto;
+  text-align: center;
+  margin: 10px 0;
 }
 
+.header-message,
 .fade-message {
+  text-align: center;
   position: fixed;
-  top: 15%;
-  right: 8%;
-  /*transform: translate(-50%,-50%);*/
   display: table;
-  width: 300px;
-  /*background: rgba(0,0,0,0.8);*/
+  table-layout: fixed;
   -webkit-animation: fade-in-out 8s ease 1s forwards;
   animation: fade-in-out 8s ease 1s forwards;
   visibility: hidden;
@@ -3338,19 +3436,35 @@ cart order------------------------*/
   }
 }
 
+/*header下部に出現するメッセージ*/
+.header-message {
+  top: 70px;
+  right: 2%;
+  /*transform: translate(-50%,-50%);*/
+  margin: 10px 0;
+}
+
+/*body中央に出現するメッセージ*/
+.fade-message {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 10px 0;
+}
+
 /*フラッシュ
 -------------------------------------*/
 .flash {
   font-size: 0.9rem;
-  background: #384359;
   color: #fff;
-  /*color: blue;*/
-  /*background: #ccf1ff;*/
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
   display: table-cell;
   vertical-align: middle;
   padding: 10px 0;
-  text-align: center;
-  border-radius: 5px;
+  width: 350px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /*エラー 
@@ -3358,10 +3472,10 @@ cart order------------------------*/
 .errors {
   color: red;
   background: #ffdacc;
-  /* margin: 10px 0; */
-  padding: 15px 0;
-  text-align: center;
-  border-radius: 5px;
+  border-radius: 3px;
+  padding: 10px 0;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 /* モバイル版
@@ -3379,6 +3493,13 @@ cart order------------------------*/
 
   .account {
     display: none;
+  }
+
+  /* flash */
+  .header-message {
+    top: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
   }
 
   /* g-nav */
@@ -3423,7 +3544,7 @@ cart order------------------------*/
 
   /* caption */
   .caption-text {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
   }
 
   /* event */
@@ -3518,6 +3639,10 @@ cart order------------------------*/
 
   /* ITEMS 
     ------------------------------*/
+  .pagelink-list {
+    display: none;
+  }
+  /**/
   #in-page-link {
     flex-direction: column;
     text-align: center;
@@ -3535,7 +3660,6 @@ cart order------------------------*/
   .right-section {
     min-height: auto;
     /*縦を100vh⇒解除*/
-    padding-top: 10px;
   }
 
   #fixed-area {
@@ -3701,6 +3825,11 @@ cart order------------------------*/
   .account-info th,
   .account-info td {
     font-size: 0.7rem;
+  }
+
+  .button-flex {
+    flex-direction: column;
+    gap: 3ch;
   }
 
   /* MEMBER 

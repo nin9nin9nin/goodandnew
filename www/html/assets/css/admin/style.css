@@ -697,7 +697,8 @@ input[type="reset"]:hover {
   margin-bottom: 10px;
 }
 
-/*フラッシュ-----------------------------------------------------*/
+/* メッセージ
+------------------------------------- */
 .fade-message {
   color: #fff;
   background: rgba(0, 0, 0, 0.6);
@@ -743,11 +744,11 @@ input[type="reset"]:hover {
     opacity: 0;
   }
 }
+
+/*フラッシュ-----------------------------------------------------*/
 .flash {
   color: blue;
   background: #ccf1ff;
-  /*display: table-cell;*/
-  /*vertical-align: middle;*/
   margin: 10px 0;
   padding: 15px 0;
   text-align: center;

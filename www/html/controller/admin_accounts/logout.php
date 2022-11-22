@@ -12,7 +12,7 @@ function execute_action() {
     Session::clear();
     
     //$_SESSION['_authenticated']をfalseにする（認証状態を解除する）
-    //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える(session_destory()と動作がかぶる？)
+    //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
     Session::setAuthenticated(false);
 
     // セッション名取得 ※デフォルトはPHPSESSID
@@ -31,7 +31,6 @@ function execute_action() {
     
     //フラッシュメッセージをセット
     Session::setFlash('ログアウトしました');
-    // var_dump($_SESSION['flash_message']);
     
     //ログイン画面へ戻る
     return View::render('signin');

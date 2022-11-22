@@ -1,6 +1,7 @@
 <?php
 $title = 'GOOD&NEW オンラインショップ';
 $is_top = NULL; //トップページの判定(isset)
+Session::start();
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
 include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
@@ -10,15 +11,19 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
     <?php include INCLUDE_DIR . '/user/header_fixed.php'; ?>
     <main>
         <section class="area" id="gallery">
-            <?php if(!empty($records['event'])) { ?>
             <nav class="page-nav wrapper">
                 <span>
-                    <a href="index.php?module=events&action=index&event_id=<?php print h($records['event']->event_id); ?>">GALLERY</a>
+                    <a href="index.php?module=schedule&action=index">SCHEDULE</a>
+                </span>
+                <span>&gt;</span>
+                <span>
+                    <a href="index.php?module=gallery&action=index&event_id=<?php print h($records['event']->event_id); ?>">GALLERY</a>
                 </span>
                 <span>&gt;</span>
             </nav><!-- / .page-nav -->
             <div class="box fadeUpTrigger wrapper">
                 <h3 class="section-title">GALLERY</h3>
+                <?php if(!empty($records['event'])) { ?>
                 <div class="gallery-content">
                     <aside>
                         <div class="gallery-info">
@@ -52,7 +57,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                                             <ul>
                                                 <?php foreach($records['brands'] as $record) { ?>
                                                     <li>
-                                                        <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>">
+                                                        <a href="index.php?module=brands&action=index&brand_id=<?php print h($record->brand_id); ?>&event_id=<?php print h($records['event']->event_id); ?>">
                                                             <?php print h($record->brand_name); ?>
                                                         </a>
                                                     </li>
@@ -102,58 +107,18 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div><!--/.gallery-info-->
                     </article>
                 </div><!-- / .gallery-content -->
+                <?php } else { ?>
+                    <p class="errors">イベントギャラリーがありません。</p>
+                <?php } ?>
             </div><!-- .box-->
-            <?php } else { ?>
-                <p class="errors">ギャラリーがありません。</p>
-            <?php } ?>
-            <div class="basebutton">
-                <a href="<?php echo url_for('schedule', 'index'); ?>">
-                    <span>スケジュール一覧</span>
-                </a>
-            </div>
-        </section><!-- / #gallery .big-bg -->
-        <section class="area" id="f-nav">
-            <div class="box fadeUpTrigger content">
-                <div class="f-nav-area">
-                    <div class="f-nav-list-link">
-                        <ul class="link-icon-nav">
-                            <li class="icon-instagram"><a href="#" target=”_blank” rel="noopener noreferrer">instagram</a></li>
-                            <li class="icon-twitter"><a href="#" target=”_blank” rel="noopener noreferrer">twitter</a></li>
-                            <li class="icon-facebook"><a href="#" target=”_blank” rel="noopener noreferrer">facebook</a></li>
-                            <li class="icon-youtube"><a href="#" target=”_blank” rel="noopener noreferrer">youtube</a></li>
-                            <li class="icon-line"><a href="#" target=”_blank” rel="noopener noreferrer">line</a></li>
-                        </ul>
-                    </div>
-                    <ul class="f-nav-list-main">
-                        <li><a href="<?php echo url_for('top', 'index'); ?>">Top</a></li>
-                        <li><a href="<?php echo url_for('concept', 'index'); ?>">CONCEPT</a></li>
-                        <li><a href="<?php echo url_for('events', 'index'); ?>">EVENT</a></li>
-                        <li><a href="<?php echo url_for('schedule', 'index'); ?>">SCHEDULE</a></li>
-                        <li><a href="<?php echo url_for('gallery', 'index'); ?>">GALLERY</a></li>
-                        <li><a href="#">INFORMATION</a></li>
-                    </ul>
-                    <ul class="f-nav-list-sub">
-                        <li><a href="<?php echo url_for('user', 'signin'); ?>">ログイン&middot;新規登録</a></li>
-                        <li><a href="#">配送に関して</a></li>
-                        <li><a href="#">ご利用ガイド</a></li>
-                        <li><a href="#">プライバシーポリシー</a></li>
-                        <li><a href="#">特定商取引に関する表示</a></li>
-                        <li><a href="#">お問い合わせ</a></li>
-                    </ul>
-                </div><!-- / .f-nav-area -->
-            </div><!-- /.box .content-->
-        </section>
+        </section><!-- / #gallery -->
+        <?php include INCLUDE_DIR . '/user/f-nav.php'; ?>
     </main>
     <?php include INCLUDE_DIR . '/user/footer.php'; ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/TextPlugin.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.4/vivus.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
     <script src="./assets/js/user/common.js"></script>
-
 </body>
 
 </html>

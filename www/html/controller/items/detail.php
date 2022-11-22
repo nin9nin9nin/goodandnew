@@ -1,13 +1,12 @@
 <?php
 require_once(MODEL_DIR . '/Tables/Items.php');
-require_once(MODEL_DIR . '/Tables/Stocks.php');
+require_once(MODEL_DIR . '/Tables/Events.php');
 require_once(MODEL_DIR . '/Tables/Brands.php');
-require_once(MODEL_DIR . '/Tables/Shops.php');
 
 function execute_action() {
-    $id = Request::get('item_id');
+    $item_id = Request::get('item_id');
 
-    if (preg_match('/^\d+$/', $id) !== 1) {
+    if (preg_match('/^\d+$/', $item_id) !== 1) {
         return View::render404();
     }
     
@@ -15,22 +14,25 @@ function execute_action() {
     $classItems = new Items();
     
     //プロパティに値をセット
-    $classItems -> item_id = $id;
+    $classItems -> item_id = $item_id;
     
     //指定レコードの取得
-    $records[0] = $classItems -> detailItem();
+    $records['item'] = $classItems -> getItemDetail();
     
     //別途情報取得------------------------------
-    
-    $brand_id = $records[0] ->brand_id;
-    $shop_id = $records[0] ->shop_id;
-    
-    //ブランド情報取得
-    $records['brand'] = Brands::detailBrand($brand_id);
-    
-    //ショップ情報取得
-    $records['shop'] = Shops::detailShop($shop_id);
+    $classEvents = new Events();
+    $classBrands = new Brands();
     
     
+    $classEvents -> event_id = $records['item'] ->event_id;
+    $classBrands -> brand_id = $records['item'] ->brand_id;
+
+    //指定IDのイベント情報の取得 (1レコードのみ retrieveBySql())
+    $records['event'] = $classEvents -> getEventDetail(); 
+    
+    //指定IDのブランド情報の取得　(1レコードのみ retrieveBySql())
+    $records['brand'] = $classBrands -> getBrandDetail();
+    
+
     return View::render('detail', ['records' => $records]);
 }

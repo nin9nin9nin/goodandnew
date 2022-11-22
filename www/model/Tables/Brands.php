@@ -739,17 +739,5 @@ class Brands {
         
         return Messages::retrieveBySql($sql,$params); 
     }
-
-    /**
-     * 指定してブランド情報取得 static
-     * 
-     * items/detail.tpl.php
-     */
-    public static function detailBrand($id) {
-        $sql = 'SELECT * FROM brands WHERE brand_id = :brand_id';
-        
-        $params = [':brand_id' => $id];
-        
-        return Messages::findBySql($sql, $params);
-    }
+    
 }

@@ -1,6 +1,7 @@
 <?php
 $title = 'GOOD&NEW オンラインショップ';
 $is_top = NULL; //トップページの判定(isset)
+Session::start();
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
 $url = Request::getUrl(); //ページネーション用url
@@ -51,10 +52,6 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
     <?php include INCLUDE_DIR . '/user/footer.php'; ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/TextPlugin.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.4/vivus.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
     <script src="./assets/js/user/common.js"></script>
 </body>

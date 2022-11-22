@@ -22,15 +22,15 @@
                     </ul>
                     <div class="g-nav-list-link">
                         <ul class="link-icon-nav">
-                            <li class="icon-instagram"><a href="#" target=”_blank” rel="noopener noreferrer">instagram</a></li>
-                            <li class="icon-twitter"><a href="#" target=”_blank” rel="noopener noreferrer">twitter</a></li>
-                            <li class="icon-facebook"><a href="#" target=”_blank” rel="noopener noreferrer">facebook</a></li>
-                            <li class="icon-youtube"><a href="#" target=”_blank” rel="noopener noreferrer">youtube</a></li>
-                            <li class="icon-line"><a href="#" target=”_blank” rel="noopener noreferrer">line</a></li>
+                            <li class="icon-instagram"><a href="#" target="_blank" rel="noopener noreferrer">instagram</a></li>
+                            <li class="icon-twitter"><a href="#" target="_blank" rel="noopener noreferrer">twitter</a></li>
+                            <li class="icon-facebook"><a href="#" target="_blank" rel="noopener noreferrer">facebook</a></li>
+                            <li class="icon-youtube"><a href="#" target="_blank" rel="noopener noreferrer">youtube</a></li>
+                            <li class="icon-line"><a href="#" target="_blank" rel="noopener noreferrer">line</a></li>
                         </ul>
                     </div>
                     <ul class="g-nav-list-sub">
-                        <li><a href="<?php echo url_for('user', 'signin'); ?>">ログイン&middot;新規登録</a></li>
+                        <li><a href="<?php echo url_for('users', 'signin'); ?>">ログイン&middot;新規登録</a></li>
                         <li><a href="#">配送に関して</a></li>
                         <li><a href="#">ご利用ガイド</a></li>
                         <li><a href="#">プライバシーポリシー</a></li>
@@ -50,7 +50,7 @@
         <div id="header-icon">
             <ul class="header-icon-btn">
                 <li class="account">
-                    <a href="<?php echo url_for('user', 'account'); ?>">
+                    <a href="<?php echo url_for('users', 'account'); ?>">
                         <svg>
                             <use xlink:href="./assets/images/icon/account.svg#account"></use>
                         </svg>
@@ -75,14 +75,8 @@
         </div>
         <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
-            <div class="fade-message">
+            <div class="header-message">
             <p class="flash"><?php echo $flash_message; ?></p>
             </div>
-        <?php } ?>
-        <!--フラッシュメッセージ-->
-        <?php if ($flash_message !== '') { ?>
-          <div class="message">
-            <p class="fade-message"><?php echo $flash_message; ?></p>
-          </div>
         <?php } ?>
     </header>

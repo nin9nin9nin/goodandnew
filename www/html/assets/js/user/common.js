@@ -118,10 +118,9 @@ $(".close-btn").click(function () {
 // ページトップリンク-----------------------------------------------------------------------
 //スクロールした際の動きを関数でまとめる
 function PageTopAnime() {
-  var headerH = $("#home").outerHeight(true);
   var scroll = $(window).scrollTop();
-  if (scroll >= headerH) {
-    //headerの出現に合わせる
+  if (scroll >= 300) {
+    //上から200pxスクロールしたら
     $("#page-top").removeClass("DownMove"); //#page-topについているDownMoveというクラス名を除く
     $("#page-top").addClass("UpMove"); //#page-topについているUpMoveというクラス名を付与
   } else {
@@ -408,34 +407,34 @@ $(".brand-image-slider").on(
 
 //サムネイル付き　slider -----------------------------------------------------------------
 //item-photo 上部画像の設定 ---------------------------------------------------------
-// $(".item-photo").slick({
-//   infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-//   fade: true, //フェードの有効化
-//   arrows: true, //左右の矢印あり
-//   prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
-//   nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
-// });
+$(".item-photo").slick({
+  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
+  fade: true, //フェードの有効化
+  arrows: true, //左右の矢印あり
+  prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
+  nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
+});
 
-// //選択画像の設定
-// $(".choice-btn").slick({
-//   infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-//   slidesToShow: 8, //表示させるスライドの数
-//   focusOnSelect: true, //フォーカスの有効化
-//   asNavFor: ".item-photo", //連動させるスライドショーのクラス名
-// });
+//選択画像の設定
+$(".choice-btn").slick({
+  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
+  slidesToShow: 8, //表示させるスライドの数
+  focusOnSelect: true, //フォーカスの有効化
+  asNavFor: ".item-photo", //連動させるスライドショーのクラス名
+});
 
-// //下の選択画像をスライドさせずに連動して変更させる設定。
-// $(".item-photo").on(
-//   "beforeChange",
-//   function (event, slick, currentSlide, nextSlide) {
-//     var index = nextSlide; //次のスライド番号
-//     //サムネイルのslick-currentを削除し次のスライド要素にslick-currentを追加
-//     $(".choice-btn .slick-slide")
-//       .removeClass("slick-current")
-//       .eq(index)
-//       .addClass("slick-current");
-//   }
-// );
+//下の選択画像をスライドさせずに連動して変更させる設定。
+$(".item-photo").on(
+  "beforeChange",
+  function (event, slick, currentSlide, nextSlide) {
+    var index = nextSlide; //次のスライド番号
+    //サムネイルのslick-currentを削除し次のスライド要素にslick-currentを追加
+    $(".choice-btn .slick-slide")
+      .removeClass("slick-current")
+      .eq(index)
+      .addClass("slick-current");
+  }
+);
 
 //750px以下でwrapper付与---------------------------------------
 // const CHANGE_WIDTH = 750; // 変更を検知する横幅
@@ -458,7 +457,7 @@ $(".brand-image-slider").on(
 $(".gallery").slick({
   infinite: true, //スライドをループさせるかどうか。初期値はtrue。
   fade: true, //フェードの有効化
-  arrows: true, //左右の矢印あり
+  arrows: false, //左右の矢印あり
   prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
   nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
 });

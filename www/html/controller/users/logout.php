@@ -7,13 +7,12 @@ function execute_action() {
         return View::render404();
     }
     
-    $user_id = Request::get('user_id');
-    
+    Session::start();
     //セッションを空にする $_SESSION = array();
-    Session::getInstance() -> clear();
+    Session::clear();
     
     //$_SESSION['_authenticated']をfalseにする（認証状態を解除する）
-    //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える(session_destory()と動作がかぶる？)
+    //session_regenerate_idで現在のセッションIDを新しく生成したものと置き換える
     Session::setAuthenticated(false);
 
     // セッション名取得 ※デフォルトはPHPSESSID
@@ -30,9 +29,10 @@ function execute_action() {
     // Cookie::clearCookieName();
     
     //$_SESSION['cart_count']もそのまま(次回アクセス時にも有効となるように)
+
+    //フラッシュメッセージをセット
+    Session::setFlash('ログアウトに成功しました');
     
     //ログイン画面へリダイレクト
-    return View::redirectTo('users', 'signin');
-    exit;
-
+    return View::render('logout');
 }

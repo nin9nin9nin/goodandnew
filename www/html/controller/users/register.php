@@ -5,11 +5,25 @@ function execute_action() {
     if (!Request::isPost()) {
         return View::render404();
     }
+
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    $token = Request::get('token');
+
+    Session::start();
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('users', 'signin');
+        exit;
+    }
     
-    $name = Request::get('user_name');
-    $email = Request::get('email');
-    $password = Request::get('password');
-    $cookie_check = Request::get('cookie_check');
+    //form/registerの値を取得
+    $name = Request::get('reg_user_name');
+    $email = Request::get('reg_email');
+    $password = Request::get('reg_password');
+    $cookie_check = Request::get('reg_cookie_check');
     
     //クラス生成（初期化）
     $classUsers = new Users();
@@ -35,17 +49,15 @@ function execute_action() {
         //$e !== null
         CommonError::errorThrow();
         
-        
     } catch (Exception $e) {
         //エラーメッセージ格納
         $errors = CommonError::errorWhile();
         
-        //クッキーの取得（空）
-        $cookie_check = Cookie::getUserCookieCheck();
-        $cookie_name = Cookie::getUserCookieName();
+        //フラッシュメッセージをセット
+        Session::setFlash('ユーザー登録に失敗しました');
         
         //ログイン画面へ（初期値はそれぞれ空の状態）
-        return View::render('login', ['cookie_check' => $cookie_check, 'cookie_name' => $cookie_name, 'errors' => $errors,]);
+        return View::render('login', ['errors' => $errors,]);
         exit;
     }
     
@@ -64,21 +76,12 @@ function execute_action() {
     
     //情報取得------------------------------------------------
     //セッションはログイン後に登録
-    
-    // //user_nameからuser情報取得(passwprd除く)
-    // $record = $classUsers -> selectUserName();
-    
-    // //$_SESSION['']を作成・値を入れる
-    // Session::set('user', $record);
-    
-    // //$_SESSION['admin']を受け取る (なければfalse)
-    // $admin = Session::get('user',false);
-    
+        
     //['cookie_check']によってクッキーを保存or空保存
     Cookie::setUserCookie($cookie_check, $name);
     
     //フラッシュメッセージをセット
-    Session::getInstance()->setFlash('ユーザーを登録しました');
+    Session::setFlash('ユーザーを登録しました');
     
     //登録して再度signinにリダイレクト
     return View::redirectTo('users', 'signin');

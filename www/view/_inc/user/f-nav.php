@@ -19,7 +19,7 @@
                         <li><a href="#">INFORMATION</a></li>
                     </ul>
                     <ul class="f-nav-list-sub">
-                        <li><a href="<?php echo url_for('user', 'signin'); ?>">ログイン&middot;新規登録</a></li>
+                        <li><a href="<?php echo url_for('users', 'signin'); ?>">ログイン&middot;新規登録</a></li>
                         <li><a href="#">配送に関して</a></li>
                         <li><a href="#">ご利用ガイド</a></li>
                         <li><a href="#">プライバシーポリシー</a></li>

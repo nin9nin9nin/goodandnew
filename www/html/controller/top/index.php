@@ -5,6 +5,7 @@ require_once(MODEL_DIR . '/Tables/Shops.php');
 require_once(MODEL_DIR . '/Tables/Items.php');
 
 function execute_action() {
+
     //クラス生成（初期化）
     $classEvents = new Events();
     $classShops = new Shops();
@@ -26,10 +27,10 @@ function execute_action() {
     //専用ブランド一覧の取得
     $records['brands'] = $classItems -> getExclusiveBrands(); //ユーザー画面
 
-    //公開中イベント情報の取得 (1レコードのみ)
+    //イベント情報(一部)の取得
     $records['schedule'] = $classEvents -> getEventSchedulePart(); //ユーザー画面
 
-    //オリジナルアイテム一覧の取得
+    //オリジナルアイテム(一部)の取得
     $records['originals'] = $classItems -> getOriginalItemsPart(); //ユーザー画面
     
     // var_dump($records);

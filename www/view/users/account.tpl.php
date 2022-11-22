@@ -1,27 +1,28 @@
 <?php
-$title = 'ec site ショップ画面';
-$description = '説明（カートページ）';
-// $is_home = true; //トップページの判定用の変数
-//セッションからカート内のアイテム数を取得
-$cart_count = Session::getInstance() -> get('cart_count', "");
-include 'inc/user/head.php'; // head.php の読み込み
+$title = 'GOOD&NEW オンラインショップ';
+$is_top = NULL; //トップページの判定(isset)
+Session::start();
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$token = Session::getCsrfToken(); // トークンの取得
+$cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
+include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
-    <div id="account" class="big-bg">
-        <div id="page-header">
-          <?php include 'inc/user/header.php'; ?>
-        </div>
-
-        <div class="account-contents wrapper">
-            <section>
-                <div class="section-title">ACCOUNT</div>
-                <div class="order-history">
-                    <a href="<?php echo url_for('carts', 'order_history'); ?>">
-                        <span>購入履歴へ</span>
-                    </a>
-                </div>
+    <?php include INCLUDE_DIR . '/user/header_fixed.php'; ?>
+    <main>
+        <section class="area" id="account">
+            <nav class="page-nav wrapper">
+                <span>
+                    <a href="<?php echo url_for('users', 'account'); ?>">ACCOUNT</a>
+                </span>
+                <span>&gt;</span>
+            </nav><!-- / .page-nav -->
+            <div class="box fadeUpTrigger wrapper">
+                <h3 class="section-title">ACCOUNT</h3>
+                <!-- <div class="btn-arrow">
+                  <a href="#" class="btnarrow4">情報を修正する</a>
+                </div> -->
                 <div class="account-info">
                     <table>
                         <!--エラーメッセージ-->
@@ -38,6 +39,7 @@ include 'inc/user/head.php'; // head.php の読み込み
                         <?php } ?>
                         <caption>アカウント情報</caption>
                         <tbody>
+                          <?php if (!empty($record)) { ?>
                           <tr>
                             <th>ユーザーID</th>
                             <td><?php print h($record->user_id); ?></td>
@@ -54,25 +56,39 @@ include 'inc/user/head.php'; // head.php の読み込み
                             <th>登録日時</th>
                             <td><?php print h($record->getCreateDateTime()); ?></td>
                           </tr>
+                          <?php } else { ?>
+                              <p class="errors">アカウント情報がありません。</p>
+                          <?php } ?>
                         </tbody>
                     </table>
+                </div><!-- /.account-info-->
+                <div class="btn-arrow">
+                  <a href="#" class="btnarrow4">購入履歴を見る</a>
                 </div>
-            </section>
-            <div class="logout">
-                <form action="index.php" method="post">
-                    <input type="submit" value="ログアウト">
-                    <input type="hidden" name="module" value="users">
-                    <input type="hidden" name="action" value="logout">
-                    <input type="hidden" name="user_id" value="<?php print h($record->user_id); ?>">
-                </form>
-            </div>
-        </div><!-- / .cart-content .wrapper-->
-    </div><!-- / #cart .big-bg -->
-    <?php include 'inc/user/footer.php'; ?>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+                <div class="button-area button-flex">
+                  <div class="logout">
+                      <form action="index.php" method="post">
+                          <input type="submit" value="ログアウト">
+                          <input type="hidden" name="module" value="users">
+                          <input type="hidden" name="action" value="logout">
+                          <input type="hidden" name="token" value="<?=h($token)?>">
+                      </form>
+                  </div>
+                  <div class="basebutton">
+                      <a href="<?php echo url_for('events', 'index'); ?>">
+                        <span>ショッピングに戻る</span> 
+                      </a>
+                  </div>
+                </div>
+            </div><!-- /.box -->
+        </section>
+        <?php include INCLUDE_DIR . '/user/f-nav.php'; ?>
+    </main>
+    <?php include INCLUDE_DIR . '/user/footer.php'; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
-    <script src="./js/user/detail.js"></script>
+    <script src="./assets/js/user/common.js"></script>
 </body>
 
 </html>
