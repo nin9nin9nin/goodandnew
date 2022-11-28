@@ -3,38 +3,70 @@ require_once(MODEL_DIR . '/Tables/Carts.php');
 require_once(MODEL_DIR . '/Tables/Stocks.php');
 
 function execute_action() {
+    Session::start();
+    //認証済みか判定 ($_SESSION['_authenticated'](bool)を受け取る)
+    if (Session::isAuthenticated() !== true) {
+        //認証済みでなければサインアップにリダイレクト (ログイン画面に移行される)
+        return View::redirectTo('users', 'signin');
+        exit;
+    }
+
+    //認証済みであれば$_SESSION['user']を取得
+    $user = Session::get('user');
+
+    //postデータ取得---------------------------------
     if (!Request::isPost()) {
         return View::render404();
     }
     
+    //フォームの値を取得
     $cart_id = Request::get('cart_id');
     $item_id = Request::get('item_id');
-    $new_quantity = Request::get('new_quantity');//更新後の値
     $quantity = Request::get('quantity');//更新前の値
-    $subtraction = $new_quantity - $quantity;//加算された値(stockの更新時に使用)
-
-    if (preg_match('/^\d+$/', $item_id) !== 1) {
+    
+    //hiddenの値をチェック
+    if (preg_match('/^\d+$/', $cart_id) !== 1 && preg_match('/^\d+$/', $item_id) !== 1) {
         return View::render404();
     }
     
+    // CSRF対策(POST投稿を行うフォームに対して必ず行う)
+    $token = Request::get('token');
+    
+    // postとsessionのトークンを照合（有効か確認）
+    if (Session::isValidCsrfToken($token) !== true) {
+        // 有効でなければリダイレクト
+        Session::setFlash('不正な処理が行われました');
+
+        return View::redirectTo('carts', 'index');
+        exit;
+    }
+
     //クラス生成（初期化）
     $classCarts = new Carts();
+    $classStocks = new Stocks();
     
+    Session::start();
+    //認証済みであれば$_SESSION['user']を取得
+    $user = Session::get('user');
+
     //プロパティに値をセット
+    $classCarts -> user_id = $user -> user_id;
     $classCarts -> cart_id = $cart_id;
     $classCarts -> item_id = $item_id;
-    $classCarts -> quantity = $new_quantity;
-    
-    //エラーチェック
+    $classStocks -> item_id = $item_id;
+    $classCarts -> quantity = $quantity;
+    $classStocks -> quantity = $quantity;
+
+    //入力値チェック+在庫の確認
     try {
         //エラークラス初期化　$e = null
         CommonError::errorClear();
         
         //バリデーション（エラーがあればCommonErrorにメッセージを入れる）
         $classCarts -> checkQuantity();
-        
-        //在庫の確認（在庫数を超えた場合エラー）
-        Stocks::checkItemStock_update($item_id, $subtraction);
+
+        // 在庫の確認
+        $classStocks -> checkUpdateItemStock();
         
         //エラーがあればthrow
         CommonError::errorThrow();
@@ -43,48 +75,31 @@ function execute_action() {
         //エラーメッセージ取得
         $errors = CommonError::errorWhile();
         
-        //カート情報の取得(商品詳細含む)
-        $records['cart_items'] = $classCarts -> getUserCartItems();
-        //数量の計算・取得
-        $records['total_quantity'] = $classCarts->getTotalQuantity($records['cart_items']);
-        //小計の計算・取得
-        $records['total_amount'] = $classCarts->getTotalAmount($records['cart_items']);
+        //カート一覧の取得
+        $records['carts'] = $classCarts -> indexUserCartDetail();
+        
+        $records['total_quantity'] = Messages::getTotalQuantity($records['carts']);
+
+        $records['total_amount'] = Messages::getTotalAmount($records['carts']);
         
         return View::render('index', ['records' => $records, 'errors' => $errors]);
+        exit;
     }
     
     //更新処理------------------------------------------------------------------
     
-    //データベース接続    
-    Database::beginTransaction();
-    try {
-        $now_date = date('Y-m-d H:i:s');
-        
-        $classCarts -> update_datetime = $now_date;
-        
-        //cartsの更新(更新日時のみ)
-        $classCarts -> updateUserCart();
-        
-        //cart_detailの更新 ($new_quantity)
-        $classCarts -> updateUserCartDetail();
-        
-        //在庫の更新($subtraction)
-        Stocks::editItemStock_update($item_id, $subtraction);
-        
-        Database::commit();
-        
-    } catch (Exception $e) {
-        $e = new Exception('変更できませんでした', 0, $e);
-        //トランザクションでのエラーはcontrollerでキャッチしてもらう(error.tpl.phpへ)
-        throw $e;
-        
-        Database::rollback();
-    }
+    //更新の処理（トランザクション）
+    $classCarts -> updateCart();
+
+    //カートの合計数量を取得
+    $cart_count = $classCarts -> getUserCartCount();
     
-    //セッション情報の更新(カートアイコンに表示)
-    $classCarts -> setSessionCartCount();
+    //セッションに登録($_SESSION['cart_count'])
+    Session::set('cart_count', $cart_count);
+
+    //フラッシュメッセージをセット
+    Session::setFlash('数量を変更しました');
         
     //カート詳細ページへリダイレクト
     return View::redirectTo('carts', 'index');
-    
 }

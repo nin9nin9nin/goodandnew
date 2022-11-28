@@ -42,7 +42,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php } ?>
                 </div><!-- / .schedule-list -->
                 <?php } else { ?>
-                    <p class="errors">スケジュール情報がありません。</p>
+                    <p class="message errors">スケジュール情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>

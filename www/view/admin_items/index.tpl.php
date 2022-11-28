@@ -95,7 +95,7 @@ include INCLUDE_DIR . '/admin/head.php'; // head.php の読み込み
               </tr>
               <tr class="form-select">
                 <th>
-                  <label for="event_id">イベント名：</label><span class="hissu">必須</span>
+                  <label for="event_id">イベント名：</label><span class="ninni">任意</span>
                 </th>
                 <td>
                   <select id="event_id" name="event_id">

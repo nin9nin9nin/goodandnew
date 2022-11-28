@@ -726,15 +726,15 @@ svgを外部から読み込み*/
 
 /*　背景画像設定　*/
 .slider-item01 {
-  background: url("../../images/banner/pexels-serhii-volyk-10865058.jpg");
+  background: url("./banner/pexels-serhii-volyk-10865058.jpg");
 }
 
 .slider-item02 {
-  background: url("../../images/banner/pexels-sujira-su-11376531.jpg");
+  background: url("./banner/pexels-sujira-su-11376531.jpg");
 }
 
 .slider-item03 {
-  background: url("../../images/banner/pexels-zsófia-fehér-11405127.jpg");
+  background: url("./banner/pexels-zsófia-fehér-11405127.jpg");
 }
 
 /* スクロールダウン

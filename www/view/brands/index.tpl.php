@@ -30,14 +30,14 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         <div class="brand-image white">
                             <!-- <img class="brand-logo" src="" alt="brand_logo"> -->
                             <ul class="brand-image-slider">
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img1); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img2); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img3); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img4); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img5); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img6); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img7); ?>" alt="ブランド画像"></li>
-                                <li class="slider-item"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img8); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img1 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img1); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img2 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img2); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img3 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img3); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img4 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img4); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img5 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img5); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img6 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img6); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img7 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img7); ?>" alt="ブランド画像"></li>
+                                <li class="slider-item <?= $records['brand']->img8 ? '' : 'false' ?>"><img src="<?php print h(BRANDS_IMG_DIR . $records['brand'] -> img8); ?>" alt="ブランド画像"></li>
                             </ul>
                         </div>
                     </div><!--/.flex-area-->
@@ -78,7 +78,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     </div><!-- / .container -->
                 </div><!-- / .brand-info -->
                 <?php } else { ?>
-                    <p class="errors">ブランド情報がありません。</p>
+                    <p class="message errors">ブランド情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box-->
         </section>
@@ -175,7 +175,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php } ?>
                 </div><!-- /.grid -->
                 <?php } else { ?>
-                    <p class="errors">アイテム情報がありません。</p>
+                    <p class="message errors">アイテム情報がありません。</p>
                 <?php } ?>
                 <div class="button-area">
                     <div class="basebutton">

@@ -218,6 +218,7 @@ class Validator {
     // }
 
     /**
+     * 0を含める
      * 数値の範囲チェック<br>
      * 整数型数値の範囲チェック<br>
      * 最小と最大を指定、最大を指定しない場合は無制限
@@ -226,8 +227,27 @@ class Validator {
      * @return bool 指定された範囲内の数値だった場合true、そうでなければfalse
      */
     //price,stock 必須 int(11) 10桁超えると2,147,483,647になる
-    //フォームからの受け取りのため最初を変更
     public static function checkRange($arg, $min_value, $max_value = null)
+    {
+        if (preg_match('/^(0|[1-9][0-9]*)$/', $arg) && self::checkDigit($min_value) && mb_strlen($arg) >= $min_value
+        && (is_null($max_value) || (self::checkDigit($max_value) && mb_strlen($arg) <= $max_value))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 0を除く
+     * 数値の範囲チェック<br>
+     * 整数型数値の範囲チェック<br>
+     * 最小と最大を指定、最大を指定しない場合は無制限
+     *
+     * @param int $arg チェックする値(整数型数値を設定すること)
+     * @return bool 指定された範囲内の数値だった場合true、そうでなければfalse
+     */
+    //price,stock 必須 int(11) 10桁超えると2,147,483,647になる
+    public static function checkRangeNotZero($arg, $min_value, $max_value = null)
     {
         if (preg_match('/^([1-9][0-9]*)$/', $arg) && self::checkDigit($min_value) && mb_strlen($arg) >= $min_value
         && (is_null($max_value) || (self::checkDigit($max_value) && mb_strlen($arg) <= $max_value))){
@@ -235,12 +255,6 @@ class Validator {
         } else {
             return false;
         }
-        // if (self::checkDigit($arg) && self::checkDigit($min_value) && $arg >= $min_value
-        // && (is_null($max_value) || (self::checkDigit($max_value) && $arg <= $max_value))){
-        //     return true;
-        // } else {
-        //     return false;
-        // }
     }
 
     /**

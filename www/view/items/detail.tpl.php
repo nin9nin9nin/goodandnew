@@ -1,6 +1,6 @@
 <?php
 $title = 'GOOD&NEW オンラインショップ';
-$is_top = true; //トップページの判定(isset)
+$is_top = NULL; //トップページの判定(isset)
 Session::start();
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
@@ -27,25 +27,25 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <div class="item-info">
                     <div id="fixed-area"><!--左固定エリア-->
                         <div class="item-photo-area">
-                            <ul class="gallery">
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img1); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img2); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img3); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img4); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img5); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img6); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img7); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img8); ?>" alt="アイテム画像"></li>
+                            <ul class="item-photo">
+                                <li class="slider-item <?= $records['item']->img1 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img1); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img2 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img2); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img3 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img3); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img4 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img4); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img5 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img5); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img6 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img6); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img7 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img7); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img8 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img8); ?>" alt="アイテム画像"></li>
                             </ul>
-                            <ul class="choice-btn">
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img1); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img2); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img3); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img4); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img5); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img6); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img7); ?>" alt="アイテム画像"></li>
-                                <li><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img8); ?>" alt="アイテム画像"></li>
+                            <ul class="item-photo-choice-btn">
+                                <li class="slider-item <?= $records['item']->img1 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img1); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img2 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img2); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img3 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img3); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img4 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img4); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img5 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img5); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img6 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img6); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img7 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img7); ?>" alt="アイテム画像"></li>
+                                <li class="slider-item <?= $records['item']->img8 ? '' : 'false' ?>"><img src="<?php print h(ITEMS_IMG_DIR . $records['item']->img8); ?>" alt="アイテム画像"></li>
                             </ul>
                         </div>
                     </div><!--/fixed-area-->
@@ -58,11 +58,16 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                                         <p class="detail-name"><?php print h($records['item']->item_name); ?></p>
                                         <p class="detail-price">&yen;<?php print h($records['item']->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                                         <div class="detail-stock <?= $records['event']->status ? 'true' : 'false' ?>">
-                                            <p class="<?= $records['item']->stock ? 'true' : 'false' ?>">在庫数&emsp;<?php print h($records['item']->getStock()); ?></p>
+                                        <?php if($records['item']->stock > 0) { ?>
+                                                <span >在庫数&emsp;<?php print h($records['item']->getStock()); ?></span>
+                                            <?php } else { ?>
+                                                <span class="soldout">在庫数&emsp;<?php print h($records['item']->getStock()); ?></span>
+                                                <span>売り切れ</span>
+                                            <?php } ?>
                                         </div>
                                     </div>
-                                    <div class="buttonwrap <?= $records['event']->status ? 'true' : 'false' ?>">
-                                        <div class="cart-button">
+                                    <div class="buttonwrap">
+                                        <div class="cart-button <?= $records['event']->status ? 'true' : 'false' ?>">
                                             <form action="index.php" method="post">
                                               <input type="submit" value="ADD TO CART">
                                               <input type="hidden" name="module" value="carts">
@@ -79,7 +84,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                                                         <use xlink:href="./assets/images/icon/favorite.svg#favorite"></use>
                                                     </svg>
                                                 </label>
-                                                <input type="hidden" name="module" value="favorite">
+                                                <input type="hidden" name="module" value="favorites">
                                                 <input type="hidden" name="action" value="add">
                                                 <input type="hidden" name="item_id" value="<?php print h($records['item']->item_id); ?>">
                                                 <input type="hidden" name="token" value="<?=h($token)?>">
@@ -135,7 +140,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     </div><!-- / .container -->
                 </div><!-- / .item-info -->
                 <?php } else { ?>
-                    <p class="errors">アイテム情報がありません。</p>
+                    <p class="message errors">アイテム情報がありません。</p>
                 <?php } ?>
                 <div class="button-area">
                     <div class="basebutton">

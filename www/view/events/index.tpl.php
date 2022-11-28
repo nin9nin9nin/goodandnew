@@ -45,7 +45,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     </div>
                 </div><!-- /.event-area-->
                 <?php } else { ?>
-                    <p class="errors">公開中イベントがありません。</p>
+                    <p class="message errors">公開中イベントがありません。</p>
                 <?php } ?>
             </div><!-- /.box-->
         </section>
@@ -153,7 +153,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php } ?>
                 </div><!-- /.grid -->
                 <?php } else { ?>
-                    <p class="errors">アイテム情報がありません。</p>
+                    <p class="message errors">アイテム情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>
@@ -190,7 +190,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php } ?>
                 </div><!-- / .grid -->
                 <?php } else { ?>
-                    <p class="errors">ブランド情報がありません。</p>
+                    <p class="message errors">ブランド情報がありません。</p>
                 <?php } ?>
             </div><!-- /.box .wrapper-->
         </section>
@@ -202,7 +202,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php foreach ($records['originals'] as $record) { ?>
                     <div class="item">
                         <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
+                            <a href="index.php?module=items&action=original_detail&item_id=<?php print h($record->item_id); ?>">
                                 <span class="mask">
                                     <img src="<?php print h(ITEMS_ICON_DIR . $record -> icon_img); ?>" alt="商品画像">
                                     <span class="cap">
@@ -216,7 +216,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div>
                         <div class="item-lead">
                             <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"><?php print h($record->item_name); ?></a>
+                                <a href="index.php?module=items&action=original_detail&item_id=<?php print h($record->item_id); ?>"><?php print h($record->item_name); ?></a>
                             </p>
                             <p class="mid-lead">&yen;<?php print h($record->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                         </div>

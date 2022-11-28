@@ -18,25 +18,10 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                 </span>
                 <span>&gt;</span>
             </nav><!-- / .page-nav -->
-            <div class="box fadeUpTrigger wrapper">
+            <div class="box fadeUpTrigger content">
                 <h3 class="section-title">ACCOUNT</h3>
-                <!-- <div class="btn-arrow">
-                  <a href="#" class="btnarrow4">情報を修正する</a>
-                </div> -->
                 <div class="account-info">
                     <table>
-                        <!--エラーメッセージ-->
-                        <?php if(count($errors) > 0) { ?>
-                        <div class="message">
-                          <ul class="errors">
-                          <?php foreach($errors as $key => $error) { ?>
-                            <li>
-                              <?php print h($error); ?>
-                            </li>
-                          <?php } ?>
-                          </ul>
-                        </div>
-                        <?php } ?>
                         <caption>アカウント情報</caption>
                         <tbody>
                           <?php if (!empty($record)) { ?>
@@ -57,13 +42,13 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                             <td><?php print h($record->getCreateDateTime()); ?></td>
                           </tr>
                           <?php } else { ?>
-                              <p class="errors">アカウント情報がありません。</p>
+                              <p class="message errors">アカウント情報がありません。</p>
                           <?php } ?>
                         </tbody>
                     </table>
                 </div><!-- /.account-info-->
                 <div class="btn-arrow">
-                  <a href="#" class="btnarrow4">購入履歴を見る</a>
+                  <a href="<?php echo url_for('orders', 'history'); ?>" class="btnarrow4">購入履歴を見る</a>
                 </div>
                 <div class="button-area button-flex">
                   <div class="logout">

@@ -104,15 +104,9 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
         </div>
         <!--フラッシュメッセージ-->
         <?php if ($flash_message !== '') { ?>
-            <div class="fade-message">
+            <div class="header-message">
             <p class="flash"><?php echo $flash_message; ?></p>
             </div>
-        <?php } ?>
-        <!--フラッシュメッセージ-->
-        <?php if ($flash_message !== '') { ?>
-          <div class="message">
-            <p class="fade-message"><?php echo $flash_message; ?></p>
-          </div>
         <?php } ?>
     </header>
     <main>
@@ -139,7 +133,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <h1 id="top-logo">
                         <img src="./assets/images/logo/logo.svg" alt="goodandnew">
                     </h1>
-                    <h2 class="top-text">良いものと、新しい発見に出会う</h2>
+                    <h2 class="top-text">&Prime;伝える&Prime;オンラインショップ</h2>
                 </div>
             </div><!-- / .top-title -->
             <div class="scrolldown">
@@ -150,9 +144,9 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
             <div class="box fadeUpTrigger wrapper">
                 <div class="caption-layout">
                     <h2 class="caption-text">
-                        わがままに、気の向くままに、毎月変わるポップアップショップ
+                        毎月変わる、ひと月限定のポップアップショップ。
                         <br>
-                        ブランドの魅力、作り手の想いを伝える
+                        「いいもの(GOOD)」と「新しい発見(NEW)」から、作り手の想い
                     </h2>
                 </div>
             </div>
@@ -203,16 +197,16 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
             </div><!-- /.box-->
             <div class="box fadeUpTrigger">
                 <?php if(!empty($records['release_event'])) { ?>
-                <div class="event-slider">
-                    <ul class="e-slider">
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img1); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img2); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img3); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img4); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img5); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img6); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img7); ?>" alt="イベントイメージ"></li>
-                        <li class="slider-item"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img8); ?>" alt="イベントイメージ"></li>
+                <div class="top-slider-area">
+                    <ul class="top-slider">
+                        <li class="slider-item <?= $records['release_event']->img1 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img1); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img2 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img2); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img3 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img3); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img4 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img4); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img5 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img5); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img6 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img6); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img7 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img7); ?>" alt="イベントイメージ"></li>
+                        <li class="slider-item <?= $records['release_event']->img8 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['release_event']->img8); ?>" alt="イベントイメージ"></li>
                     </ul>
                 </div>
                 <?php } ?>
@@ -339,7 +333,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <?php foreach ($records['originals'] as $record) { ?>
                     <div class="item">
                         <div class="bgUD zoomIn item-img">
-                            <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
+                            <a href="index.php?module=items&action=original_detail&item_id=<?php print h($record->item_id); ?>">
                                 <span class="mask">
                                     <img src="<?php print h(ITEMS_ICON_DIR . $record -> icon_img); ?>" alt="商品画像">
                                     <span class="cap">
@@ -353,7 +347,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         </div>
                         <div class="item-lead">
                             <p class="main-lead">
-                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>"><?php print h($record->item_name); ?></a>
+                                <a href="index.php?module=items&action=original_detail&item_id=<?php print h($record->item_id); ?>"><?php print h($record->item_name); ?></a>
                             </p>
                             <p class="mid-lead">&yen;<?php print h($record->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
                         </div>

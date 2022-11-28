@@ -1,137 +1,135 @@
 <?php
-$title = 'ec site ショップ画面';
-$description = '説明（カートページ）';
-// $is_home = true; //トップページの判定用の変数
-//セッションからカート内のアイテム数を取得
-$cart_count = Session::getInstance() -> get('cart_count', "");
-include 'inc/user/head.php'; // head.php の読み込み
+$title = 'GOOD&NEW オンラインショップ';
+$is_top = NULL; //トップページの判定(isset)
+Session::start();
+$flash_message = Session::getFlash(); // フラッシュメッセージの取得
+$cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
+$token = Session::getCsrfToken(); // トークンの取得
+include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
 ?>
 </head>
-
 <body>
-    <div id="cart" class="big-bg">
-        <div id="page-header">
-          <?php include 'inc/user/header.php'; ?>
-        </div>
-
-        <div class="cart-contents wrapper">
-            <section>
-                <div class="section-title">CART&nbsp;DETAILS</div>
-                <div class="order-history">
-                    <a href="<?php echo url_for('carts', 'order_history'); ?>">
-                        <span>購入履歴へ</span>
-                    </a>
-                </div>
-
-                <div class="cart-info">
-                    <table>
+    <?php include INCLUDE_DIR . '/user/header_fixed.php'; ?>
+    <main>
+        <section class="area" id="carts">
+            <nav class="page-nav wrapper">
+                <span>
+                    <a href="<?php echo url_for('carts', 'index'); ?>">CARTS</a>
+                </span>
+                <span>&gt;</span>
+            </nav>
+            <div class="box fadeUpTrigger wrapper">
+                <div class="section-title">SHOPPING&nbsp;CART</div>
+                <div class="cart-content">
+                    <div class="list-content">
                         <!--エラーメッセージ-->
                         <?php if(count($errors) > 0) { ?>
-                        <div class="message">
-                          <ul class="errors">
-                          <?php foreach($errors as $key => $error) { ?>
-                            <li>
-                              <?php print h($error); ?>
-                            </li>
-                          <?php } ?>
-                          </ul>
-                        </div>
+                            <div class="message">
+                                <ul class="errors">
+                                    <?php foreach($errors as $key => $error) { ?>
+                                        <li>
+                                            <?php print h($error); ?>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
                         <?php } ?>
-                        <caption>カート一覧</caption>
-                        <thead>
-                          <tr>
-                            <th>商品</th>
-                            <th>数量</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <?php if($records['total_quantity'] > 0) { ?>
-                        <tbody>
-                          <?php foreach ($records['cart_items'] as $record) { ?>
-                          <tr>
-                            <td class="list-item">
-                                <div class="list-img">
-                                    <img src="<?php print h('./include/img/' .$record->icon_img); ?>">
-                                </div>
-                                <div class="list-lead">
-                                    <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
-                                        <span class="sub-lead"><?php print h($record->brand_name); ?></span>
-                                        <p class="main-lead"><?php print h($record->item_name); ?></p>
-                                        <p class="main-lead">
-                                            &yen;<?php print h($record->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </td>
-                            <td class="list-quantity">
-                                <form action="index.php" method="post">
-                                    <div>
-                                        <input type="text" name="new_quantity" value="<?php print h($record->quantity); ?>">
-                                    </div>
-                                    <div>
-                                        <input type="submit" value="変更">
-                                        <input type="hidden" name="module" value="carts">
-                                        <input type="hidden" name="action" value="update">
-                                        <input type="hidden" name="cart_id" value="<?php print h($record->cart_id); ?>">
-                                        <input type="hidden" name="item_id" value="<?php print h($record->item_id); ?>">
-                                        <input type="hidden" name="quantity" value="<?php print h($record->quantity); ?>">
-                                    </div>
-                                </form>
-                            </td>
-                            <td class="list-delete">
-                                <form action="index.php" method="post">
-                                  <input type="submit" value="削除">
-                                  <input type="hidden" name="module" value="carts">
-                                  <input type="hidden" name="action" value="delete">
-                                  <input type="hidden" name="cart_id" value="<?php print h($record->cart_id); ?>">
-                                  <input type="hidden" name="item_id" value="<?php print h($record->item_id); ?>">
-                                  <input type="hidden" name="quantity" value="<?php print h($record->quantity); ?>">
-                                </form>
-                            </td>
-                          </tr>
-                          <?php } ?>
-                        </tbody>
+                        <div class="cart-list">
+                        <?php if(count($records['carts']) > 0) { ?>
+                            <?php if(!empty($records['carts'][0] -> item_id)) { ?>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>商品</th>
+                                            <th>数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($records['carts'] as $record) { ?>
+                                        <tr>
+                                            <td class="cart-info">
+                                                <a href="index.php?module=items&action=detail&item_id=<?php print h($record->item_id); ?>">
+                                                    <div class="cart-item-img">
+                                                        <img src="<?php print h(ITEMS_ICON_DIR . $record -> icon_img); ?>" alt="アイテム画像">
+                                                    </div>
+                                                    <div class="cart-item-lead">
+                                                        <p class="sub-lead"><?php print h($record->brand_name); ?></p>
+                                                        <p class="main-lead"><?php print h($record->item_name); ?></p>
+                                                        <p class="mid-lead">&yen;<?php print h($record->getPrice()); ?>&nbsp;<span class="tax-in">(TAX&nbsp;IN)</span></p>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="cart-quantity">
+                                                <div class="cart-quantity-flex">
+                                                    <form action="index.php" method="post">
+                                                        <input type="text" name="quantity" value="<?php print h($record -> quantity); ?>">
+                                                        <input type="submit" id="editsubmit" value="">
+                                                        <input type="hidden" name="module" value="carts">
+                                                        <input type="hidden" name="action" value="update">
+                                                        <input type="hidden" name="cart_id" value="<?php print h($record->cart_id); ?>">
+                                                        <input type="hidden" name="item_id" value="<?php print h($record->item_id); ?>">
+                                                        <input type="hidden" name="token" value="<?=h($token)?>">
+                                                    </form>
+                                                    <form action="index.php" method="post">
+                                                        <input type="submit" id="deletesubmit" value="削除" />
+                                                        <input type="hidden" name="module" value="carts" />
+                                                        <input type="hidden" name="action" value="delete" />
+                                                        <input type="hidden" name="cart_id" value="<?php print h($record->cart_id); ?>">
+                                                        <input type="hidden" name="item_id" value="<?php print h($record->item_id); ?>">
+                                                        <input type="hidden" name="token" value="<?=h($token)?>">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            <?php } else { ?>
+                                <p class="message errors">カートに商品がありません。</p>
+                            <?php } ?>
                         <?php } else { ?>
-                        <p class="errors">カートに商品がありません</p>
+                            <p class="message errors">カート情報がありません。</p>
                         <?php } ?>
-                    </table>
-                </div>
-            </section>
-            <section>
-                <div class="cart-slip">
-                    <form action="index.php" method="post">
-                        <table>
-                            <tr>
-                                <th>数量</th><td><?php print h($records['total_quantity']); ?></td>
-                            </tr>
-                            <tr>
-                                <th>合計金額（税込）</th><td><?php print h($records['total_amount']); ?></td>
-                            </tr>
-                        </table>
-                        <?php if($records['total_quantity'] > 0) { ?>
-                        <div class="orderbutton">
-                            <input type="submit" value="CONFIRM THE ORDER">
-                            <input type="hidden" name="module" value="carts">
-                            <input type="hidden" name="action" value="order">
-                            <input type="hidden" name="user_id" value="<?php print h($records['cart_items'][0]->user_id); ?>">
-                            <input type="hidden" name="cart_id" value="<?php print h($records['cart_items'][0]->cart_id); ?>">
+                        </div><!-- .cart-list -->
+                    </div>
+                    <div class="slip-content">
+                        <div class="cart-slip">
+                            <table>
+                                <tr>
+                                    <th>合計数量</th>
+                                    <td><?php print h($records['total_quantity']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>合計金額（税込）</th>
+                                    <td><?php print h($records['total_amount']); ?></td>
+                                </tr>
+                            </table>
+                        </div><!-- .cart-slip -->
+                        <div class="order-button <?= $records['carts'][0] -> item_id ? 'true' : 'false' ?>">
+                            <form action="index.php" method="post">
+                                <input type="submit" value="CONFIRM THE ORDER" />
+                                <input type="hidden" name="module" value="carts" />
+                                <input type="hidden" name="action" value="confirm" />
+                                <input type="hidden" name="cart_id" value="<?php print h($records['carts'][0]->cart_id); ?>">
+                                <input type="hidden" name="token" value="<?=h($token)?>">
+                            </form>
                         </div>
-                        <?php } ?>
-                    </form>
-                </div>
-            </section>
-            <div class="basebutton">
-                <a href="<?php echo url_for('items', 'index'); ?>">
-                    <span>ショッピングを続ける</span>
-                </a>
-            </div>
-        </div><!-- / .cart-content .wrapper-->
-    </div><!-- / #cart .big-bg -->
-    <?php include 'inc/user/footer.php'; ?>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+                        <div class="basebutton">
+                            <a href="<?php echo url_for('events', 'index'); ?>">
+                                <span>ショッピングを続ける</span>
+                            </a>
+                        </div>
+                    </div>
+                </div><!-- / .cart-content -->
+            </div><!-- /.box -->
+        </section><!-- / #carts -->
+        <?php include INCLUDE_DIR . '/user/f-nav.php'; ?>
+    </main>
+    <?php include INCLUDE_DIR . '/user/footer.php'; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.min.js"></script>
-    <script src="./js/user/detail.js"></script>
+    <script src="./assets/js/user/common.js"></script>
 </body>
 
 </html>

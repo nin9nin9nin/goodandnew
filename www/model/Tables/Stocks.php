@@ -7,6 +7,7 @@ class Stocks {
     public $stock_id;
     public $item_id;
     public $stock;
+    public $quantity;
     public $create_datetime;
     public $update_datetime;
     
@@ -15,6 +16,7 @@ class Stocks {
         $this -> stock_id = null;
         $this -> item_id = null;
         $this -> stock = null;
+        $this -> quantity = null;
         $this -> create_datetime = null;
         $this -> update_datetime = null;
     }
@@ -85,58 +87,118 @@ class Stocks {
     }
     
     //ユーザー側-------------------------------------------------------
-    
     /**
      * カート追加時の在庫確認
      * 
-     * return bool
+     * return object or false
      */
-    public static function checkItemStock_add($id)
-    {
+    public function checkAddItemStock() {        
         $sql = 'SELECT item_id, stock' . PHP_EOL
              . 'FROM stocks' . PHP_EOL
              . 'WHERE item_id = :item_id' . PHP_EOL
-             . 'AND stock > 0';
+             . 'AND stock >= :quantity';
         
-        $params = ['item_id' => $id];
+        $params = [
+            ':item_id' => $this -> item_id,
+            ':quantity' => $this -> quantity,
+        ];
+        
+        return Messages::retrieveBySql($sql, $params);
+    }
+
+    /**
+     * カート数量変更時の在庫確認
+     * 
+     * （エラーメッセージを返す）
+     */
+    public function checkUpdateItemStock() {        
+        $sql = 'SELECT item_id, stock' . PHP_EOL
+             . 'FROM stocks' . PHP_EOL
+             . 'WHERE item_id = :item_id' . PHP_EOL
+             . 'AND stock >= :quantity';
+        
+        $params = [
+            ':item_id' => $this -> item_id,
+            ':quantity' => $this -> quantity,
+        ];
         
         $record = Messages::retrieveBySql($sql, $params);
-        
-        if ($record !== false) {
-            return true;
-        } else {
-            CommonError::errorAdd('申し訳ございません。在庫数を超えています。');
-            return false;
+
+        //falseの場合エラーを返す
+        if ($record === false) {
+            return CommonError::errorAdd('申し訳ございません。在庫が不足しております。');
         }
-        
     }
     
+    /**
+     * オーダー時の在庫数変更(rollback)
+     */
+    public function orderStocks($records = []) {
+        try {
+            $now_date = date('Y-m-d H:i:s');
+            
+            //登録日時
+            $this -> update_datetime = $now_date;
+
+            foreach ($records as $record) {
+                $item_id = $record -> item_id;
+                $quantity = $record -> quantity;
+
+                $sql = 'UPDATE stocks' . PHP_EOL
+                    . 'SET stock = stock - :quantity,' . PHP_EOL
+                    . '    update_datetime = :update_datetime' . PHP_EOL
+                    . 'WHERE item_id = :item_id' . PHP_EOL;
+                
+                $params = [
+                    ':quantity' => $quantity,
+                    ':update_datetime' => $this->update_datetime,
+                    ':item_id' => $item_id,
+                ];
+                
+                Messages::executeBySql($sql, $params);
+            }
+
+        } catch (Exception $e) {
+
+        $e = new Exception('在庫の変更ができませんでした', 0, $e);
+        //トランザクションでのエラーはcontrollerでキャッチしてもらう(error.tpl.phpへ)
+        throw $e;
+        
+        Database::rollback();
+        }
+    }
+
+
+    
+
+
+
     /**
      * セレクト（在庫確認）できれば更新
      * セレクト（false）できければエラーを投げる
      * 
      * 在庫数が０より大きければ在庫数を１減らす
      */
-    public static function editItemStock_add($id)
-    {
-        //チェックがtrueであればupdate
-        if (self::checkItemStock_add($id)) {
+    // public static function editItemStock_add($id)
+    // {
+    //     //チェックがtrueであればupdate
+    //     if (self::checkItemStock_add($id)) {
             
-            $sql = 'UPDATE stocks' . PHP_EOL
-                 . 'SET stock = stock-1' . PHP_EOL
-                 . 'WHERE item_id = :item_id' . PHP_EOL
-                 . 'AND stock > 0';
+    //         $sql = 'UPDATE stocks' . PHP_EOL
+    //              . 'SET stock = stock-1' . PHP_EOL
+    //              . 'WHERE item_id = :item_id' . PHP_EOL
+    //              . 'AND stock > 0';
             
-            $params = [':item_id' => $id];
+    //         $params = [':item_id' => $id];
             
-            Messages::executeBySql($sql, $params);
+    //         Messages::executeBySql($sql, $params);
             
-        } else {
-            CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
-            //先に入れてあるエラーを投げる
-            CommonError::errorThrow();
-        }
-    }
+    //     } else {
+    //         CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
+    //         //先に入れてあるエラーを投げる
+    //         CommonError::errorThrow();
+    //     }
+    // }
     
     /**
      * カートインデックス時の在庫確認
@@ -144,69 +206,69 @@ class Stocks {
      * 
      * return bool
      */
-    public static function checkItemStock_update($id, $subtraction)
-    {
-        $sql = 'SELECT stock_id, item_id, stock' . PHP_EOL
-             . 'FROM stocks' . PHP_EOL
-             . 'WHERE item_id = :item_id' . PHP_EOL
-             . 'AND stock >= :subtraction';
+    // public static function checkItemStock_update($id, $subtraction)
+    // {
+    //     $sql = 'SELECT stock_id, item_id, stock' . PHP_EOL
+    //          . 'FROM stocks' . PHP_EOL
+    //          . 'WHERE item_id = :item_id' . PHP_EOL
+    //          . 'AND stock >= :subtraction';
         
-        $params = [
-            ':item_id' => $id,
-            ':subtraction' => $subtraction,
-        ];
+    //     $params = [
+    //         ':item_id' => $id,
+    //         ':subtraction' => $subtraction,
+    //     ];
         
-        $record = Messages::retrieveBySql($sql, $params);
+    //     $record = Messages::retrieveBySql($sql, $params);
         
-        if ($record !== false) {
-            return true;
-        } else {
-            CommonError::errorAdd('申し訳ございません。在庫数を超えています。');
-            return false;
-        }
-    }
+    //     if ($record !== false) {
+    //         return true;
+    //     } else {
+    //         CommonError::errorAdd('申し訳ございません。在庫数を超えています。');
+    //         return false;
+    //     }
+    // }
     
     /**
      * 在庫数が更新の値以上であれば更新する
      * 在庫数が足りなければエラーを投げる
      * 
      */
-    public static function editItemStock_update($id, $subtraction) 
-    {
-        //チェックがtrueであればupdate
-        if (self::checkItemStock_update($id, $subtraction)) {
+    // public static function editItemStock_update($id, $subtraction) 
+    // {
+    //     //チェックがtrueであればupdate
+    //     if (self::checkItemStock_update($id, $subtraction)) {
             
-            $sql = 'UPDATE stocks' . PHP_EOL
-                 . 'SET stock = stock - :subtraction' . PHP_EOL
-                 . 'WHERE item_id = :item_id';
+    //         $sql = 'UPDATE stocks' . PHP_EOL
+    //              . 'SET stock = stock - :subtraction' . PHP_EOL
+    //              . 'WHERE item_id = :item_id';
             
-            $params = [
-                ':item_id' => $id,
-                ':subtraction' => $subtraction,
-            ];
+    //         $params = [
+    //             ':item_id' => $id,
+    //             ':subtraction' => $subtraction,
+    //         ];
             
-            Messages::executeBySql($sql, $params);
+    //         Messages::executeBySql($sql, $params);
             
-        } else {
-            CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
-            CommonError::errorThrow();
-        }
-    }
+    //     } else {
+    //         CommonError::errorAdd('申し訳ございません。更新時にエラーが発生しました。');
+    //         CommonError::errorThrow();
+    //     }
+    // }
     
     /**
      * カートアイテムの削除時に在庫に戻す
      */
-    public static function editItemStock_return($id, $quantity)
-    {
-        $sql = 'UPDATE stocks' . PHP_EOL
-             . 'SET stock = stock + :quantity' . PHP_EOL
-             . 'WHERE item_id = :item_id';
+    // public static function editItemStock_return($id, $quantity)
+    // {
+    //     $sql = 'UPDATE stocks' . PHP_EOL
+    //          . 'SET stock = stock + :quantity' . PHP_EOL
+    //          . 'WHERE item_id = :item_id';
         
-        $params = [
-            ':item_id' => $id,
-            ':quantity' => $quantity,
-        ];
+    //     $params = [
+    //         ':item_id' => $id,
+    //         ':quantity' => $quantity,
+    //     ];
         
-        Messages::executeBySql($sql, $params);
-    }
+    //     Messages::executeBySql($sql, $params);
+    // }
 }

@@ -1,5 +1,6 @@
 <?php
 require_once(MODEL_DIR . '/Tables/Users.php');
+require_once(MODEL_DIR . '/Tables/Carts.php');
 
 function execute_action() {
     if (!Request::isPost()) {
@@ -19,7 +20,8 @@ function execute_action() {
         return View::redirectTo('users', 'signin');
         exit;
     }
-        
+       
+    //postされた値
     $name = Request::get('user_name');
     $password = Request::get('password');
     $cookie_check = Request::get('cookie_check');
@@ -58,14 +60,22 @@ function execute_action() {
     
     //情報取得------------------------------------------------
     //user_nameからuser情報取得(passwprd除く)
-    $record = $classUsers -> selectUserName();
+    $user = $classUsers -> getUserInfoFromName();
     
     //情報登録------------------------------------------------
     //$_SESSION['user']を作成・値を入れる
-    Session::set('user', $record); 
+    Session::set('user', $user); 
     
     //['cookie_check']によってクッキーを保存or削除
     Cookie::setUserCookie($cookie_check, $name);
+
+    //カート情報の取得
+    $classCarts = new Carts();
+    $classCarts -> user_id = $user -> user_id;
+    $cart_count = $classCarts -> getUserCartCount();
+
+    //セッションに登録($_SESSION['cart_count'])
+    Session::set('cart_count', $cart_count);
     
     //フラッシュメッセージをセット
     Session::setFlash('ログインに成功しました');

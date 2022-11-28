@@ -104,8 +104,8 @@ $(window).on("load", function () {
   FixedAnime(); /* スクロール途中からヘッダーを出現させる関数を呼ぶ*/
 });
 
-// event-slider ------------------------------------------------
-$(".e-slider").slick({
+// top-slider ------------------------------------------------
+$(".top-slider").slick({
   autoplay: true, //自動的に動き出すか。初期値はfalse。
   autoplaySpeed: 0, //次のスライドに切り替わる待ち時間
   speed: 8000, //スライドの動きのスピード。初期値は300
@@ -135,10 +135,10 @@ $(".e-slider").slick({
 });
 
 //スマホ用：スライダーをタッチしても止めずにスライドをさせたい場合
-$(".e-slider").on(
+$(".top-slider").on(
   "touchmove",
   function (event, slick, currentSlide, nextSlide) {
-    $(".e-slider").slick("slickPlay");
+    $(".top-slider").slick("slickPlay");
   }
 );
 

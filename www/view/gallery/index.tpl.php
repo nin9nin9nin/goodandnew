@@ -65,7 +65,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                                             </ul>
                                         </div>
                                         <?php } else { ?>
-                                            <p class="errors">ブランド情報がありません。</p>
+                                            <p class="message errors">ブランド情報がありません。</p>
                                         <?php } ?>
                                     </div>
                                 </li>
@@ -85,31 +85,38 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <article>
                         <div class="gallery-area">
                             <ul class="gallery">
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img1); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img2); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img3); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img4); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img5); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img6); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img7); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img8); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img1 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img1); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img2 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img2); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img3 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img3); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img4 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img4); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img5 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img5); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img6 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img6); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img7 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img7); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img8 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img8); ?>" alt="イベントイメージ"></li>
                             </ul>
-                            <ul class="choice-btn">
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img1); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img2); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img3); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img4); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img5); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img6); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img7); ?>" alt="イベントイメージ"></li>
-                                <li><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img8); ?>" alt="イベントイメージ"></li>
+                            <ul class="gallery-choice-btn">
+                                <li class="slider-item <?= $records['event']->img1 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img1); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img2 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img2); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img3 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img3); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img4 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img4); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img5 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img5); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img6 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img6); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img7 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img7); ?>" alt="イベントイメージ"></li>
+                                <li class="slider-item <?= $records['event']->img8 ? '' : 'false' ?>"><img src="<?php print h(EVENTS_IMG_DIR . $records['event']->img8); ?>" alt="イベントイメージ"></li>
                             </ul>
                         </div><!--/.gallery-info-->
                     </article>
                 </div><!-- / .gallery-content -->
                 <?php } else { ?>
-                    <p class="errors">イベントギャラリーがありません。</p>
+                    <p class="message errors">イベントギャラリーがありません。</p>
                 <?php } ?>
+                <div class="button-area">
+                    <div class="basebutton">
+                        <a href="index.php?module=schedule&action=index">
+                            <span>SCHEDULE</span>
+                        </a>
+                    </div>
+                </div>
             </div><!-- .box-->
         </section><!-- / #gallery -->
         <?php include INCLUDE_DIR . '/user/f-nav.php'; ?>

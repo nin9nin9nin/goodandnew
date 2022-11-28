@@ -15,7 +15,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
         <section class="area" id="member">
           <div class="box wrapper">
             <h3 class="section-title">MEMBER</h3>
-            <!--エラーメッセージ-->
+              <!--エラーメッセージ-->
               <?php if(count($errors) > 0) { ?>
               <div class="message">
                 <ul class="errors">

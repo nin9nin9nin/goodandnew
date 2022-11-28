@@ -163,16 +163,14 @@ CREATE TABLE customers (
 -- 注文管理
 CREATE TABLE orders (
   order_id int(11) NOT NULL COMMENT '注文ID' AUTO_INCREMENT,
-  customer_id int(11) COMMENT '顧客ID',
-  order_date datetime NOT NULL COMMENT '注文日',
+  user_id int(11) COMMENT 'ユーザーID', 
+  order_number int(11) NOT NULL unique COMMENT '注文番号',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
-  foreign key(customer_id) references customers (customer_id),
-  primary key(order_id, customer_id)
+  foreign key(user_id) references users (user_id),
+  primary key(order_id, user_id)
 );
-ALTER TABLE orders ADD order_number int(11) NOT NULL unique COMMENT '注文番号';
-ALTER TABLE orders ADD total_quantity int(11) NOT NULL COMMENT '合計数量';
-ALTER TABLE orders ADD total_amount int(11) NOT NULL COMMENT '合計金額';
+--customer_idをuser_idで対応
 
 -- 注文詳細
 CREATE TABLE order_detail (
@@ -185,12 +183,12 @@ CREATE TABLE order_detail (
   primary key(order_id,item_id)
 );
 -- 集約　結果整合性を考慮し値段も含めたアイテムデータを格納(item_idに外部制約キーは使用しない)
+ALTER TABLE order_detail ADD sub_total int(11) NOT NULL COMMENT '小計';
 
 -- カート
 CREATE TABLE carts (
   cart_id int(11) NOT NULL COMMENT 'カートID' AUTO_INCREMENT,
   user_id int(11) COMMENT 'ユーザーID',
-  cart_date datetime NOT NULL COMMENT '追加日',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   foreign key(user_id) references users (user_id),

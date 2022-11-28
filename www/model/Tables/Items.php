@@ -111,7 +111,7 @@ class Items {
         Validator::paramClear();
         
         if (!Validator::checkInputempty($this->event_id)) {
-            return CommonError::errorAdd('イベントを選択してください');
+            $this -> event_id = NULL;
         } else if (!Validator::checkNumeric($this->event_id)) {
             return CommonError::errorAdd('イベントIDが正しくありません');
         }
@@ -971,6 +971,21 @@ class Items {
         
         return Messages::findBySql($sql);
     }
+
+    /**
+     * 専用カテゴリーの取得
+     */
+    // public function getOriginalCategorys() {
+    //     $sql = 'SELECT B.category_id, B.category_name' . PHP_EOL
+    //          . 'FROM' . PHP_EOL
+    //          . '    (SELECT * FROM items WHERE event_id = 1 AND status = 1 AND enabled = true) AS A' . PHP_EOL //有効なアイテムの取得
+    //          . 'LEFT JOIN categorys AS B' .PHP_EOL 
+    //          . 'ON A.category_id = B.category_id' . PHP_EOL
+    //          . 'GROUP BY A.category_id' . PHP_EOL
+    //          . 'ORDER BY A.category_id ASC'; 
+        
+    //     return Messages::findBySql($sql);
+    // }
 
     // search ------------------------------------------------------------------------
     /**

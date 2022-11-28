@@ -21,7 +21,7 @@ function execute_action() {
     $classUsers -> user_id = $user -> user_id;
     
     //指定userレコードを取得
-    $record = $classUsers -> selectUserId();
+    $record = $classUsers -> getUserInfoFromId();
     
     return View::render('account', ['record' => $record]);
 }

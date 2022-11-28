@@ -797,24 +797,21 @@ svgを外部から読み込み*/
 }
 
 /* カートアイテム数 */
-.cart-count:not(.cart-count--0) {
-  display: inline-block;
-}
-
 .cart-count {
-  background: rgba(219, 86, 91, 0.8);
-  border-radius: 50%;
-  padding: 0 5px;
-  color: #fff;
-  pointer-events: none;
-  font-size: 0.65rem;
-  line-height: 18px;
+  display: inline-block;
   position: absolute;
   left: 0px;
   top: 6px;
-  display: none;
+  background: rgba(219, 86, 91, 0.8);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.65rem;
+  text-align: center;
+  width: 18px;
+  line-height: 18px;
   transition: opacity 0.3s;
   z-index: 1;
+  pointer-events: none;
 }
 
 /* TOP
@@ -1019,7 +1016,7 @@ imgタグを使用して対策+filterで色変更*/
 }
 
 .caption-text {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 2.4;
   letter-spacing: 0.3em;
@@ -1158,9 +1155,8 @@ imgタグを使用して対策+filterで色変更*/
   margin: 0 auto;
 }
 
-/* fadeを使用する場合 */
-/* .slider-item { */
-/*width: 100%;*/
+/* .slider-item {
+  width: 100%; */
 /*各スライダー全体の横幅を画面の高さいっぱい（100%）にする*/
 /*height:35vw;*/
 /*各スライダー全体の縦幅を画面の高さいっぱい（100vh）にする*/
@@ -1168,6 +1164,10 @@ imgタグを使用して対策+filterで色変更*/
 /*background-position: center;背景画像の位置を中央に*/
 /*background-size: cover;背景画像が.slider-item全体を覆い表示*/
 /* } */
+
+.slider-item.false {
+  display: none;
+}
 
 .slick-slide img {
   height: 30vw;
@@ -1240,27 +1240,26 @@ imgタグを使用して対策+filterで色変更*/
   opacity: 1;
 }
 
-/* .e-slider 等速スライダー
+/* .top-slider 等速スライダー
 ------------------------------*/
-.event-slider {
+.top-slider-area {
   padding-top: 50px;
 }
 
 /* ワイドを100％に変更 */
-.e-slider {
-  position: relative;
+.top-slider {
   width: 100%;
 }
 
 /* 画像サイズ調整 */
-.e-slider .slick-slide img {
+.top-slider .slick-slide img {
   height: 22.5vw;
   width: 30vw;
   backface-visibility: hidden; /*画像がぼやけ解消*/
 }
 
 /* 画像間の余白をなくす */
-.e-slider .slick-slide {
+.top-slider .slick-slide {
   margin: 0 4px;
 }
 
@@ -2071,10 +2070,13 @@ footer p {
 
 /*スライド＋サムネイル
 ------------------------------- */
-.gallery-area,
+.gallery-area {
+  width: 100%;
+}
+
 .item-photo-area {
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
   margin: 0 auto;
 }
 
@@ -2090,7 +2092,7 @@ footer p {
   margin: 0;
 }
 
-/*横*/
+/*gallery*/
 .gallery .slick-slide img {
   /* height: 25vw; */
   max-height: 350px;
@@ -2098,20 +2100,21 @@ footer p {
   width: 100%;
   object-fit: contain;
 }
-/*縦*/
+/*item-photo*/
 .item-photo .slick-slide img {
-  /*height: 57vw;*/
-  height: 50.625vw;
-  max-height: 750px;
-  min-height: 230px;
+  height: auto;
+  max-height: 600px;
+  min-height: 500px;
   width: 100%;
+  object-fit: contain;
 }
 
 /*矢印の設定 (sliderと一緒)
 ---------------------- */
 /*選択するサムネイル画像の設定
 ----------------------------------------- */
-.choice-btn li {
+.gallery-choice-btn li,
+.item-photo-choice-btn li {
   cursor: pointer;
   outline: none;
   background: #333;
@@ -2119,11 +2122,13 @@ footer p {
   /*8枚の設定*/
 }
 
-.choice-btn .slick-slide {
+.gallery-choice-btn .slick-slide,
+.item-photo-choice-btn .slick-slide {
   margin: 0;
 }
 
-.choice-btn .slick-slide img {
+.gallery-choice-btn .slick-slide img,
+.item-photo-choice-btn .slick-slide img {
   height: 7vw;
   max-height: 90px;
   min-height: 60px;
@@ -2132,17 +2137,20 @@ footer p {
   vertical-align: bottom; /*画像の下にできる余白を削除*/
 }
 
-.choice-btn li img {
+.gallery-choice-btn li img,
+.item-photo-choice-btn li img {
   opacity: 0.4;
   /*選択されていないものは透過40%*/
 }
 
-.choice-btn li.slick-current img {
+.gallery-choice-btn li.slick-current img,
+.item-photo-choice-btn li.slick-current img {
   opacity: 1;
   /*選択されているものは透過しない*/
 }
 
-.choice-btn .slick-track {
+.gallery-choice-btn .slick-track,
+.item-photo-choice-btn .slick-track {
   transform: unset !important; /*画面幅サイズ変更に伴うサムネイル固定*/
 }
 
@@ -2308,34 +2316,8 @@ a.page_number:visited {
   font-weight: bold;
 }
 
-/* DETAILSページ
+/* props 特殊コンテンツ
 --------------------------------------------------------------------------------- */
-#details {
-  background: #fff;
-}
-
-/* .shrot-sliderの設定 
----------------------------*/
-/*スライダーの余白*/
-.shrot-slider .slick-slide {
-  margin: 0;
-}
-
-/*ポップアップ説明*/
-.slider-link-description {
-  font-size: 0.95rem;
-  margin-top: 20px;
-  padding: 20px 0;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  line-height: 2.4;
-  /*行の高さ*/
-  letter-spacing: 0.04em;
-  /*文字間を調整*/
-}
-
-/* 特殊コンテンツ
---------------------------- */
 #props {
   background: #fff;
   padding: 0;
@@ -2497,7 +2479,13 @@ a.page_number:visited {
   opacity: 1;
 }
 
-/* brand_index.tpl.phpとoriginal_index.tpl.phpとdetail.tpl.php */
+/* DETAILS
+brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php 
+--------------------------------------------------------------------------------- */
+#details {
+  background: #fff;
+}
+
 /* スクロールすると画面分割した右側が動く
 ---------------------------------------------------------------- */
 .brand-info,
@@ -2518,7 +2506,7 @@ a.page_number:visited {
   position: -webkit-sticky;
   /*Safari用*/
   position: sticky;
-  top: 100px;
+  top: 70px;
   /*横半分50%　縦を100vhにする*/
   width: 50%;
   height: 100%;
@@ -2534,18 +2522,23 @@ a.page_number:visited {
 
 /*brand-info 
 ------------------------------------------*/
-.brand-image {
+/* logoを真ん中に配置 */
+/* .brand-image {
   margin: 0 auto;
-  width: 300px;
+  width: 350px;
   height: 300px;
   position: relative;
-  /*.brand-name は真ん中に位置*/
-  /*.white　背景白*/
-  /* box-shadow: 0px 1px 1px rgb(0 0 0 / 20%); */
+} */
+
+.brand-image {
+  width: 100%;
 }
 
-.brand-image-slider .slider-item {
+/*.brand-logo-image 正方形でカバー*/
+.brand-image .slick-slide img {
   height: 300px;
+  width: 100%;
+  object-fit: contain;
 }
 
 /*左右の余白をなくす*/
@@ -2554,13 +2547,6 @@ a.page_number:visited {
 }
 
 /*.white .brand-logo-name(bgUDから)*/
-
-/*.brand-logo-image 正方形でカバー*/
-.brand-image .slick-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
 
 /*ドットを画像下部に移動*/
 .brand-image .slick-dots {
@@ -2615,13 +2601,13 @@ a.page_number:visited {
   font-size: 0.85rem;
 }
 
-/* 非表示 */
+/* ステータス非表示 */
 .detail-stock.false {
   display: none;
 }
 
 /* 売り切れ */
-.detail-stock .false {
+.detail-stock .soldout {
   text-decoration: line-through;
 }
 
@@ -2666,16 +2652,18 @@ a.page_number:visited {
   margin: 20px 0;
 }
 
-/* 非表示 */
-.buttonwrap.false {
-  display: none;
-}
 
 /* submit */
 .cart-button,
 .order-button {
   width: 200px;
   background: #000000;
+}
+
+/* 非表示 */
+.cart-button.false,
+.order-button.false {
+  display: none;
 }
 
 .cart-button input[type="submit"],
@@ -2705,7 +2693,6 @@ a.page_number:visited {
 
 /*お気に入りボタン(labelで囲う svg使用)*/
 .favorite-button {
-  margin-left: 20px;
   position: relative;
 }
 
@@ -2719,17 +2706,15 @@ a.page_number:visited {
   width: 25px;
   height: 25px;
   position: absolute;
-  top: 10px;
-  left: 5px;
+  top: 50%;
+  left: 20px;
+  transform: translate(0, -50%);
 }
 
 /* .soldout {} */
 
 /* FAVORITEページ
 ------------------------------------------------------------------------------------- */
-#favorite {
-  margin-top: 100px;
-}
 
 .favorite-black-button {
   color: #222222;
@@ -2739,7 +2724,7 @@ a.page_number:visited {
 .favorite-black-button svg {
   fill: currentColor;
   position: absolute;
-  top: -13px;
+  top: 50%;
   right: -8px;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -2752,26 +2737,30 @@ a.page_number:visited {
   opacity: 0.6;
 }
 
-/* CARTページ
+/* CARTページ CONFIRMページ ORDERページ HISTORYページ
 ------------------------------------------------------------------------------------- */
-#cart {
-  margin-top: 100px;
-}
-
-/*一覧と伝票で分ける*/
-.cart-content {
+/*ページflex*/
+.cart-content,
+.confirm-content,
+.history-content {
   display: flex;
   justify-content: space-between;
 }
 
-/*一覧サイズ*/
-.cart-list {
-  width: 65%;
+/*listコンテンツのサイズ*/
+.list-content {
+  width: 60%;
 }
 
-/*伝票サイズ*/
-.cart-slip {
-  width: 30%;
+/*listコンテンツ*/
+.cart-list,
+.order-list {
+  width: 100%;
+}
+
+/*slipコンテンツのサイズと整列*/
+.slip-content {
+  width: 35%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -2779,35 +2768,100 @@ a.page_number:visited {
   gap: 4ch;
 }
 
+/*slipコンテンツ*/
+.cart-slip,
+.account-slip {
+  width: 100%;
+}
+
+/* tableの設定
+--------------------------------------*/
 /*両テーブルの設定*/
-.cart-content table {
+.list-content table,
+.slip-content table {
   width: 100%;
   border-collapse: collapse;
   /*隣接するセルのボーダーを、間を空けずに重ねて表示*/
   border-spacing: 0;
 }
 
-.cart-content tr,
-.cart-content th,
-.cart-content td {
+.list-content tr,
+.list-content th,
+.list-content td,
+.slip-content tr,
+.slip-content th,
+.slip-content td {
   box-sizing: border-box;
 }
 
-/*一覧テーブル
+/*listテーブル
 ------------------ */
-.cart-list th,
-.cart-list td {
-  padding: 10px;
+.list-content table {
   border: 1px solid #ddd;
 }
 
-/*項目 */
-.cart-list th {
+/* .list-content tr {
+  border-bottom: 1px solid #ddd;
+} */
+
+.list-content th,
+.list-content td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.list-content thead,
+.list-content tfoot {
   background: #eee;
+}
+
+/*項目 */
+.list-content thead th {
   font-weight: 500;
   font-size: 0.95rem;
 }
 
+.list-content tfoot tr {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* slipテーブル
+------------------ */
+.slip-content tr {
+  border-bottom: 1px solid #222222;
+}
+
+.slip-content tr {
+  font-size: 0.9rem;
+}
+
+/* account-slip */
+.account-slip tr {
+  font-size: 0.8rem;
+}
+
+/*項目*/
+.slip-content th {
+  width: 50%;
+  text-align: left;
+  padding: 10px;
+}
+
+/*値*/
+.slip-content td {
+  width: 50%;
+  text-align: right;
+  padding: 10px;
+}
+
+/*下部arrow用スペース*/
+.account-slip table {
+  margin-bottom: 15px;
+}
+
+/* cart-list 詳細
+---------------------------------------- */
 /*商品情報*/
 .cart-info {
   width: 80%;
@@ -2823,8 +2877,7 @@ a.page_number:visited {
   text-align: center;
 }
 
-/*商品名 
-----------------------*/
+/*商品名*/
 .cart-info a {
   display: flex;
   justify-content: space-between;
@@ -2880,31 +2933,9 @@ a.page_number:visited {
   color: #fff;
 }
 
-/*カート伝票（右側）
------------------------ */
-.cart-slip tr {
-  font-size: 1rem;
-  border-bottom: 1px solid #222222;
-}
-
-/*項目*/
-.cart-slip th {
-  text-align: left;
-  padding: 10px;
-}
-
-/*値*/
-.cart-slip td {
-  text-align: right;
-  padding: 10px;
-}
-
 /* ORDERページ
-------------------------------------------------------------------------------------- */
-#order {
-  margin-top: 100px;
-}
-
+---------------------------------------- */
+/*上部設定*/
 .check-mark {
   margin: 0 auto;
   width: 45px;
@@ -2930,14 +2961,16 @@ a.page_number:visited {
   margin-top: 20px;
 }
 
-/*コンテンツ部分
---------------------- */
-.order {
+/* order-list 詳細
+---------------------------------------- */
+.order-complete,
+.order-detail {
   margin-top: 30px;
+  width: 100%;
 }
 
-/*タイトル部分*/
-.order-title {
+/*caption部分*/
+.order-caption {
   display: flex;
   justify-content: space-between;
 }
@@ -2945,45 +2978,13 @@ a.page_number:visited {
 .order-number,
 .order-datetime {
   padding: 5px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
 .order-number a:hover {
   text-decoration: underline;
   opacity: 1;
-}
-
-/*テーブル部分*/
-.order-list table {
-  width: 100%;
-  border-collapse: collapse;
-  /*隣接するセルのボーダーを、間を空けずに重ねて表示*/
-  border-spacing: 0;
-}
-
-.order-list tr,
-.order-list th,
-.order-list td {
-  box-sizing: border-box;
-}
-
-/*一覧テーブル */
-.order-list th,
-.order-list td {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-}
-
-.order-list thead,
-.order-list tfoot {
-  background: #eee;
-}
-
-/*項目*/
-.order-list th {
-  font-weight: 500;
-  font-size: 0.95rem;
 }
 
 /*商品情報*/
@@ -3007,79 +3008,22 @@ a.page_number:visited {
   margin-top: 12px;
 }
 
-.item-quantity span,
-.item-amount span {
-  margin-left: 10px;
+/*合計部分*/
+.order-list tr td:nth-child(2) {
+  text-align: right;
 }
 
-/*合計部分
-------------------- */
-.order-slip {
-  font-weight: bold;
-  font-size: 0.95rem;
+/*下部arrow用スペース*/
+.order-list table {
+  margin-bottom: 15px;
 }
 
-/* ORDER_HISTORYページ
-------------------------------------------------------------------------------------- */
-.history-content {
-  display: flex;
-  justify-content: space-between;
-}
-
-.history-list {
-  width: 60%;
-}
-
-/*アカウント*/
-.account-list {
-  width: 35%;
-}
-
-/*両テーブルの設定*/
-.history-content table {
-  width: 100%;
-  border-collapse: collapse;
-  /*隣接するセルのボーダーを、間を空けずに重ねて表示*/
-  border-spacing: 0;
-}
-
-.history-content tr,
-.history-content th,
-.history-content td {
-  box-sizing: border-box;
-}
-
-/*一覧テーブル 
----------------------- */
-.history-list table {
-  border: 1px solid #ddd;
-}
-
-.history-list tr {
-  border-bottom: 1px solid #ddd;
-}
-
-.history-list th,
-.history-list td {
-  padding: 10px;
-}
-
-.history-list th {
-  background: #eee;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-/*商品見出し*/
-.history-info {
-  word-break: break-word;
-  /*IEとEdgeには非対応*/
-}
-
+/* history-list 詳細
+---------------------------------------- */
 /*情報見出し*/
-.history-slip {
+.history-info {
   width: 70%;
-  text-align: left;
+  word-break: break-word;
 }
 
 .history-total {
@@ -3099,28 +3043,6 @@ a.page_number:visited {
   font-size: 0.6rem;
   text-decoration: underline;
   text-align: right;
-}
-
-/*カート伝票
------------------------ */
-.account-list tr {
-  font-size: 0.75rem;
-  border-bottom: 1px solid #222222;
-}
-
-/*項目*/
-.account-list th {
-  width: 30%;
-  text-align: left;
-  padding: 10px;
-}
-
-/*値*/
-.account-list td {
-  width: 65%;
-  text-align: right;
-  padding: 10px;
-  word-break: break-word;
 }
 
 /* ACCOUNTページ
@@ -3461,10 +3383,7 @@ a.page_number:visited {
   border-radius: 3px;
   display: table-cell;
   vertical-align: middle;
-  padding: 10px 0;
-  width: 350px;
-  white-space: nowrap;
-  overflow: hidden;
+  padding: 10px 20px;
 }
 
 /*エラー 
@@ -3475,6 +3394,7 @@ a.page_number:visited {
   border-radius: 3px;
   padding: 10px 0;
   max-width: 450px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -3495,11 +3415,9 @@ a.page_number:visited {
     display: none;
   }
 
-  /* flash */
   .header-message {
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
+    right: 0;
+    width: 100%;
   }
 
   /* g-nav */
@@ -3568,7 +3486,7 @@ a.page_number:visited {
     line-height: 1.8;
   }
 
-  .e-slider .slick-slide img {
+  .top-slider .slick-slide img {
     height: 60vw;
     width: 80vw;
   }
@@ -3686,45 +3604,57 @@ a.page_number:visited {
 
   /* FAVORITE
     ----------------------*/
-  #favorite .tax-in {
-    display: none;
+  .favorite-black-button svg {
+    top: 85%;
+    right: -10px;
   }
 
-  /* CART
-    ----------------------*/
-  .cart-content {
+  /* CART CONFIRM ORDER HISTORY
+  ----------------------*/
+  /*コンテンツを縦並びに*/
+  .cart-content,
+  .confirm-content,
+  .history-content {
     height: auto;
     flex-direction: column;
   }
 
-  .cart-list {
+  /*コンテンツテーブルの設定*/
+  .list-content,
+  .slip-content {
     width: 100%;
   }
 
+  .slip-content {
+    margin-top: 30px;
+  }
+
+  /*枠線の変更とth,tdを縦並びに変更*/
+  .list-content tr {
+    border: 1px solid #ddd;
+  }
+
+  .list-content td,
+  .list-content th {
+    border: 0px none;
+    display: block;
+  }
+
+  .list-content tfoot tr {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* CART
+  ----------------------*/
   .cart-info,
   .cart-quantity {
     width: 100%;
   }
 
-  /*テーブルを縦並びに*/
-  .cart-list th,
-  .cart-list td {
-    display: block;
-  }
-
-  /*数量項目を非表示*/
+  /*thead 数量を非表示*/
   .cart-list th:nth-child(2) {
     display: none;
-  }
-
-  /*枠線の変更*/
-  .cart-list td,
-  .cart-list th {
-    border: 0px none;
-  }
-
-  .cart-list tr {
-    border: 1px solid #ddd;
   }
 
   /*画像サイズ*/
@@ -3746,12 +3676,6 @@ a.page_number:visited {
     margin-left: 10px;
   }
 
-  /*合計伝票*/
-  .cart-slip {
-    width: 100%;
-    margin-top: 30px;
-  }
-
   /* ORDER 
     ------------------------- */
   /*文字間調整*/
@@ -3759,10 +3683,9 @@ a.page_number:visited {
     letter-spacing: 0.1em;
   }
 
-  /*縦並びに変更*/
-  .order-list td {
-    display: block;
-    border: 0px none;
+  /*captionを縦並びに*/
+  .order-caption {
+    flex-direction: column;
   }
 
   .order-info,
@@ -3785,40 +3708,14 @@ a.page_number:visited {
     margin-top: 0px;
   }
 
-  /*枠線の変更*/
-  .order-list tr {
-    border: 1px solid #ddd;
-  }
-
-  .order-slip tr {
+  /* HISTORY
+    ----------------------*/
+  .history-list td {
+    width: 100%;
     display: flex;
     justify-content: space-between;
   }
 
-  /* ORDER_HISTORY
-    ----------------------*/
-  .history-content {
-    flex-direction: column;
-  }
-
-  .history-list {
-    width: 100%;
-  }
-
-  /*アカウントリスト*/
-  .account-list {
-    width: 100%;
-    margin-top: 30px;
-  }
-
-  /*微調整*/
-  .history-slip {
-    width: 65%;
-  }
-
-  .history-total {
-    width: 35%;
-  }
 
   /* ACCOUNT 
     -------------------------- */

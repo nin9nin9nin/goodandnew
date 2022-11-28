@@ -95,26 +95,41 @@ class Messages extends Models {
     /**
      * 合計数量
      */
-    public function getTotalQuantity($records = []) {
-        $total_quantity = 0;
+    public static function getTotalQuantity($records = [], $default = '-') {
+        $total_quantity = $default;
 
-        foreach ($records as $record) {
-            $total_quantity += $record->quantity;
+        //データが存在すれば
+        if (count($records) > 0) {
+            $value = 0;
+            //数量を加算
+            foreach ($records as $record) {
+                $value += $record->quantity;
+            }
+            //合計数量を代入
+            $total_quantity = number_format($value). '点';
         }
-        
-        return number_format($total_quantity);
+
+        return $total_quantity;
     }
     
     /**
      * 合計金額
      */
-    public function getTotalAmount($records = []) {
-        $total_amount = '-';
+    public static function getTotalAmount($records = [], $default = '-') {
+        $total_amount = $default;
 
-        foreach($records as $record){
-            $total_amount += $record->price * $record->quantity;
+        //データが存在すれば
+        if (count($records) > 0) {
+            $value = 0;
+            //合計金額を計算
+            foreach($records as $record){
+                $value += $record->price * $record->quantity;
+            }
+            //合計金額を代入
+            $total_amount = number_format($value) . '円';
         }
 
-        return number_format($total_amount);
+        return $total_amount;
     }
+
 }

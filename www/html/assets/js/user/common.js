@@ -282,104 +282,6 @@ $(".fade-slider").on(
   }
 );
 
-//サブスライダー ------------------------------------------------------------------------
-$(".sub-slider").slick({
-  fade: true, //切り替えをフェードで行う。初期値はfalse。
-  autoplay: true, //自動的に動き出すか。初期値はfalse。
-  autoplaySpeed: 3000, //次のスライドに切り替わる待ち時間(3秒設定）
-  speed: 2000, //スライドの動きのスピード。初期値は300。(2秒設定)
-  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-  // cssEase: 'linear',//スライドの流れを等速に設定
-  swipe: false, // 操作による切り替えはさせない
-  pauseOnFocus: false, //スライダーをフォーカスした時にスライドを停止させるか
-  pauseOnHover: false, //スライダーにマウスホバーした時にスライドを停止させるか
-  // centerMode: true,
-  // centerPadding: '20%',
-  // variableWidth: true,//高さを揃える
-  // initialSlide: 0,//最初に表示させる要素の番号を指定
-  slidesToShow: 1,
-  slidesToScroll: 1, //1回のスクロールで2枚の写真を移動して見せる
-  // rtl: true,//スライダの表示方向を左⇒右に変更する
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        arrows: true, //左右の矢印あり
-        dots: true, //下部ドットナビゲーションの表示
-        // centerMode: true,
-        // centerPadding: '15%',
-        // slidesToShow: 1
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        arrows: false, //左右の矢印なし
-        dots: false, //下部ドットナビゲーションの表示
-        // centerMode: true,
-        // centerPadding: '0%',
-        // slidesToShow: 1
-      },
-    },
-  ],
-  arrows: true, //左右の矢印あり
-  prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
-  nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
-  dots: true, //下部ドットナビゲーションの表示
-  pauseOnFocus: false, //フォーカスで一時停止を無効
-  pauseOnHover: false, //マウスホバーで一時停止を無効
-  pauseOnDotsHover: false, //ドットナビゲーションをマウスホバーで一時停止を無効
-});
-
-//スマホ用：スライダーをタッチしても止めずにスライドをさせたい場合
-$(".sub-slider").on(
-  "touchmove",
-  function (event, slick, currentSlide, nextSlide) {
-    $(".sub-slider").slick("slickPlay");
-  }
-);
-
-//ショートスライダー -----------------------------------------------------------------------
-$(".shrot-slider").slick({
-  autoplay: true, //自動的に動き出すか。初期値はfalse。
-  autoplaySpeed: 3000, //次のスライドに切り替わる待ち時間
-  speed: 2000, //スライドの動きのスピード。初期値は300。
-  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-  centerMode: true,
-  variableWidth: true, //高さを揃える
-  slidesToShow: 1,
-  slidesToScroll: 1, //1回のスクロールで3枚の写真を移動して見せる
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        arrows: true, //左右の矢印あり
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        arrows: false, //左右の矢印なし
-      },
-    },
-  ],
-  arrows: true, //左右の矢印あり
-  prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
-  nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
-  dots: true, //下部ドットナビゲーションの表示
-  pauseOnFocus: false, //フォーカスで一時停止を無効
-  pauseOnHover: false, //マウスホバーで一時停止を無効
-  pauseOnDotsHover: false, //ドットナビゲーションをマウスホバーで一時停止を無効
-});
-
-//スマホ用：スライダーをタッチしても止めずにスライドをさせたい場合
-$(".shrot-slider").on(
-  "touchmove",
-  function (event, slick, currentSlide, nextSlide) {
-    $(".shrot-slider").slick("slickPlay");
-  }
-);
-
 //brand image スライダー -------------------------------------------------------------------
 $(".brand-image-slider").slick({
   autoplay: true, //自動的に動き出すか。初期値はfalse。
@@ -406,6 +308,36 @@ $(".brand-image-slider").on(
 );
 
 //サムネイル付き　slider -----------------------------------------------------------------
+//gallery 上部画像の設定 ---------------------------------------------------------
+$(".gallery").slick({
+  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
+  fade: true, //フェードの有効化
+  arrows: false, //左右の矢印あり
+  prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
+  nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
+});
+
+//選択画像の設定
+$(".gallery-choice-btn").slick({
+  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
+  slidesToShow: 8, //表示させるスライドの数
+  focusOnSelect: true, //フォーカスの有効化
+  asNavFor: ".gallery", //連動させるスライドショーのクラス名
+});
+
+//下の選択画像をスライドさせずに連動して変更させる設定。
+$(".gallery").on(
+  "beforeChange",
+  function (event, slick, currentSlide, nextSlide) {
+    var index = nextSlide; //次のスライド番号
+    //サムネイルのslick-currentを削除し次のスライド要素にslick-currentを追加
+    $(".gallery-choice-btn .slick-slide")
+      .removeClass("slick-current")
+      .eq(index)
+      .addClass("slick-current");
+  }
+);
+
 //item-photo 上部画像の設定 ---------------------------------------------------------
 $(".item-photo").slick({
   infinite: true, //スライドをループさせるかどうか。初期値はtrue。
@@ -416,7 +348,7 @@ $(".item-photo").slick({
 });
 
 //選択画像の設定
-$(".choice-btn").slick({
+$(".item-photo-choice-btn").slick({
   infinite: true, //スライドをループさせるかどうか。初期値はtrue。
   slidesToShow: 8, //表示させるスライドの数
   focusOnSelect: true, //フォーカスの有効化
@@ -429,7 +361,7 @@ $(".item-photo").on(
   function (event, slick, currentSlide, nextSlide) {
     var index = nextSlide; //次のスライド番号
     //サムネイルのslick-currentを削除し次のスライド要素にslick-currentを追加
-    $(".choice-btn .slick-slide")
+    $(".item-photo-choice-btn .slick-slide")
       .removeClass("slick-current")
       .eq(index)
       .addClass("slick-current");
@@ -452,33 +384,3 @@ $(".item-photo").on(
 //     }
 //   }
 // });
-
-//gallery 上部画像の設定 ---------------------------------------------------------
-$(".gallery").slick({
-  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-  fade: true, //フェードの有効化
-  arrows: false, //左右の矢印あり
-  prevArrow: '<div class="slick-prev"></div>', //矢印部分PreviewのHTMLを変更
-  nextArrow: '<div class="slick-next"></div>', //矢印部分NextのHTMLを変更
-});
-
-//選択画像の設定
-$(".choice-btn").slick({
-  infinite: true, //スライドをループさせるかどうか。初期値はtrue。
-  slidesToShow: 8, //表示させるスライドの数
-  focusOnSelect: true, //フォーカスの有効化
-  asNavFor: ".gallery", //連動させるスライドショーのクラス名
-});
-
-//下の選択画像をスライドさせずに連動して変更させる設定。
-$(".gallery").on(
-  "beforeChange",
-  function (event, slick, currentSlide, nextSlide) {
-    var index = nextSlide; //次のスライド番号
-    //サムネイルのslick-currentを削除し次のスライド要素にslick-currentを追加
-    $(".choice-btn .slick-slide")
-      .removeClass("slick-current")
-      .eq(index)
-      .addClass("slick-current");
-  }
-);

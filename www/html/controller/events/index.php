@@ -5,9 +5,9 @@ require_once(MODEL_DIR . '/Tables/Items.php');
 
 function execute_action() {
     //イベントIDの取得
-    $id = Request::getEventId('event_id');
+    $event_id = Request::getEventId('event_id');
 
-    if (preg_match('/^\d+$/', $id) !== 1) {
+    if (preg_match('/^\d+$/', $event_id) !== 1) {
         return View::render404();
     }
 
@@ -16,8 +16,8 @@ function execute_action() {
     $classItems = new Items();
     
     //プロパティに値をセット
-    $classEvents -> event_id = $id;
-    $classItems -> event_id = $id;
+    $classEvents -> event_id = $event_id;
+    $classItems -> event_id = $event_id;
 
     //指定IDのイベント情報の取得 (1レコードのみ retrieveBySql())
     $records['event'] = $classEvents -> getEventDetail(); 

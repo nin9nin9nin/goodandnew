@@ -187,6 +187,7 @@ class Users {
         }
     }
     
+    // index ------------------------------------------------------------------------
     /**
      * テーブル一覧の取得
      */
@@ -198,7 +199,7 @@ class Users {
         return Messages::findBySql($sql);
     }
     
-    
+    // insert ------------------------------------------------------------------------
     /**
      * 新規登録
      */
@@ -219,12 +220,13 @@ class Users {
         Messages::executeBySql($sql, $params);
     }
     
+    // get ------------------------------------------------------------------------
     /**
      * user_idで指定
      * 指定レコード取得(全カラム)
      */
-    public function selectUserId() {
-        $sql = 'SELECT * ' .PHP_EOL
+    public function getUserInfoFromId() {
+        $sql = 'SELECT user_id, user_name, email, create_datetime ' .PHP_EOL
              . 'FROM users WHERE user_id = :user_id';
              
         $params = [':user_id' => $this->user_id];
@@ -232,13 +234,14 @@ class Users {
         return Messages::retrieveBySql($sql, $params);
 
     }
+
     /**
      * user_nameから指定
      * 指定レコード取得(passwordを除く)
      * 
      * $_SESSION['user']用
      */
-    public function selectUserName() {
+    public function getUserInfoFromName() {
         $sql = 'SELECT user_id, user_name, email, create_datetime, update_datetime' .PHP_EOL
              . 'FROM users WHERE user_name = :user_name';
              
@@ -248,6 +251,7 @@ class Users {
 
     }
     
+    // update ------------------------------------------------------------------------
     /**
      * 指定レコードの更新
      */
@@ -269,6 +273,8 @@ class Users {
         
         Messages::executeBySql($sql, $params);
     }
+
+    // delete ------------------------------------------------------------------------
     
     
 }

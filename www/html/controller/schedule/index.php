@@ -4,12 +4,12 @@ require_once(MODEL_DIR . '/Tables/Events.php');
 
 function execute_action() {
     //イベントIDの取得
-    $id = Request::getEventId('event_id');
+    $event_id = Request::getEventId('event_id');
     //ページIDの取得（なければ1が格納される）
     $page_id = Request::getPageId('page_id');
 
 
-    if (preg_match('/^\d+$/', $id) !== 1 && preg_match('/^\d+$/', $page_id) !== 1) {
+    if (preg_match('/^\d+$/', $event_id) !== 1 && preg_match('/^\d+$/', $page_id) !== 1) {
         return View::render404();
     }
 
@@ -17,7 +17,7 @@ function execute_action() {
     $classEvents = new Events();
     
     //プロパティに値をセット
-    $classEvents -> event_id = $id;
+    $classEvents -> event_id = $event_id;
     $classEvents -> page_id = $page_id;
 
     //指定IDのイベント情報の取得 (1レコードのみ retrieveBySql())
