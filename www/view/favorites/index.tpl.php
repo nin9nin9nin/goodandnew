@@ -5,6 +5,7 @@ Session::start();
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得
 $token = Session::getCsrfToken(); // トークンの取得
 $cart_count = Session::get('cart_count', ""); //カート内のアイテム数を取得
+$url = Request::getUrl(); //ページネーション用url
 include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
 ?>
 </head>

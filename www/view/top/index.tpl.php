@@ -133,7 +133,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <h1 id="top-logo">
                         <img src="./assets/images/logo/logo.svg" alt="goodandnew">
                     </h1>
-                    <h2 class="top-text">&Prime;伝える&Prime;オンラインショップ</h2>
+                    <h2 class="top-text">&Prime;つたえる&Prime;オンラインショップ</h2>
                 </div>
             </div><!-- / .top-title -->
             <div class="scrolldown">
@@ -146,7 +146,9 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                     <h2 class="caption-text">
                         毎月変わる、ひと月限定のポップアップショップ。
                         <br>
-                        「いいもの(GOOD)」と「新しい発見(NEW)」から、作り手の想い
+                        愛せるブランドの伝えたい
+                        <br>
+                        「いいもの(GOOD)」と「新しい発見(NEW)」
                     </h2>
                 </div>
             </div>

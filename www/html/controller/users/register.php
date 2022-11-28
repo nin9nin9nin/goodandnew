@@ -53,9 +53,6 @@ function execute_action() {
         //エラーメッセージ格納
         $errors = CommonError::errorWhile();
         
-        //フラッシュメッセージをセット
-        Session::setFlash('ユーザー登録に失敗しました');
-        
         //ログイン画面へ（初期値はそれぞれ空の状態）
         return View::render('login', ['errors' => $errors,]);
         exit;

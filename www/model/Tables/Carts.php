@@ -45,18 +45,19 @@ class Carts {
     public function checkCarts($records = []) {
 
         //カートの中身の確認
-        if ($records === false) {
-            return CommonError::errorAdd('カートに商品がありません');
+        if ($records !== false) {
 
             foreach ($records as $record) {
-                if ($record -> event_status === 0) { //イベントステータスの確認
-                    return CommonError::errorAdd($record->item_name . 'はイベント開催期間が終了しています');
-                } else if ($record -> item_status === 0) { //アイテムステータスの確認
+                if ($record -> event_status !== 1) { //イベントステータスの確認
+                    return CommonError::errorAdd($record->item_name . 'は開催期間が終了しています');
+                } else if ($record -> item_status !== 1) { //アイテムステータスの確認
                     return CommonError::errorAdd($record->item_name . 'は現在購入できません');   
                 } else if ($record->stock - $record->quantity < 0) { //在庫の確認
                     return CommonError::errorAdd($record->item_name . 'は在庫が不足しています');
                 }
             } 
+        } else {
+            return CommonError::errorAdd('カートに商品がありません');
         }
     }
     

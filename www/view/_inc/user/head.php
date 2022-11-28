@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><?php echo h($title); ?></title>
-    <meta name="description" content="GOOD&NEWは、暮らしの中で見つけた良い物(GOOD)新しい発見(NEW)を共有し、ブランドと人を繋げるコミニュケーションサービスです。毎月変わるポップアップショップや">
+    <meta name="description" content="「いいもの(GOOD)」と「新しい発見(NEW)」を伝えるをコンセプトに、毎月変わるひと月限定のポップアップショップを開催しています。">
     <!-- og -->
     <meta property="og:title" content="ページのタイトル">
     <meta property="og:description" content="ページの説明文">

@@ -1,5 +1,5 @@
    <section class="area" id="paginations">
-      <div class="box wrapper">
+      <div class="box fadeUpTrigger wrapper">
         <div class="paginations-text">
             <p class="from_to"><?php print h($paginations['total_record']); ?>件中 <?php print h($paginations['from_record']); ?> - <?php print h($paginations['to_record']);?> 件目を表示</p>
         </div>

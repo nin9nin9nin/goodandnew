@@ -1879,7 +1879,7 @@ footer p {
 #page-top {
   position: fixed;
   right: 0px;
-  bottom: 50px;
+  bottom: 25px;
   z-index: 3;
   /*はじめは非表示*/
   opacity: 0;
@@ -2001,7 +2001,7 @@ footer p {
 /*Page Topと書かれたテキストの位置*/
 #page-top span {
   position: absolute;
-  bottom: -15px;
+  bottom: -10px;
   right: 25px;
 }
 
@@ -2033,7 +2033,7 @@ footer p {
 
 .concept-text {
   padding: 10px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 400;
   line-height: 2;
   letter-spacing: 0.3em;
@@ -2259,7 +2259,7 @@ footer p {
   margin: 0 auto;
 }
 .from-to {
-  font-size: 1rem;
+  font-size: 0.9rem;
   /*font-size: 1.6vw;*/
   font-weight: 400;
   text-align: center;
@@ -2284,6 +2284,7 @@ a.page_number:visited {
   padding: 5px 10px;
   text-align: center;
   background: #fff;
+  border: 1px solid #b8b8b8;
 }
 .first_last_page {
   width: 30px;
@@ -2291,6 +2292,7 @@ a.page_number:visited {
   padding: 5px 10px;
   text-align: center;
   background: #b8b8b8;
+  border: 1px solid #b8b8b8;
 }
 
 /* ページ番号 */
@@ -2306,6 +2308,7 @@ a.page_number:visited {
   padding: 5px;
   text-align: center;
   background: #fff;
+  border: 1px solid #b8b8b8;
 }
 .now_page_number {
   width: 30px;
@@ -2313,6 +2316,7 @@ a.page_number:visited {
   padding: 5px;
   text-align: center;
   background: #b8b8b8;
+  border: 1px solid #b8b8b8;
   font-weight: bold;
 }
 
@@ -2399,7 +2403,7 @@ a.page_number:visited {
 .select-wrap select {
   font-size: 0.75rem;
   color: #696969;
-  padding: 5px 0;
+  padding: 5px;
   width: 100%;
   text-align: center;
   cursor: pointer;
@@ -3462,7 +3466,7 @@ brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php
 
   /* caption */
   .caption-text {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
   }
 
   /* event */
@@ -3538,6 +3542,14 @@ brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php
     gap: 10px;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
+
+  /* CONCEPT 
+    -------------------------- */
+  .concept-caption span,
+  .concept-text span {
+    display: block;
+  }
+
 
   /* GALLERY 
     ------------------------------*/

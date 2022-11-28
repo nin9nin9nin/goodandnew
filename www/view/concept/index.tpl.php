@@ -21,23 +21,21 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                 <h3 class="section-title">CONCEPT</h3>
                 <div class="concept-area">
                     <div class="concept-caption">
-                        良いものと、新しい発見に出会う
+                        <span>「いいもの(GOOD)」と</span><span>「新しい発見(NEW)」を伝える</span>
                     </div>
                     <div class="concept-text-box">
-                        <p class="concept-text">
-                            ブランドの魅力、作り手の想いを伝えるをコンセプトに
-                            <br>
-                            わがままに、気の向くままに、毎月変わるポップアップショップを開催
-                            <br>
-                            わがままに、気の向くままに、毎月変わるポップアップショップを開催
-                        </p>
-                        <p class="concept-text">
-                            ブランドの魅力、作り手の想いを伝えるをコンセプトに
-                            <br>
-                            わがままに、気の向くままに、毎月変わるポップアップショップを開催
-                            <br>
-                            わがままに、気の向くままに、毎月変わるポップアップショップを開催
-                        </p>
+                        <div class="concept-text">
+                            <div><span>好奇心旺盛で、気の向くままに、</span></div>
+                            <div><span>それでいて好きな物に出会うと</span><span>異常な執着を見せる</span></div>
+                            <div><span>周りから見ると不思議だけど、</span><span>ほっとけないような存在</span></div>
+                            <div><span>それがGOOD&NEWという</span><span>オンラインショップだと思っています。</span></div>
+                        </div>
+                        <div class="concept-text">
+                            <div><span>ブランドの魅力、商品へのこだわり、</span><span>作り手の想いを伝えるため。</span></div>
+                            <div><span>ただ商品を見比べたり、イメージだけで</span><span>買い物をするオンラインショップではなく</span></div>
+                            <div><span>あえて選択肢を限定し、</span><span>伝えることに集中したオンラインショップで</span></div>
+                            <div><span>ブランドと人とを繋げたいと考えています。</span></div>
+                        </div>
                     </div>
                     <div class="concept-image">
                         <img src="./assets/images/baby/concept.png" alt="イメージ画像">
