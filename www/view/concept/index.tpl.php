@@ -41,6 +41,13 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         <img src="./assets/images/baby/concept.png" alt="イメージ画像">
                     </div>
                 </div>
+                <div class="button-area">
+                    <div class="basebutton">
+                        <a href="<?php echo url_for('events', 'index'); ?>">
+                            <span>EVENT</span>
+                        </a>
+                    </div>
+                </div>
             </div><!-- .box-->
         </section><!-- / #concept -->
         <?php include INCLUDE_DIR . '/user/f-nav.php'; ?>

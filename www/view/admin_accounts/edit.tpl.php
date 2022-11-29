@@ -1,5 +1,5 @@
 <?php
-$title = 'goodandnew管理画面';
+$title = 'goodandnewshop管理画面';
 $description = '説明（アカウント情報変更ページ）';
 $is_home = NULL; //トップページの判定用の変数
 $token = Session::getCsrfToken(); // トークンの取得

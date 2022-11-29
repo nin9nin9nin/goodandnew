@@ -47,7 +47,7 @@ include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
                         <li><a href="<?php echo url_for('events', 'index'); ?>">EVENT</a></li>
                         <li><a href="<?php echo url_for('schedule', 'index'); ?>">SCHEDULE</a></li>
                         <li><a href="<?php echo url_for('gallery', 'index'); ?>">GALLERY</a></li>
-                        <li><a href="#">INFORMATION</a></li>
+                        <li><a href="<?php echo url_for('originals', 'index'); ?>">ORIGINALS</a></li>
                     </ul>
                     <div class="g-nav-list-link">
                         <ul class="link-icon-nav">

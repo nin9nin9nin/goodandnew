@@ -43,6 +43,7 @@ function execute_action() {
     $classCarts = new Carts();
     
     //プロパティに値をセット
+    $classCarts -> user_id = $user -> user_id;
     $classCarts -> cart_id = $cart_id;
     $classCarts -> item_id = $item_id;
     

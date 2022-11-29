@@ -46,14 +46,15 @@ class Carts {
 
         //カートの中身の確認
         if ($records !== false) {
-
             foreach ($records as $record) {
-                if ($record -> event_status !== 1) { //イベントステータスの確認
-                    return CommonError::errorAdd($record->item_name . 'は開催期間が終了しています');
+                if ($record->stock - $record->quantity < 0) { //在庫の確認
+                    return CommonError::errorAdd($record->item_name . 'は在庫が不足しています');
                 } else if ($record -> item_status !== 1) { //アイテムステータスの確認
                     return CommonError::errorAdd($record->item_name . 'は現在購入できません');   
-                } else if ($record->stock - $record->quantity < 0) { //在庫の確認
-                    return CommonError::errorAdd($record->item_name . 'は在庫が不足しています');
+                } else if ($record -> category_id !== 8) { //オリジナルアイテムの確認
+                    if ($record -> event_status !== 1) { //イベントステータスの確認
+                        return CommonError::errorAdd($record->item_name . 'は開催期間が終了しています');
+                    } 
                 }
             } 
         } else {
@@ -74,8 +75,9 @@ class Carts {
              . '       B.item_id, B.quantity, B.create_datetime,' . PHP_EOL
              . '       C.item_name, C.price, C.icon_img, C.status AS item_status,' . PHP_EOL
              . '       D.stock,' . PHP_EOL
-             . '       E.brand_id, E.brand_name,' . PHP_EOL
-             . '       F.event_id, F.event_name, F.status AS event_status' . PHP_EOL
+             . '       E.category_id, E.category_name,' . PHP_EOL
+             . '       F.brand_id, F.brand_name,' . PHP_EOL
+             . '       G.event_id, G.event_name, G.status AS event_status' . PHP_EOL
              . 'FROM ' . PHP_EOL
              . '    (SELECT * FROM carts WHERE user_id = :user_id) AS A' . PHP_EOL
              . 'LEFT JOIN cart_detail AS B' . PHP_EOL
@@ -84,10 +86,12 @@ class Carts {
              . 'ON B.item_id = C.item_id' . PHP_EOL
              . 'LEFT JOIN stocks AS D' . PHP_EOL
              . 'ON C.item_id = D.item_id' . PHP_EOL
-             . 'LEFT JOIN brands AS E' . PHP_EOL
-             . 'ON C.brand_id = E.brand_id' . PHP_EOL
-             . 'LEFT JOIN events AS F' . PHP_EOL
-             . 'ON C.event_id = F.event_id' . PHP_EOL
+             . 'LEFT JOIN categorys AS E' . PHP_EOL
+             . 'ON C.category_id = E.category_id' . PHP_EOL
+             . 'LEFT JOIN brands AS F' . PHP_EOL
+             . 'ON C.brand_id = F.brand_id' . PHP_EOL
+             . 'LEFT JOIN events AS G' . PHP_EOL
+             . 'ON C.event_id = G.event_id' . PHP_EOL
              . 'ORDER BY B.create_datetime DESC'; //cart_detailに登録された日時順
              
         $params = [
@@ -424,9 +428,11 @@ class Carts {
     public function deleteUserCart()
     {
         $sql = 'DELETE FROM carts' . PHP_EOL
-             . 'WHERE cart_id = :cart_id';
+             . 'WHERE user_id = :user_id' . PHP_EOL
+             . 'AND cart_id = :cart_id';
         
         $params = [
+            ':user_id' => $this->user_id,
             ':cart_id' => $this->cart_id,
         ];
         

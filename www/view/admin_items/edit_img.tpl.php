@@ -1,5 +1,5 @@
 <?php
-$title = 'goodandnew管理画面';
+$title = 'goodandnewshop管理画面';
 $description = '説明（アイテム画像編集ページ）';
 $is_home = NULL; //トップページの判定用の変数
 $flash_message = Session::getFlash(); // フラッシュメッセージの取得

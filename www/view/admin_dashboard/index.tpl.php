@@ -1,6 +1,6 @@
 <?php
-$title = 'goodandnew管理画面';
-$description = '説明（トップページ）';
+$title = 'goodandnewshop管理画面';
+$description = '説明（ダッシュボード）';
 $is_home = true; //トップページの判定用の変数
 $flash_message = Session::getFlash();
 $admin_name = Session::get('admin_name',"");
