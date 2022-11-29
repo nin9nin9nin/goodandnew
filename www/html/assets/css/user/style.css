@@ -309,7 +309,6 @@ body.appear .splash-bg {
 }
 
 /*画面遷移の後現れるコンテンツ設定*/
-
 #top-bg,
 #top-logo,
 .top-text,
@@ -822,18 +821,18 @@ svgを外部から読み込み*/
   height: 100vh;
 }
 
-/* 固定背景　sticky→gsapに変更 
+/* 固定背景　sticky→panelに変更 
 ----------------------------- */
 #top-bg {
   /* position: -webkit-sticky;
     position: sticky;
 	top: 0; */
   min-height: 100vh;
-  overflow: hidden;
 }
 
-#top-bg img {
-  width: 100%;
+/*scrolltriger対策*/
+#top-bg.fixed {
+  position: fixed;
 }
 
 .bb-1 {
@@ -2656,7 +2655,6 @@ brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php
   margin: 20px 0;
 }
 
-
 /* submit */
 .cart-button,
 .order-button {
@@ -3550,7 +3548,6 @@ brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php
     display: block;
   }
 
-
   /* GALLERY 
     ------------------------------*/
   .gallery-content {
@@ -3727,7 +3724,6 @@ brands/index.tpl.phpとoriginals/index.tpl.phpとitems/detail.tpl.php
     display: flex;
     justify-content: space-between;
   }
-
 
   /* ACCOUNT 
     -------------------------- */

@@ -80,17 +80,19 @@ gsap.utils.toArray(".panel").forEach((panel, i) => {
   });
 });
 
-// header fixed ----------------------------------------------------------
+// header top-bg fixed ----------------------------------------------------------
 // header スクロールすると上部に固定させるための設定を関数でまとめる
 function FixedAnime() {
-  var headerH = $("#top-bg").outerHeight(true); //#homeの画像を超えたら
+  var headerH = $("#top").outerHeight(true); //#homeの画像を超えたら
   var scroll = $(window).scrollTop();
   if (scroll >= headerH) {
     //headerの高さ以上になったら
     $("#header").addClass("fixed"); //fixedというクラス名を付与
+    $("#top-bg").addClass("fixed"); //fixedというクラス名を付与
   } else {
     //それ以外は
     $("#header").removeClass("fixed"); //fixedというクラス名を除去
+    $("top-bg").removeClass("fixed"); //fixedというクラス名を除去
   }
 }
 
