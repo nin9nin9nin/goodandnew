@@ -9,7 +9,7 @@ $sorting = Request::get('sorting'); //並べ替えの値
 include INCLUDE_DIR . '/user/head.php'; // head.php の読み込み
 ?>
 </head>
-<body>
+<body ontouchstart="">
     <?php include INCLUDE_DIR . '/user/header_fixed.php'; ?>
     <main>
         <section class="area" id="originals-logo">

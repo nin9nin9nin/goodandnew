@@ -361,36 +361,34 @@ body.appear .scrolldown {
 
 /* HEADER
 ------------------------------------------------------------------------------------- */
-#header {
-  height: calc(env(safe-area-inset-top) + 70px); /*セーフエリア対策*/
-  /*高さ指定*/
-  width: 100%;
-  /*横幅指定*/
-  position: absolute;
-  top: 0;
-  z-index: 990;
+header {
+  /* 非表示 */
   display: none;
+  /*高さ指定*/
+  height: 70px;
+  /*セーフエリア対策*/
+  /* height: calc(env(safe-area-inset-top) + 70px); */
+  /*横幅指定*/
+  width: 100%;
+  /*ぼかしエフェクト*/
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /*下部シャドウ*/
+  box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
 }
 
 /*JSを使いfixedクラスが付与された際の設定*/
 #header.fixed {
+  /* 表示させる */
   display: block;
-  height: calc(env(safe-area-inset-top) + 70px); /*セーフエリア対策*/
-  /*高さ指定*/
-  width: 100%;
-  /*横幅指定*/
-  position: fixed;
   /*fixedを設定して固定*/
+  position: fixed;
+  /*位置指定*/
   top: 0;
   /*位置指定*/
   left: 0;
-  /*位置指定*/
-  z-index: 990;
   /*最前面へ*/
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  /*ぼかしエフェクト*/
-  box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
+  z-index: 990;
   /* 降りてくる動作 */
   animation: fadeDown 0.5s forwards;
 }
@@ -410,8 +408,9 @@ body.appear .scrolldown {
 ------------------------------- */
 .logo {
   position: absolute;
-  /* top: 50%; */
-  top: calc(env(safe-area-inset-top) + 50%); /*セーフエリア対策*/
+  top: 50%;
+  /*セーフエリア対策*/
+  /* top: calc(env(safe-area-inset-top) + 50%); */
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -482,10 +481,11 @@ svgを外部から読み込み*/
 /* ナビボタンのためのCSS */
 .openbtn1 {
   position: absolute;
-  z-index: 999;
   /*ボタンを最前面に*/
-  /* top: 10px; */
-  top: calc(env(safe-area-inset-top) + 10px); /*セーフエリア対策*/
+  z-index: 999;
+  top: 10px;
+  /*セーフエリア対策*/
+  /* top: calc(env(safe-area-inset-top) + 10px); */
   left: 1%;
   cursor: pointer;
   width: 50px;
@@ -755,9 +755,10 @@ svgをcss背景に（テキストは置き換え）*/
 ------------------------------- */
 #header-icon {
   position: absolute;
+  top: 10px;
+  /*セーフエリア対策*/
+  /* top: calc(env(safe-area-inset-top) + 10px); */
   right: 2%;
-  /* top: 10px; */
-  top: calc(env(safe-area-inset-top) + 10px); /*セーフエリア対策*/
 }
 
 .header-icon-btn {
@@ -2001,7 +2002,7 @@ footer p {
 #page-top span {
   position: absolute;
   bottom: -10px;
-  right: 25px;
+  right: 26px;
 }
 
 .slider-content {
