@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<head>
+<head prefix="og:http://ogp.me/ns#">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><?php echo h($title); ?></title>
-    <meta name="description" content="「いいもの(GOOD)」と「新しい発見(NEW)」を伝えるをコンセプトに、毎月変わるひと月限定のポップアップショップを開催しています。">
+    <meta name="description" content="「いいもの(GOOD)」と「新しい発見(NEW)」を伝えるをコンセプトに、毎月変わるひと月限定のポップアップショップを開催。民藝品からファッションブランドまで、様々な作り手の想いを伝えるオンラインショップです。">
     <!-- og -->
-    <meta property="og:title" content="ページのタイトル">
-    <meta property="og:description" content="ページの説明文">
-    <meta property="og:image" content="./assets/images/logo/logo.png">
-    <meta property="og:image:alt" content="画像の説明文">
-    <meta property="og:locale" content="ja_JP">
+    <meta property="og:url" content="http://goodandnewshop.com">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:url" content="https://mywebsite.com/page">
-    <link rel="canonical" href="https://mywebsite.com/page">
+    <meta property="og:title" content="GOOD&NEWのオンラインショップ">
+    <meta property="og:description" content="「いいもの(GOOD)」と「新しい発見(NEW)」を伝えるをコンセプトに、毎月変わるひと月限定のポップアップショップを開催。民藝品からファッションブランドまで、様々な作り手の想いを伝えるオンラインショップです。">
+    <meta property="og:site_name" content="GOOD&NEW SHOP">
+    <meta property="og:image" content="http://goodandnewshop.com/assets/images/logo/logo.png">
+    <meta property="og:image:alt" content="サイトロゴ">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary">
+    <link rel="canonical" href="http://goodandnewshop.com">
     <!-- favicon -->
     <link rel="icon" href="./assets/images/favicon/favicon.ico">
     <link rel="icon" href="./assets/images/favicon/favicon.svg" type="image/svg+xml">
