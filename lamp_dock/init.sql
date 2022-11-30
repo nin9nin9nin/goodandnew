@@ -78,8 +78,9 @@ CREATE TABLE  brands (
 CREATE TABLE items (
   item_id int(11) NOT NULL COMMENT 'アイテムID' AUTO_INCREMENT,
   item_name varchar(64) NOT NULL COMMENT 'アイテム名' COLLATE utf8_general_ci,
-  category_id int(11) NOT NULL default 0 COMMENT 'カテゴリーID',
-  brand_id int(11) NOT NULL default 0 COMMENT 'ブランドID',
+  category_id int(11) NOT NULL COMMENT 'カテゴリーID',
+  brand_id int(11) NOT NULL COMMENT 'ブランドID',
+  event_id int(11) COMMENT 'イベントID',
   price int(11) NOT NULL COMMENT '値段',
   description text COMMENT 'アイテム説明' COLLATE utf8_general_ci,
   icon_img varchar(128) NOT NULL COMMENT 'アイコン画像',
@@ -106,7 +107,7 @@ CREATE TABLE items (
 -- 在庫
 CREATE TABLE stocks (
   stock_id int(11) NOT NULL COMMENT '在庫ID' AUTO_INCREMENT,
-  item_id int(11) COMMENT 'アイテムID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
   stock int(11) NOT NULL COMMENT '在庫数',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
@@ -131,8 +132,8 @@ CREATE TABLE users (
 -- お気に入り
 CREATE TABLE favorites (
   favorite_id int(11) NOT NULL COMMENT 'お気に入りID' AUTO_INCREMENT,
-  user_id int(11) COMMENT 'ユーザーID',
-  item_id int(11) COMMENT 'アイテムID',
+  user_id int(11) NOT NULL COMMENT 'ユーザーID',
+  item_id int(11) NOT NULL COMMENT 'アイテムID',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
   primary key(favorite_id)
@@ -208,8 +209,8 @@ CREATE TABLE cart_detail (
 -- ダッシュボード
 CREATE TABLE dashboards (
   dashboard_id int(11) NOT NULL COMMENT 'ID' AUTO_INCREMENT,
-  news text NOT NULL COMMENT 'ニュース',
-  topics text NOT NULL COMMENT 'トピックス',
+  tag int(11) NOT NULL COMMENT 'タグ（0:ニュース、1:トピックス）',
+  description text COMMENT '説明' COLLATE utf8_general_ci,
   enabled boolean NOT NULL default true COMMENT '有効',
   create_datetime DATETIME COMMENT 'レコードの作成日',
   update_datetime DATETIME COMMENT 'レコードの更新日',
