@@ -119,10 +119,6 @@ class View {
             }
         }
 
-        //頭のファイル名        
-        //dashboardかindexか
-        $url = BASE_URL;
-
         //パラメータがnullでなければ
         //$url_params[] = 'module=message'
         //$url_params[] = 'action=index'
@@ -130,13 +126,17 @@ class View {
             $url_params[] = 'module=' . $module_name;
             $url_params[] = 'action=' . $action_name;
         }
+        
+        //頭のファイル名        
+        //dashboardかindexか
+        $url = BASE_URL;
 
         //&を使って連結させる(配列要素を文字列として)
         if (count($url_params) > 0) {
             $url .= '?' . implode('&', $url_params); 
             //.= (+=などと一緒)
             //implode()配列要素を文字列により連結する
-            //すべての配列要素の順序を変えずに、各要素間に separator 文字列をはさんで 1 つの文字列にして返します。
+            //すべての配列要素の順序を変えずに、各要素間にseparator('&')文字列をはさんで 1 つの文字列にして返します。
         }
 
         return $url;

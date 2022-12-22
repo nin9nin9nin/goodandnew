@@ -62,7 +62,7 @@ function dispatch($default_module, $default_action) {
         require_once($filename);
         execute_action();
         
-    //関数内でthrowされた$eを受け取る
+    //エラー処理excute_action()内でthrowされた$eを受け取る
     } catch (Exception $e) {
         //do-whileループ　最後にチェックを行う/最低１回の実行が保証される
         //$errors[]配列にエラーメッセージを入れる

@@ -400,6 +400,7 @@ input[type="reset"]:hover {
   padding: 10px;
   text-align: center;
   font-size: 0.9rem;
+  line-height: 2;
   margin: 5px;
   border: 1px solid;
   width: 150px;

@@ -12,7 +12,7 @@
     <meta property="og:title" content="GOOD&NEWのオンラインショップ">
     <meta property="og:description" content="「いいもの(GOOD)」と「新しい発見(NEW)」を伝えるをコンセプトに、毎月変わるひと月限定のポップアップショップを開催。民藝品からファッションブランドまで、様々な作り手の想いを伝えるオンラインショップです。">
     <meta property="og:site_name" content="GOOD&NEW SHOP">
-    <meta property="og:image" content="http://goodandnewshop.com/assets/images/logo/logo.png">
+    <meta property="og:image" content="http://goodandnewshop.com/assets/images/logo/og_image.jpg">
     <meta property="og:image:alt" content="サイトロゴ">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary">
